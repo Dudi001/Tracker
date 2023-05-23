@@ -16,6 +16,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D942C9192A1D5D0C00138959 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D991ADD22A1673EE00F1F0F3 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D991ADD52A1673EE00F1F0F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D991ADD72A1673EE00F1F0F3 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -40,6 +41,7 @@
 		D991ADC92A1673EE00F1F0F3 = {
 			isa = PBXGroup;
 			children = (
+				D942C9192A1D5D0C00138959 /* .gitignore */,
 				D991ADD42A1673EE00F1F0F3 /* Tracker */,
 				D991ADD32A1673EE00F1F0F3 /* Products */,
 			);
