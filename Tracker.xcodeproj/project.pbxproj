@@ -20,6 +20,7 @@
 		D90E2E7E2A2CE3760000C7E1 /* BottonClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E7D2A2CE3760000C7E1 /* BottonClass.swift */; };
 		D90E2E802A2F2D520000C7E1 /* Int + ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E7F2A2F2D520000C7E1 /* Int + ext.swift */; };
 		D90E2E822A31CE5E0000C7E1 /* SupplementaryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E812A31CE5E0000C7E1 /* SupplementaryView.swift */; };
+		D90E2E842A31DC840000C7E1 /* image + ext.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E832A31DC840000C7E1 /* image + ext.swift */; };
 		D991ADD62A1673EE00F1F0F3 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D991ADD52A1673EE00F1F0F3 /* AppDelegate.swift */; };
 		D991ADD82A1673EE00F1F0F3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D991ADD72A1673EE00F1F0F3 /* SceneDelegate.swift */; };
 		D991ADDA2A1673EE00F1F0F3 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D991ADD92A1673EE00F1F0F3 /* ViewController.swift */; };
@@ -41,6 +42,7 @@
 		D90E2E7D2A2CE3760000C7E1 /* BottonClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottonClass.swift; sourceTree = "<group>"; };
 		D90E2E7F2A2F2D520000C7E1 /* Int + ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int + ext.swift"; sourceTree = "<group>"; };
 		D90E2E812A31CE5E0000C7E1 /* SupplementaryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupplementaryView.swift; sourceTree = "<group>"; };
+		D90E2E832A31DC840000C7E1 /* image + ext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "image + ext.swift"; sourceTree = "<group>"; };
 		D942C9192A1D5D0C00138959 /* .gitignore */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
 		D991ADD22A1673EE00F1F0F3 /* Tracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Tracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D991ADD52A1673EE00F1F0F3 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 				D90E2E642A2A779A0000C7E1 /* UIColor+Extension.swift */,
 				D90E2E7D2A2CE3760000C7E1 /* BottonClass.swift */,
 				D90E2E7F2A2F2D520000C7E1 /* Int + ext.swift */,
+				D90E2E832A31DC840000C7E1 /* image + ext.swift */,
 			);
 			path = Helpers;
 			sourceTree = "<group>";
@@ -241,6 +244,7 @@
 			files = (
 				D90E2E702A2BD0630000C7E1 /* TrackerCategory.swift in Sources */,
 				D90E2E802A2F2D520000C7E1 /* Int + ext.swift in Sources */,
+				D90E2E842A31DC840000C7E1 /* image + ext.swift in Sources */,
 				D90E2E622A2A4A500000C7E1 /* TrackerViewController.swift in Sources */,
 				D90E2E6B2A2B44570000C7E1 /* StatisticViewController.swift in Sources */,
 				D90E2E5E2A2A497B0000C7E1 /* TabBarViewController.swift in Sources */,

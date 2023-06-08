@@ -11,17 +11,22 @@ final class TrackerViewController: UIViewController {
     private var query: String = ""
     private var currentDate = Date()
     private var completedTrackers: Set<TrackerRecord> = []
+    private var day = 1
     
-    private lazy var trackersHome: [Tracker] = [
-        Tracker(id: UUID(), name: "Погулять с собакой", color: .colorSelection1, emoji: "🐕", schedule:  []),
-            Tracker(id: UUID(), name: "Пропылесосить", color: .colorSelection2, emoji: "🐷", schedule: []),
-            Tracker(id: UUID(), name: "Приготовить покушать", color: .colorSelection3, emoji: "🍒", schedule: []),
+    private lazy var testTrakers: [Tracker] = [
+        Tracker(id: UUID(), name: "Тест 1", color: .colorSelection1, emoji: "🐕", schedule:  []),
+            Tracker(id: UUID(), name: "Попрыгать ", color: .colorSelection2, emoji: "😇", schedule: []),
+            Tracker(id: UUID(), name: "Сделать сальтуху", color: .colorSelection3, emoji: "🍒", schedule: []),
     
         ]
     
+    private lazy var secondTrackers: [Tracker] = [
+        Tracker(id: UUID(), name: "тест2", color: .colorSelection4, emoji: "🐤", schedule: []),
+        Tracker(id: UUID(), name: "тест3333", color: .colorSelection6, emoji: "🦒", schedule: [])
+    ]
     private lazy var categories: [TrackerCategory] = [
-        TrackerCategory(name: "Домашние дела", trackerArray: trackersHome),
-//        TrackerCategory(header: "Важное", trackers: anotherTrackers)
+        TrackerCategory(name: "Заголовок1", trackerArray: testTrakers),
+        TrackerCategory(name: "Заголовок2", trackerArray: secondTrackers)
     ]
     
     
@@ -92,7 +97,20 @@ final class TrackerViewController: UIViewController {
         return stackView
     }()
     
+    private lazy var placeholder: UIImageView = {
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.image = .placeHolder
+        return image
+    }()
     
+    private func setupPlaceHolder() {
+        if visibleCategories.isEmpty  {
+            placeholder.image = .notFound
+            emptyLabel.text = "Ничего не найдено"
+        }
+    }
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -135,8 +153,14 @@ final class TrackerViewController: UIViewController {
         return("\(text)")
     }
     
+    private func setupViews() {
+        collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
+        collectionView.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        collectionView.dataSource = self
+        collectionView.delegate = self
+    }
+    
     private func setupCell(_ cell: TrackerCollectionViewCell, trackerModel: Tracker) {
-        
         cell.emojiLabel.text = trackerModel.emoji
         cell.cellView.backgroundColor = trackerModel.color
         cell.trackerCompleteButton.backgroundColor = trackerModel.color
@@ -162,33 +186,6 @@ final class TrackerViewController: UIViewController {
         return trackerRecord
     }
     
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
-        var id: String
-        switch kind {
-        case UICollectionView.elementKindSectionHeader:
-            id = "header"
-        default:
-            id = ""
-        }
-        
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                         withReuseIdentifier: id,
-                                                                         for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
-        view.titleLabel.text = categories[indexPath.section].name
-    
-        return view
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                         height: collectionView.frame.height),
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
-    }
-    
-    
     @objc
     private func addTrackerButton() {
         print("OK")
@@ -203,10 +200,6 @@ final class TrackerViewController: UIViewController {
     private func completeButtonTapped(_ sender: UIButton) {
     }
     
-    
-    private var day = 1
-
-    
     @objc
     private func setupTrackersFromDatePicker(_ sender: UIDatePicker) {
         currentDate = sender.date
@@ -218,7 +211,7 @@ final class TrackerViewController: UIViewController {
         }()
         day = weekday
 //        filtered()
-//        setupPlaceHolder()
+        setupPlaceHolder()
     }
 }
 
@@ -241,14 +234,7 @@ extension TrackerViewController {
         navBar.addSubview(datePicker)
     }
     
-    private func setupViews() {
-        collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
-        collectionView.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        collectionView.dataSource = self
-        collectionView.delegate = self
-        
-//        searchTextField.delegate = self
-    }
+    
     
     private func updateVisibleCategories(_ newCategory: [TrackerCategory]) {
         visibleCategories = newCategory
@@ -286,8 +272,6 @@ extension TrackerViewController {
         ])
     }
     
-    
-    
 }
 
 
@@ -297,7 +281,7 @@ extension TrackerViewController: UITextFieldDelegate {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
 //        filtered()
-//        setupPlaceHolder()
+        setupPlaceHolder()
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -313,10 +297,11 @@ extension TrackerViewController: UITextFieldDelegate {
             self.view.layoutIfNeeded()
             
         }
-//        if categories.isEmpty {
-//            placeholder.image = .placeHolder
-//            label.text = "Что будем отслеживать?"
-//        }
+        
+        if categories.isEmpty {
+            placeholder.image = .placeHolder
+            emptyLabel.text = "Что будем отслеживать?"
+        }
 
     }
 }
@@ -324,8 +309,8 @@ extension TrackerViewController: UITextFieldDelegate {
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         visibleCategories.count
+        
     }
-    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         visibleCategories[section].trackerArray.count
@@ -338,12 +323,40 @@ extension TrackerViewController: UICollectionViewDataSource {
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+        var id: String
+        switch kind {
+        case UICollectionView.elementKindSectionHeader:
+            id = "header"
+        default:
+            id = ""
+        }
+        
+        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
+                                                                         withReuseIdentifier: id,
+                                                                         for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
+        view.titleLabel.text = categories[indexPath.section].name
+    
+        return view
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let indexPath = IndexPath(row: 0, section: section)
+        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
+        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
+                                                         height: collectionView.frame.height),
+                                                  withHorizontalFittingPriority: .required,
+                                                  verticalFittingPriority: .fittingSizeLevel)
+    }
+    
     
 }
 
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: (collectionView.bounds.width - 41) / 2, height: 148)
+        let width = collectionView.bounds.width / 2
+        let height = width * 0.8
+        return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
