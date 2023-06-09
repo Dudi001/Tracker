@@ -17,12 +17,17 @@ final class TrackerViewController: UIViewController {
         Tracker(id: UUID(), name: "Тест 1", color: .colorSelection1, emoji: "🐕", schedule:  []),
             Tracker(id: UUID(), name: "Попрыгать ", color: .colorSelection2, emoji: "😇", schedule: []),
             Tracker(id: UUID(), name: "Сделать сальтуху", color: .colorSelection3, emoji: "🍒", schedule: []),
+            
     
         ]
     
     private lazy var secondTrackers: [Tracker] = [
         Tracker(id: UUID(), name: "тест2", color: .colorSelection4, emoji: "🐤", schedule: []),
-        Tracker(id: UUID(), name: "тест3333", color: .colorSelection6, emoji: "🦒", schedule: [])
+        Tracker(id: UUID(), name: "тест3333", color: .colorSelection6, emoji: "🦒", schedule: []),
+        Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection7, emoji: "🐤", schedule: []),
+        Tracker(id: UUID(), name: "Найти жирафа", color: .colorSelection5, emoji: "🦒", schedule: []),
+        Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection8, emoji: "🐤", schedule: []),
+        Tracker(id: UUID(), name: "Найти жирафа", color: .colorSelection9, emoji: "🦒", schedule: []),
     ]
     private lazy var categories: [TrackerCategory] = [
         TrackerCategory(name: "Заголовок1", trackerArray: testTrakers),
@@ -48,11 +53,11 @@ final class TrackerViewController: UIViewController {
         return newLabel
     }()
     
-    lazy var collectionView: UICollectionView = {
-       let collectionViewLayout = UICollectionViewLayout()
-        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: collectionViewLayout)
+    lazy var trackerCollectionView: UICollectionView = {
+        let collectionViewLayout = UICollectionViewFlowLayout()
+        let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: collectionViewLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.backgroundColor = .ypBlack
+        collectionView.backgroundColor = .ypWhite
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
         return collectionView
     }()
@@ -154,10 +159,10 @@ final class TrackerViewController: UIViewController {
     }
     
     private func setupViews() {
-        collectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
-        collectionView.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
-        collectionView.dataSource = self
-        collectionView.delegate = self
+        trackerCollectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
+        trackerCollectionView.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        trackerCollectionView.dataSource = self
+        trackerCollectionView.delegate = self
     }
     
     private func setupCell(_ cell: TrackerCollectionViewCell, trackerModel: Tracker) {
@@ -228,7 +233,7 @@ extension TrackerViewController {
         guard let navBar = navigationController?.navigationBar else { return }
         setupSearchContainerView()
         view.backgroundColor = .ypWhite
-        view.addSubview(collectionView)
+        view.addSubview(trackerCollectionView)
         view.addSubview(datePicker)
         view.addSubview(searchContainerView)
         navBar.addSubview(datePicker)
@@ -238,17 +243,17 @@ extension TrackerViewController {
     
     private func updateVisibleCategories(_ newCategory: [TrackerCategory]) {
         visibleCategories = newCategory
-        collectionView.reloadData()
+        trackerCollectionView.reloadData()
 //        updateCollectionViewVisibility()
     }
     
     
     private func addConstraintsCollectionView() {
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: searchContainerView.bottomAnchor, constant: 10),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            trackerCollectionView.topAnchor.constraint(equalTo: searchContainerView.bottomAnchor, constant: 10),
+            trackerCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            trackerCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            trackerCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
     
@@ -354,9 +359,9 @@ extension TrackerViewController: UICollectionViewDataSource {
 
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = collectionView.bounds.width / 2
-        let height = width * 0.8
-        return CGSize(width: width, height: height)
+        let width = (collectionView.bounds.width - 41) / 2
+//        let height = width * 0.8
+        return CGSize(width: width, height: 158)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {

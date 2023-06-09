@@ -20,7 +20,7 @@ final class TabBarViewController: UITabBarController {
         
         tabBar.tintColor = .ypBlue
         tabBar.barTintColor = .ypGray
-        tabBar.backgroundColor = .ypWhite
+        tabBar.backgroundColor = .ypBackground
         tabBar.layer.borderColor = CGColor(gray: 1, alpha: 1)
 
         
