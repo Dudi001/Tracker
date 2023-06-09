@@ -11,7 +11,7 @@ import UIKit
 
 enum Resourses {
     enum Images {
-        static let statisticEmptyImage = UIImage(named: "statisticEmptyImage")
-        static let trackerEmptyImage = UIImage(named: "trackerEmptyImage")
+        static let statisticEmptyImage = UIImage(named: "notFound")
+        static let trackerEmptyImage = UIImage(named: "placeHolder")
     }
 }

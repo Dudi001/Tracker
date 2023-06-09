@@ -17,10 +17,10 @@ final class TrackerViewController: UIViewController {
         Tracker(id: UUID(), name: "Тест 1", color: .colorSelection1, emoji: "🐕", schedule:  []),
             Tracker(id: UUID(), name: "Попрыгать ", color: .colorSelection2, emoji: "😇", schedule: []),
             Tracker(id: UUID(), name: "Сделать сальтуху", color: .colorSelection3, emoji: "🍒", schedule: []),
-            
-    
+
+
         ]
-    
+
     private lazy var secondTrackers: [Tracker] = [
         Tracker(id: UUID(), name: "тест2", color: .colorSelection4, emoji: "🐤", schedule: []),
         Tracker(id: UUID(), name: "тест3333", color: .colorSelection6, emoji: "🦒", schedule: []),
@@ -65,7 +65,7 @@ final class TrackerViewController: UIViewController {
     lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.translatesAutoresizingMaskIntoConstraints = false
-        picker.preferredDatePickerStyle = .compact
+        picker.preferredDatePickerStyle = .automatic
         picker.datePickerMode = .date
         picker.layer.cornerRadius = 8
         picker.locale = Locale(identifier: "ru_RU")
@@ -102,19 +102,39 @@ final class TrackerViewController: UIViewController {
         return stackView
     }()
     
-    private lazy var placeholder: UIImageView = {
-        let image = UIImageView()
-        image.translatesAutoresizingMaskIntoConstraints = false
-        image.image = .placeHolder
-        return image
-    }()
+//    private lazy var placeholder: UIImageView = {
+//        let image = UIImageView()
+//        image.translatesAutoresizingMaskIntoConstraints = false
+//        image.image = .placeHolder
+//        return image
+//    }()
+//
+//    private func setupPlaceHolder() {
+//        if visibleCategories.isEmpty  {
+//            placeholder.image = .notFound
+//            emptyLabel.text = "Ничего не найдено"
+//        }
+//    }
     
-    private func setupPlaceHolder() {
-        if visibleCategories.isEmpty  {
-            placeholder.image = .notFound
-            emptyLabel.text = "Ничего не найдено"
+    
+    func checkCellsCount() {
+        if categories.count == 0 {
+            
+            view.addSubview(emptyImage)
+            view.addSubview(emptyLabel)
+                
+            NSLayoutConstraint.activate([
+                emptyImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+//                emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                
+                emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
+            ])
+        } else {
+            emptyImage.removeFromSuperview()
+            emptyLabel.removeFromSuperview()
+            }
         }
-    }
 
     
     override func viewDidLoad() {
@@ -122,12 +142,15 @@ final class TrackerViewController: UIViewController {
         addTracker()
         addViews()
         setupViews()
+//        setupPlaceHolder()
+        checkCellsCount()
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
         addConstraintSearchText()
         addConstraintsDatePicker()
         setupDatePicker()
         updateVisibleCategories(categories)
+        addConstraintsCollectionView()
     }
     
     
@@ -216,7 +239,7 @@ final class TrackerViewController: UIViewController {
         }()
         day = weekday
 //        filtered()
-        setupPlaceHolder()
+//        setupPlaceHolder()
     }
 }
 
@@ -261,7 +284,8 @@ extension TrackerViewController {
         NSLayoutConstraint.activate([
             searchContainerView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             searchContainerView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            searchContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchContainerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 7),
+//            searchTextField.bottomAnchor.constraint(equalTo: searchContainerView.bottomAnchor, constant: 10),
             
             cancelButton.trailingAnchor.constraint(equalTo: searchContainerView.trailingAnchor),
             cancelButton.centerYAnchor.constraint(equalTo: searchContainerView.centerYAnchor)
@@ -272,6 +296,7 @@ extension TrackerViewController {
         guard let navBar = navigationController?.navigationBar else { return }
         NSLayoutConstraint.activate([
             datePicker.heightAnchor.constraint(equalToConstant: 34),
+            datePicker.widthAnchor.constraint(equalToConstant: 97),
             datePicker.trailingAnchor.constraint(equalTo: navBar.trailingAnchor, constant: -16),
             datePicker.bottomAnchor.constraint(equalTo: navBar.bottomAnchor, constant: -11)
         ])
@@ -286,7 +311,7 @@ extension TrackerViewController: UITextFieldDelegate {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
 //        filtered()
-        setupPlaceHolder()
+//        setupPlaceHolder()
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -303,10 +328,10 @@ extension TrackerViewController: UITextFieldDelegate {
             
         }
         
-        if categories.isEmpty {
-            placeholder.image = .placeHolder
-            emptyLabel.text = "Что будем отслеживать?"
-        }
+//        if categories.isEmpty {
+////            placeholder.image = .placeHolder
+//            emptyLabel.text = "Что будем отслеживать?"
+//        }
 
     }
 }
