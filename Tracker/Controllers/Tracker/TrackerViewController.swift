@@ -224,8 +224,20 @@ final class TrackerViewController: UIViewController {
         searchTextField.text = ""
         searchTextField.resignFirstResponder()
     }
+    
     @objc
     private func completeButtonTapped(_ sender: UIButton) {
+        guard let cell = sender.superview?.superview as? TrackerCollectionViewCell,
+              let indexPath = trackerCollectionView.indexPath(for: cell) else { return }
+        let tracker = visibleCategories[indexPath.section].trackerArray[indexPath.item]
+        guard currentDate < Date() || tracker.schedule.isEmpty else { return }
+        let trackerRecord = createTrackerRecord(with: tracker.id)
+        if completedTrackers.contains(trackerRecord) {
+            completedTrackers.remove(trackerRecord)
+        } else {
+            completedTrackers.insert(trackerRecord)
+        }
+        cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
     }
     
     @objc
