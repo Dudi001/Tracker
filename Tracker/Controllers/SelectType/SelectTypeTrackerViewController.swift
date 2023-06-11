@@ -13,7 +13,8 @@ final class SelectTypeTrackerViewController: UIViewController {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.text = "Создание трекера"
-        text.font = UIFont.systemFont(ofSize: 16)
+        text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
+        text.textColor = .ypWhite
         return text
     }()
     
@@ -33,6 +34,7 @@ final class SelectTypeTrackerViewController: UIViewController {
         irregular.setTitle("Нерегуляное событие", for: .normal)
         irregular.backgroundColor = .ypWhite
         irregular.layer.cornerRadius = 16
+        irregular.addTarget(self, action: #selector(irregularButtonTappet), for: .touchUpInside)
         return irregular
     }()
     
@@ -67,8 +69,8 @@ final class SelectTypeTrackerViewController: UIViewController {
     
     private func configureTitele() {
         NSLayoutConstraint.activate([
-            titileLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            titileLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+            titileLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 23),
+            titileLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor)
         ])
     }
     
