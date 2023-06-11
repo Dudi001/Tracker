@@ -124,8 +124,8 @@ final class TrackerViewController: UIViewController {
             view.addSubview(emptyLabel)
                 
             NSLayoutConstraint.activate([
-                emptyImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
-//                emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+//                emptyImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+                emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 
                 emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
@@ -216,7 +216,9 @@ final class TrackerViewController: UIViewController {
     
     @objc
     private func addTrackerButton() {
-        print("OK")
+        let selectVC = SelectTypeTrackerViewController()
+        searchTextField.endEditing(true)
+        present(selectVC, animated: true)
     }
     
     @objc
