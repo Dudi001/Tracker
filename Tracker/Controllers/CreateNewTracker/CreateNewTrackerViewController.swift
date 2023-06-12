@@ -229,15 +229,18 @@ final class CreateNewTrackerViewController: UIViewController {
     
     
     private func setupTableViewConstraint() {
-//        if typeOfTracker == .hobby {
-//            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149).isActive
-//        } else {
-//            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 75).isActive
-//            categoryAndScheduleTableView.separatorStyle = .none
-//        }
+        if typeOfTracker == .hobby {
+            NSLayoutConstraint.activate([
+                categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149)
+            ])
+        } else {
+            NSLayoutConstraint.activate([
+                categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 75)
+            ])
+            categoryAndScheduleTableView.separatorStyle = .none
+        }
         
         NSLayoutConstraint.activate([
-            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149),
             categoryAndScheduleTableView.topAnchor.constraint(equalTo: hobbyNameTextField.bottomAnchor, constant: 24),
             categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
