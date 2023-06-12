@@ -50,7 +50,7 @@ final class CreateNewTrackerViewController: UIViewController {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        text.textColor = .ypWhite
+        text.textColor = .ypBlack
         return text
     }()
     
@@ -96,7 +96,7 @@ final class CreateNewTrackerViewController: UIViewController {
     
     lazy var collectionView: UICollectionView = {
         let element = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        element.backgroundColor = .ypBlack
+        element.backgroundColor = .ypWhite
         element.isScrollEnabled = false
         element.allowsMultipleSelection = true
         element.translatesAutoresizingMaskIntoConstraints = false
@@ -170,7 +170,7 @@ final class CreateNewTrackerViewController: UIViewController {
     }
     
     private func addViews() {
-        view.backgroundColor = .ypBlack
+        view.backgroundColor = .ypWhite
         view.addSubview(titileHobbyLabel)
         view.addSubview(scrollView)
         view.addSubview(bottomButtonsStack)
@@ -200,9 +200,9 @@ final class CreateNewTrackerViewController: UIViewController {
             titileHobbyLabel.heightAnchor.constraint(equalToConstant: 22),
             titileHobbyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            hobbyNameTextField.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 38),
-            hobbyNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            hobbyNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            hobbyNameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 39),
+            hobbyNameTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            hobbyNameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
             hobbyNameTextField.heightAnchor.constraint(equalToConstant: 75),
 //            hobbyNameTextField.bottomAnchor.constraint(equalTo: categoryAndScheduleTableView.topAnchor, constant: 34),
 
@@ -210,7 +210,7 @@ final class CreateNewTrackerViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 14),
             scrollView.bottomAnchor.constraint(equalTo: bottomButtonsStack.topAnchor, constant: -16),
-            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
+//            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
 
 
             bottomButtonsStack.leadingAnchor.constraint(equalTo: hobbyNameTextField.leadingAnchor),
@@ -219,11 +219,11 @@ final class CreateNewTrackerViewController: UIViewController {
             bottomButtonsStack.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -34),
 
             collectionView.topAnchor.constraint(equalTo: categoryAndScheduleTableView.bottomAnchor, constant: 32),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-//            collectionView.heightAnchor.constraint(equalToConstant: 460),
+            collectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+//            collectionView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
+            collectionView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
         ])
     }
     
@@ -242,8 +242,8 @@ final class CreateNewTrackerViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             categoryAndScheduleTableView.topAnchor.constraint(equalTo: hobbyNameTextField.bottomAnchor, constant: 24),
-            categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
+            categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16)
         ])
     }
     

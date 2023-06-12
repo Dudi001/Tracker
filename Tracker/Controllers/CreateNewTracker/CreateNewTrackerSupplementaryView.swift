@@ -11,7 +11,7 @@ import UIKit
 final class CreateNewTrackerSupplementaryView: UICollectionReusableView {
     lazy var headerLabel: UILabel = {
         let header = UILabel()
-        header.textColor = .ypWhite
+        header.textColor = .ypBlack
         header.font = UIFont.systemFont(ofSize: 19)
         header.translatesAutoresizingMaskIntoConstraints = false
         return header
