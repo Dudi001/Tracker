@@ -13,6 +13,7 @@ final class CreateNewTrackerTableVIewCell: UITableViewCell {
         let labelItem = UILabel()
         labelItem.font = .systemFont(ofSize: 17, weight: .regular)
         labelItem.textColor = .ypBlack
+        labelItem.translatesAutoresizingMaskIntoConstraints = false
         return labelItem
     }()
     
@@ -20,6 +21,7 @@ final class CreateNewTrackerTableVIewCell: UITableViewCell {
         let item = UILabel()
         item.font = .systemFont(ofSize: 17, weight: .regular)
         item.textColor = .ypGray
+        item.translatesAutoresizingMaskIntoConstraints = false
         return item
     }()
     

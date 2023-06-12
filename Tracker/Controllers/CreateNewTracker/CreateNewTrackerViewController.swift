@@ -25,10 +25,15 @@ final class CreateNewTrackerViewController: UIViewController {
     var trackerColor: UIColor?
     var schedule: [Int]?
     
+    static let colllectionViewHeightWithSchedule: CGFloat = 618.0
+    static let colllectionViewHeight: CGFloat = 543.0
+    
     
     var emojies = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+        "🥦", "🏓", "🥇", "🎸", "🏝", "😪",
+        "🥦", "🏓", "🥇", "🎸", "🏝", "😪",
         "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
     
@@ -45,7 +50,7 @@ final class CreateNewTrackerViewController: UIViewController {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        text.textColor = .ypBlack
+        text.textColor = .ypWhite
         return text
     }()
     
@@ -58,8 +63,10 @@ final class CreateNewTrackerViewController: UIViewController {
         hobbyText.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         hobbyText.leftViewMode = .always
         hobbyText.returnKeyType = .done
+        hobbyText.layer.cornerRadius = 8
         hobbyText.font = .systemFont(ofSize: 17, weight: .regular)
         hobbyText.textColor = .ypBlack
+        hobbyText.translatesAutoresizingMaskIntoConstraints = false
         return hobbyText
     }()
     
@@ -68,6 +75,7 @@ final class CreateNewTrackerViewController: UIViewController {
         element.text = "Ограничение 38 символов"
         element.font = .systemFont(ofSize: 17, weight: .regular)
         element.textColor = .ypRed
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
@@ -76,19 +84,22 @@ final class CreateNewTrackerViewController: UIViewController {
         element.separatorStyle = .singleLine
         element.layer.cornerRadius = 16
         element.isScrollEnabled = false
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     lazy var scrollView: UIScrollView = {
         let element = UIScrollView()
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
     lazy var collectionView: UICollectionView = {
         let element = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        element.backgroundColor = .ypWhite
+        element.backgroundColor = .ypBlack
         element.isScrollEnabled = false
         element.allowsMultipleSelection = true
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
@@ -102,6 +113,7 @@ final class CreateNewTrackerViewController: UIViewController {
         element.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         element.backgroundColor = .ypWhite
         element.tintColor = .ypRed
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
@@ -113,6 +125,7 @@ final class CreateNewTrackerViewController: UIViewController {
         element.setTitleColor(.white, for: .normal)
         element.backgroundColor = .ypGray
         element.isEnabled = false
+        element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
@@ -156,7 +169,7 @@ final class CreateNewTrackerViewController: UIViewController {
     }
     
     private func addViews() {
-        view.backgroundColor = .ypWhite
+        view.backgroundColor = .ypBlack
         view.addSubview(titileHobbyLabel)
         view.addSubview(scrollView)
         view.addSubview(bottomButtonsStack)
@@ -180,18 +193,21 @@ final class CreateNewTrackerViewController: UIViewController {
     
     private func addConstant() {
         NSLayoutConstraint.activate([
-            titileHobbyLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
+            titileHobbyLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 2),
+            titileHobbyLabel.heightAnchor.constraint(equalToConstant: 22),
             titileHobbyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
             hobbyNameTextField.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 24),
             hobbyNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             hobbyNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             hobbyNameTextField.heightAnchor.constraint(equalToConstant: 75),
+//            hobbyNameTextField.bottomAnchor.constraint(equalTo: categoryAndScheduleTableView.topAnchor, constant: 84),
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 14),
             scrollView.bottomAnchor.constraint(equalTo: bottomButtonsStack.topAnchor, constant: -16),
+            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
 
 
             bottomButtonsStack.leadingAnchor.constraint(equalTo: hobbyNameTextField.leadingAnchor),
@@ -202,23 +218,23 @@ final class CreateNewTrackerViewController: UIViewController {
             collectionView.topAnchor.constraint(equalTo: categoryAndScheduleTableView.bottomAnchor, constant: 32),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 460),
+//            collectionView.heightAnchor.constraint(equalToConstant: 460),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
             collectionView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
-
         ])
     }
     
     
     private func setupTableViewConstraint() {
-        if typeOfTracker == .hobby {
-            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149).isActive
-        } else {
-            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 75).isActive
-            categoryAndScheduleTableView.separatorStyle = .none
-        }
+//        if typeOfTracker == .hobby {
+//            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149).isActive
+//        } else {
+//            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 75).isActive
+//            categoryAndScheduleTableView.separatorStyle = .none
+//        }
         
         NSLayoutConstraint.activate([
+            categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149),
             categoryAndScheduleTableView.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 32),
             categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)

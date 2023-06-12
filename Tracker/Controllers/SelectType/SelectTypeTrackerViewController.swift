@@ -51,12 +51,14 @@ final class SelectTypeTrackerViewController: UIViewController {
     @objc
     private func hobbyButtonTappet() {
         let newTrackerVC = CreateNewTrackerViewController()
+        newTrackerVC.typeOfTracker = .hobby
         present(newTrackerVC, animated: true)
     }
     
     @objc
     private func irregularButtonTappet() {
         let newTrackerVC = CreateNewTrackerViewController()
+        newTrackerVC.typeOfTracker = .irregular
         present(newTrackerVC, animated: true)
     }
     
