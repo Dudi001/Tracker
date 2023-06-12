@@ -7,11 +7,21 @@
 
 import UIKit
 
-final class TrackerViewController: UIViewController {
-    private var query: String = ""
-    private var currentDate = Date()
-    private var completedTrackers: Set<TrackerRecord> = []
-    private var day = 1
+
+protocol TrackerViewProtocol: AnyObject {
+    var categories: [TrackerCategory] { get set }
+    var visibleCategories: [TrackerCategory] { get set }
+//    var completedTrackers: [TrackerRecord]? { get set }
+//    var emojies: [String] { get }
+//    var currentDate: Date? { get set }
+//    func filterTrackersFromDate(text: String?)
+}
+
+final class TrackerViewController: UIViewController, TrackerViewProtocol {
+    var query: String = ""
+    var currentDate = Date()
+    var completedTrackers: Set<TrackerRecord> = []
+    var day = 1
     
     private lazy var testTrakers: [Tracker] = [
         Tracker(id: UUID(), name: "Тест 1", color: .colorSelection1, emoji: "🐕", schedule:  []),
@@ -29,16 +39,18 @@ final class TrackerViewController: UIViewController {
         Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection8, emoji: "🐤", schedule: []),
         Tracker(id: UUID(), name: "Найти жирафа", color: .colorSelection9, emoji: "🦒", schedule: []),
     ]
-    private lazy var categories: [TrackerCategory] = [
+    
+    lazy var categories: [TrackerCategory] = [
         TrackerCategory(name: "Заголовок1", trackerArray: testTrakers),
         TrackerCategory(name: "Заголовок2", trackerArray: secondTrackers)
     ]
     
     
-    private lazy var visibleCategories = [TrackerCategory]()
+    var visibleCategories = [TrackerCategory]()
     
     lazy var emptyImage: UIImageView = {
         let newImage = UIImageView()
+        newImage.translatesAutoresizingMaskIntoConstraints = false
         newImage.image = Resourses.Images.trackerEmptyImage
         return newImage
     }()
@@ -46,7 +58,7 @@ final class TrackerViewController: UIViewController {
     lazy var emptyLabel: UILabel = {
        let newLabel = UILabel()
         newLabel.translatesAutoresizingMaskIntoConstraints = false
-        newLabel.text = "что будем отслеживать?"
+        newLabel.text = "Что будем отслеживать?"
         newLabel.tintColor = .ypBlack
         newLabel.textAlignment = .center
         newLabel.font = .systemFont(ofSize: 12, weight: .medium)
@@ -102,21 +114,6 @@ final class TrackerViewController: UIViewController {
         return stackView
     }()
     
-//    private lazy var placeholder: UIImageView = {
-//        let image = UIImageView()
-//        image.translatesAutoresizingMaskIntoConstraints = false
-//        image.image = .placeHolder
-//        return image
-//    }()
-//
-//    private func setupPlaceHolder() {
-//        if visibleCategories.isEmpty  {
-//            placeholder.image = .notFound
-//            emptyLabel.text = "Ничего не найдено"
-//        }
-//    }
-    
-    
     func checkCellsCount() {
         if categories.count == 0 {
             
@@ -124,7 +121,8 @@ final class TrackerViewController: UIViewController {
             view.addSubview(emptyLabel)
                 
             NSLayoutConstraint.activate([
-//                emptyImage.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
+
+                emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
                 emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 
                 emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
