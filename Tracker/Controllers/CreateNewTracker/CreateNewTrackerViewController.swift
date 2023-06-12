@@ -63,7 +63,7 @@ final class CreateNewTrackerViewController: UIViewController {
         hobbyText.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         hobbyText.leftViewMode = .always
         hobbyText.returnKeyType = .done
-        hobbyText.layer.cornerRadius = 8
+        hobbyText.layer.cornerRadius = 16
         hobbyText.font = .systemFont(ofSize: 17, weight: .regular)
         hobbyText.textColor = .ypBlack
         hobbyText.translatesAutoresizingMaskIntoConstraints = false
@@ -150,7 +150,8 @@ final class CreateNewTrackerViewController: UIViewController {
         setupCollectionView()
         
     }
-    
+
+//MARK: - Register cell
     private func setupTableView() {
             categoryAndScheduleTableView.register(CreateNewTrackerTableVIewCell.self, forCellReuseIdentifier: "TableViewCell")
             categoryAndScheduleTableView.dataSource = self
@@ -191,17 +192,19 @@ final class CreateNewTrackerViewController: UIViewController {
         scrollView.addSubview(hobbyNameTextField)
     }
     
+    
+//MARK: - Constraints
     private func addConstant() {
         NSLayoutConstraint.activate([
-            titileHobbyLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 2),
+            titileHobbyLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
             titileHobbyLabel.heightAnchor.constraint(equalToConstant: 22),
             titileHobbyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             
-            hobbyNameTextField.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 24),
+            hobbyNameTextField.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 38),
             hobbyNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             hobbyNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             hobbyNameTextField.heightAnchor.constraint(equalToConstant: 75),
-//            hobbyNameTextField.bottomAnchor.constraint(equalTo: categoryAndScheduleTableView.topAnchor, constant: 84),
+//            hobbyNameTextField.bottomAnchor.constraint(equalTo: categoryAndScheduleTableView.topAnchor, constant: 34),
 
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
@@ -220,7 +223,7 @@ final class CreateNewTrackerViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
 //            collectionView.heightAnchor.constraint(equalToConstant: 460),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+            collectionView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
     }
     
@@ -235,7 +238,7 @@ final class CreateNewTrackerViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149),
-            categoryAndScheduleTableView.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 32),
+            categoryAndScheduleTableView.topAnchor.constraint(equalTo: hobbyNameTextField.bottomAnchor, constant: 24),
             categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
         ])
@@ -270,7 +273,7 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
 }
 
 
-//MARK: UITableViewDataSource
+//MARK: - UITableViewDataSource
 extension CreateNewTrackerViewController: UITableViewDataSource {
     
     
@@ -313,7 +316,7 @@ extension CreateNewTrackerViewController: UITableViewDataSource {
 }
 
 
-//MARK: UITableViewDelegate
+//MARK: - UITableViewDelegate
 extension CreateNewTrackerViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 75
@@ -333,7 +336,7 @@ extension CreateNewTrackerViewController: UITableViewDelegate {
 }
 
 
-//MARK: UICollectionViewDataSource
+//MARK: - UICollectionViewDataSource
 extension CreateNewTrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 2
@@ -389,7 +392,9 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
         return view
     }
 }
-//MARK: UICollectionViewDelegateFlowLayout
+
+
+//MARK: - UICollectionViewDelegateFlowLayout
 extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         switch indexPath.section {

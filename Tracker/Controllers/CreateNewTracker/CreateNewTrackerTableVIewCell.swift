@@ -37,7 +37,7 @@ final class CreateNewTrackerTableVIewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 15)
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 27)
         ])
         
     }
@@ -48,7 +48,7 @@ final class CreateNewTrackerTableVIewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 15)
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 27)
         ])
         
         NSLayoutConstraint.activate([
