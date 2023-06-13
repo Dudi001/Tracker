@@ -76,6 +76,18 @@ final class TrackerViewController: UIViewController {
         return cancel
     }()
     
+    lazy var filterButton: UIButton = {
+        let filterButton = UIButton(type: .system)
+        filterButton.translatesAutoresizingMaskIntoConstraints = false
+        filterButton.backgroundColor = .ypBlue
+        filterButton.tintColor = .white
+        filterButton.layer.cornerRadius = 16
+        filterButton.setTitle("Фильтры", for: .normal)
+        filterButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
+        filterButton.addTarget(self, action: #selector(switchToFilterViewController), for: .touchUpInside)
+        return filterButton
+    }()
+    
     private lazy var searchContainerView: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
@@ -85,7 +97,7 @@ final class TrackerViewController: UIViewController {
     
     func checkCellsCount() {
         if trackerStorage.categories.count == 0 {
-            
+            filterButton.removeFromSuperview()
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
                 
@@ -100,8 +112,16 @@ final class TrackerViewController: UIViewController {
         } else {
             emptyImage.removeFromSuperview()
             emptyLabel.removeFromSuperview()
-            }
+            view.addSubview(filterButton)
+            
+            NSLayoutConstraint.activate([
+                filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -17),
+                filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+                filterButton.heightAnchor.constraint(equalToConstant: 50),
+                filterButton.widthAnchor.constraint(equalToConstant: 114)
+            ])
         }
+    }
 
     
     override func viewDidLoad() {
@@ -109,7 +129,6 @@ final class TrackerViewController: UIViewController {
         addTracker()
         addViews()
         setupViews()
-//        setupPlaceHolder()
         checkCellsCount()
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
@@ -219,8 +238,13 @@ final class TrackerViewController: UIViewController {
             return day
         }()
         day = weekday
-//        filtered()
-
+        filtered()
+    }
+    
+    @objc
+    private func switchToFilterViewController() {
+        let filterVC = FilterViewController()
+        present(filterVC, animated: true)
     }
 }
 
@@ -248,7 +272,6 @@ extension TrackerViewController {
     private func updateVisibleCategories(_ newCategory: [TrackerCategory]) {
         trackerStorage.visibleCategories = newCategory
         trackerCollectionView.reloadData()
-//        updateCollectionViewVisibility()
     }
     
     
@@ -290,7 +313,7 @@ extension TrackerViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
-//        filtered()
+        filtered()
 
     }
     
@@ -307,12 +330,6 @@ extension TrackerViewController: UITextFieldDelegate {
             self.view.layoutIfNeeded()
             
         }
-        
-//        if categories.isEmpty {
-////            placeholder.image = .placeHolder
-//            emptyLabel.text = "Что будем отслеживать?"
-//        }
-
     }
 }
 
@@ -381,3 +398,50 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         return UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
     }
 }
+
+
+//MARK: - Filters cells
+
+extension TrackerViewController {
+    
+    private func filtered() {
+        var filteredCategories = [TrackerCategory]()
+        
+        for category in trackerStorage.categories {
+            var trackers = [Tracker]()
+            for tracker in category.trackerArray {
+                let schedule = tracker.schedule
+                if schedule.contains(day) {
+                    trackers.append(tracker)
+                } else if schedule.isEmpty {
+                    trackers.append(tracker)
+                }
+                
+            }
+            if !trackers.isEmpty {
+                let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                filteredCategories.append(trackerCategory)
+            }
+        }
+        
+        if !query.isEmpty {
+            var trackersWithFilteredName = [TrackerCategory]()
+            for category in filteredCategories {
+                var trackers = [Tracker]()
+                for tracker in category.trackerArray {
+                    let trackerName = tracker.name.lowercased()
+                    if trackerName.range(of: query, options: .caseInsensitive) != nil {
+                        trackers.append(tracker)
+                    }
+                }
+                if !trackers.isEmpty {
+                    let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                    trackersWithFilteredName.append(trackerCategory)
+                }
+            }
+            filteredCategories = trackersWithFilteredName
+        }
+        updateVisibleCategories(filteredCategories)
+    }
+}
+

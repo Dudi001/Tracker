@@ -90,6 +90,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         element.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         element.backgroundColor = .ypWhite
         element.tintColor = .ypRed
+        element.addTarget(self, action: #selector(cancelButtonActive), for: .touchUpInside)
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -125,11 +126,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         setupCollectionView()
         
     }
-    
-    func reloadTableView() {
-        print("OKK")
-        categoryAndScheduleTableView.reloadData()
-    }
 
 //MARK: - Register cell
     private func setupTableView() {
@@ -147,28 +143,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     private func setupTextField() {
         hobbyNameTextField.delegate = self
-    }
-    
-    private func addViews() {
-        view.backgroundColor = .ypWhite
-        view.addSubview(titileHobbyLabel)
-        view.addSubview(scrollView)
-        view.addSubview(bottomButtonsStack)
-        setupTitle()
-        setupScrollViewItems()
-        setupBottomButtonsStack()
-    }
-    
-    private func setupBottomButtonsStack() {
-        bottomButtonsStack.addArrangedSubview(cancelButton)
-        bottomButtonsStack.addArrangedSubview(createButton)
-    }
-    
-    private func setupScrollViewItems() {
-        scrollView.addSubview(hobbyNameTextField)
-        scrollView.addSubview(categoryAndScheduleTableView)
-        scrollView.addSubview(collectionView)
-        
     }
     
     func createNewTracker() -> [TrackerCategory] {
@@ -201,8 +175,38 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         return newCategory
     }
     
+    private func setupTitle() {
+        titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
+    }
+    
+    func reloadTableView() {
+        categoryAndScheduleTableView.reloadData()
+    }
+    
     
 //MARK: - Constraints
+    private func addViews() {
+        view.backgroundColor = .ypWhite
+        view.addSubview(titileHobbyLabel)
+        view.addSubview(scrollView)
+        view.addSubview(bottomButtonsStack)
+        setupTitle()
+        setupScrollViewItems()
+        setupBottomButtonsStack()
+    }
+    
+    private func setupBottomButtonsStack() {
+        bottomButtonsStack.addArrangedSubview(cancelButton)
+        bottomButtonsStack.addArrangedSubview(createButton)
+    }
+    
+    private func setupScrollViewItems() {
+        scrollView.addSubview(hobbyNameTextField)
+        scrollView.addSubview(categoryAndScheduleTableView)
+        scrollView.addSubview(collectionView)
+        
+    }
+    
     private func addConstant() {
         if typeOfTracker == .hobby {
             NSLayoutConstraint.activate([
@@ -247,20 +251,23 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         ])
     }
     
-    
-    private func setupTitle() {
-        titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
-    }
-    
-    @objc private func switchToCategoryViewController() {
+//MARK: - @OBJC FUNC
+    @objc
+    private func switchToCategoryViewController() {
         let categoryVC = CategoryViewController()
         categoryVC.createTrackerViewController = self
         present(categoryVC, animated: true)
     }
     
-    @objc private func switchToScheduleViewController() {
+    @objc
+    private func switchToScheduleViewController() {
         let scheduleVC = ScheduleViewController()
         present(scheduleVC, animated: true)
+    }
+    
+    @objc
+    private func cancelButtonActive() {
+        dismiss(animated: true)
     }
     
 }
@@ -280,7 +287,6 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
 
 //MARK: - UITableViewDataSource
 extension CreateNewTrackerViewController: UITableViewDataSource {
-    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch typeOfTracker {
@@ -421,7 +427,6 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         default:
             return 14
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -488,7 +493,6 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
             collectionView.deselectItem(at: $0, animated: true)
         })
-        
         return true
     }
 }

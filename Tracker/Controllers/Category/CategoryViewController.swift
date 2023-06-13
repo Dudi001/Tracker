@@ -50,7 +50,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         element.separatorStyle = .singleLine
         element.layer.cornerRadius = 16
         element.isScrollEnabled = false
-        element.backgroundColor = .ypBlack
+        element.backgroundColor = .ypBackground
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -76,14 +76,14 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         setupTableView()
         emptyImage.removeFromSuperview()
         emptyLabel.removeFromSuperview()
-        view.addSubview(categoryTableView)
-        
-        NSLayoutConstraint.activate([
-            categoryTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-            categoryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            categoryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            categoryTableView.heightAnchor.constraint(equalToConstant: 300)
-        ])
+//        view.addSubview(categoryTableView)
+//        
+//        NSLayoutConstraint.activate([
+//            categoryTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
+//            categoryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+//            categoryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+//            categoryTableView.heightAnchor.constraint(equalToConstant: 150)
+//        ])
     }
     
     func checkCellsCount() {
@@ -110,7 +110,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
                 categoryTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
                 categoryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 categoryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                categoryTableView.heightAnchor.constraint(equalToConstant: 300)
+                categoryTableView.heightAnchor.constraint(equalToConstant: 150)
             ])
         }
     }
