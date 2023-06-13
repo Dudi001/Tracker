@@ -10,7 +10,6 @@ import UIKit
 
 final class CategoryViewController: UIViewController {
     var trackerStorage = TrackerStorageService.shared
-
     var selectedIndexPath: IndexPath?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
     
@@ -186,12 +185,13 @@ extension CategoryViewController: UITableViewDelegate {
                 }
             }
         }
-
+        
+        
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell {
             cell.accessoryType = .checkmark
             selectedIndexPath = indexPath
 
-            createTrackerViewController?.selectedCategory = cell.label.text
+            trackerStorage.selectedCategory = cell.label.text
             createTrackerViewController?.reloadTableView()
             dismiss(animated: true)
         }

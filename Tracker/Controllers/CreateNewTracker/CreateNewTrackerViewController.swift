@@ -15,42 +15,13 @@ enum TypeOfTracker {
 }
 
 protocol CreateTrackerViewControllerProtocol {
-    var selectedCategory: String? { get set }
-    var selectedSchedule: String? { get set }
     func reloadTableView()
 }
 
-final class CreateNewTrackerViewController: UIViewController {
-    var trackerViewController: TrackerViewProtocol?
+final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
     var typeOfTracker: TypeOfTracker?
     var trackerStorage = TrackerStorageService.shared
-    
-//    var selectedCategory: String?
-//    var selectedSchedule: String?
-//    
-//    var trackerName: String?
-//    var trackerEmoji: String?
-//    var trackerColor: UIColor?
-//    var schedule: [Int] = []
-//    
-//    static let colllectionViewHeightWithSchedule: CGFloat = 618.0
-//    static let colllectionViewHeight: CGFloat = 543.0
-//    
-//    
-//    var emojies = [
-//        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-//        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-//        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
-//    ]
-//    
-//    var colors: [UIColor] = [
-//        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4, .colorSelection5, .colorSelection6,
-//        .colorSelection7, .colorSelection8, .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12,
-//        .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16, .colorSelection17, .colorSelection18,
-//    ]
-//    
-//    let tableViewTitle = ["Категория", "Расписание"]
-    
+     
     
     lazy var titileHobbyLabel: UILabel = {
        let text = UILabel()
@@ -156,6 +127,7 @@ final class CreateNewTrackerViewController: UIViewController {
     }
     
     func reloadTableView() {
+        print("OKK")
         categoryAndScheduleTableView.reloadData()
     }
 
@@ -252,13 +224,11 @@ final class CreateNewTrackerViewController: UIViewController {
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 14),
             scrollView.bottomAnchor.constraint(equalTo: bottomButtonsStack.topAnchor, constant: -16),
-//            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             hobbyNameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 39),
             hobbyNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             hobbyNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             hobbyNameTextField.heightAnchor.constraint(equalToConstant: 75),
-//            hobbyNameTextField.bottomAnchor.constraint(equalTo: categoryAndScheduleTableView.topAnchor, constant: 34),
             
             categoryAndScheduleTableView.topAnchor.constraint(equalTo: hobbyNameTextField.bottomAnchor, constant: 24),
             categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
@@ -269,7 +239,6 @@ final class CreateNewTrackerViewController: UIViewController {
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.heightAnchor.constraint(equalToConstant: 500),
             collectionView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
-//            collectionView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
             bottomButtonsStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
             bottomButtonsStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
@@ -285,6 +254,7 @@ final class CreateNewTrackerViewController: UIViewController {
     
     @objc private func switchToCategoryViewController() {
         let categoryVC = CategoryViewController()
+        categoryVC.createTrackerViewController = self
         present(categoryVC, animated: true)
     }
     

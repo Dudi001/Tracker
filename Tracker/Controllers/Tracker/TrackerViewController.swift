@@ -8,10 +8,7 @@
 import UIKit
 
 
-protocol TrackerViewProtocol: AnyObject {
-    var categories: [TrackerCategory] { get set }
-    var visibleCategories: [TrackerCategory] { get set }
-}
+
 
 final class TrackerViewController: UIViewController {
     var query: String = ""
