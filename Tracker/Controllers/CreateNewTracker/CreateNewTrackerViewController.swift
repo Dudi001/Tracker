@@ -23,32 +23,33 @@ protocol CreateTrackerViewControllerProtocol {
 final class CreateNewTrackerViewController: UIViewController {
     var trackerViewController: TrackerViewProtocol?
     var typeOfTracker: TypeOfTracker?
+    var trackerStorage = TrackerStorageService.shared
     
-    var selectedCategory: String?
-    var selectedSchedule: String?
-    
-    var trackerName: String?
-    var trackerEmoji: String?
-    var trackerColor: UIColor?
-    var schedule: [Int] = []
-    
-    static let colllectionViewHeightWithSchedule: CGFloat = 618.0
-    static let colllectionViewHeight: CGFloat = 543.0
-    
-    
-    var emojies = [
-        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
-        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
-    ]
-    
-    var colors: [UIColor] = [
-        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4, .colorSelection5, .colorSelection6,
-        .colorSelection7, .colorSelection8, .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12,
-        .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16, .colorSelection17, .colorSelection18,
-    ]
-    
-    let tableViewTitle = ["Категория", "Расписание"]
+//    var selectedCategory: String?
+//    var selectedSchedule: String?
+//    
+//    var trackerName: String?
+//    var trackerEmoji: String?
+//    var trackerColor: UIColor?
+//    var schedule: [Int] = []
+//    
+//    static let colllectionViewHeightWithSchedule: CGFloat = 618.0
+//    static let colllectionViewHeight: CGFloat = 543.0
+//    
+//    
+//    var emojies = [
+//        "🙂", "😻", "🌺", "🐶", "❤️", "😱",
+//        "😇", "😡", "🥶", "🤔", "🙌", "🍔",
+//        "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
+//    ]
+//    
+//    var colors: [UIColor] = [
+//        .colorSelection1, .colorSelection2, .colorSelection3, .colorSelection4, .colorSelection5, .colorSelection6,
+//        .colorSelection7, .colorSelection8, .colorSelection9, .colorSelection10, .colorSelection11, .colorSelection12,
+//        .colorSelection13, .colorSelection14, .colorSelection15, .colorSelection16, .colorSelection17, .colorSelection18,
+//    ]
+//    
+//    let tableViewTitle = ["Категория", "Расписание"]
     
     
     lazy var titileHobbyLabel: UILabel = {
@@ -199,12 +200,14 @@ final class CreateNewTrackerViewController: UIViewController {
     }
     
     func createNewTracker() -> [TrackerCategory] {
-        guard let categories = trackerViewController?.categories,
-              let trackerColor = trackerColor,
-              let trackerName = trackerName,
-              let trackerEmoji = trackerEmoji else { return [] }
-
+        guard let trackerColor = trackerStorage.trackerColor,
+              let trackerName = trackerStorage.trackerName,
+              let trackerEmoji = trackerStorage.trackerEmoji,
+              let schedule = trackerStorage.schedule
         
+        else { return [] }
+
+        let categories = trackerStorage.categories
         let newTracker = Tracker(id: UUID(),
                                  name: trackerName,
                                  color: trackerColor,
@@ -214,7 +217,7 @@ final class CreateNewTrackerViewController: UIViewController {
         var newCategory: [TrackerCategory] = []
 
         categories.forEach { category in
-            if selectedCategory == category.name {
+            if trackerStorage.selectedCategory == category.name {
                 var newTrackers = category.trackerArray
                 newTrackers.append(newTracker)
                 newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
@@ -299,7 +302,7 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-        trackerName = textField.text
+        trackerStorage.trackerName = textField.text
 //        checkCreateButton()
     }
 }
@@ -322,18 +325,18 @@ extension CreateNewTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as? CreateNewTrackerTableVIewCell else { return UITableViewCell() }
-        cell.label.text = tableViewTitle[indexPath.row]
+        cell.label.text = trackerStorage.tableViewTitle[indexPath.row]
         
         switch indexPath.row {
         case 0:
-            if let selectedCategory = selectedCategory {
+            if let selectedCategory = trackerStorage.selectedCategory {
                 cell.label.removeConstraints(cell.label.constraints)
                 cell.configureCellWithCategory(selectedCategory)
             } else {
                 cell.configureCellWithoutCategory()
             }
         case 1:
-            if let selectedSchedule = selectedSchedule {
+            if let selectedSchedule = trackerStorage.selectedSchedule {
                 cell.label.removeConstraints(cell.label.constraints)
                 cell.configureCellWithCategory(selectedSchedule)
             } else {
@@ -377,9 +380,9 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return emojies.count
+            return trackerStorage.emojies.count
         case 1:
-            return colors.count
+            return trackerStorage.colors.count
         default:
             return 10
         }
@@ -390,10 +393,10 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
               
         switch indexPath.section {
         case 0:
-            cell.configureEmojiCell(emoji: emojies[indexPath.row])
+            cell.configureEmojiCell(emoji: trackerStorage.emojies[indexPath.row])
             return cell
         case 1:
-            cell.configureColorCell(color: colors[indexPath.row])
+            cell.configureColorCell(color: trackerStorage.colors[indexPath.row])
             return cell
         default:
             return UICollectionViewCell()
@@ -490,12 +493,12 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             cell.layer.cornerRadius = 16
             cell.backgroundColor = .ypLightGray
-            trackerEmoji = cell.emojiLabel.text
+            trackerStorage.trackerEmoji = cell.emojiLabel.text
         case 1:
             cell.layer.cornerRadius = 11
-            cell.layer.borderColor = colors[indexPath.row].withAlphaComponent(0.3).cgColor
+            cell.layer.borderColor = trackerStorage.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
-            trackerColor = colors[indexPath.row]
+            trackerStorage.trackerColor = trackerStorage.colors[indexPath.row]
         default:
             cell.backgroundColor = .gray
         }
