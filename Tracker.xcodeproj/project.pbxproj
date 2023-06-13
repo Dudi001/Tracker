@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D9021F152A389EEA0080BB4D /* TrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9021F142A389EEA0080BB4D /* TrackerService.swift */; };
 		D90E2E5E2A2A497B0000C7E1 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E5D2A2A497B0000C7E1 /* TabBarViewController.swift */; };
 		D90E2E622A2A4A500000C7E1 /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E612A2A4A500000C7E1 /* TrackerViewController.swift */; };
 		D90E2E652A2A779A0000C7E1 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E642A2A779A0000C7E1 /* UIColor+Extension.swift */; };
@@ -38,6 +39,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		D9021F142A389EEA0080BB4D /* TrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerService.swift; sourceTree = "<group>"; };
 		D90E2E5D2A2A497B0000C7E1 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		D90E2E612A2A4A500000C7E1 /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
 		D90E2E642A2A779A0000C7E1 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -82,6 +84,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D9021F132A389ED70080BB4D /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				D9021F142A389EEA0080BB4D /* TrackerService.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
 		D90E2E5F2A2A4A330000C7E1 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
@@ -216,6 +226,7 @@
 		D991ADD42A1673EE00F1F0F3 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				D9021F132A389ED70080BB4D /* Service */,
 				D90E2E7A2A2CA3FF0000C7E1 /* protocols */,
 				D90E2E752A2BE0E10000C7E1 /* Resourses */,
 				D90E2E6C2A2BD03D0000C7E1 /* Models */,
@@ -325,6 +336,7 @@
 				D90E2E7C2A2CA4160000C7E1 /* TrackerViewPresenterProtocol.swift in Sources */,
 				D991ADD82A1673EE00F1F0F3 /* SceneDelegate.swift in Sources */,
 				D962398A2A36261000F61DAE /* CreateNewTrackerTableVIewCell.swift in Sources */,
+				D9021F152A389EEA0080BB4D /* TrackerService.swift in Sources */,
 				D962398F2A362CAA00F61DAE /* CategoryViewController.swift in Sources */,
 				D962398C2A36261700F61DAE /* CreateNewTrackerCollectionViewCell.swift in Sources */,
 			);

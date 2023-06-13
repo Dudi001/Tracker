@@ -9,7 +9,7 @@ import UIKit
 
 
 final class CategoryViewController: UIViewController {
-    var trackerViewController: TrackerViewProtocol?
+    var trackerStorage = TrackerStorageService.shared
 
     var selectedIndexPath: IndexPath?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
@@ -84,7 +84,7 @@ final class CategoryViewController: UIViewController {
     }
     
     func checkCellsCount() {
-        if trackerViewController?.categories.count == 0 {
+        if trackerStorage.categories.count == 0 {
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
             categoryTableView.removeFromSuperview()
@@ -149,7 +149,7 @@ final class CategoryViewController: UIViewController {
 //MARK: UITableViewDataSource
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return  trackerViewController?.categories.count ?? 0
+        return  trackerStorage.categories.count
 //        if categoryArray.isEmpty {
 //            return 1
 //        } else {
@@ -161,7 +161,7 @@ extension CategoryViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         
         
-        cell.configureCell(text: trackerViewController?.categories[indexPath.row].name ?? "")
+        cell.configureCell(text: trackerStorage.categories[indexPath.row].name)
         
         return cell
     }
