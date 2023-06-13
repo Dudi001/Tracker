@@ -10,8 +10,7 @@ import UIKit
 
 final class CategoryViewController: UIViewController {
     var trackerViewController: TrackerViewProtocol?
-//    private let categoryArray = ["Важное", "Веселье"]
-    
+
     var selectedIndexPath: IndexPath?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
     
@@ -98,8 +97,6 @@ final class CategoryViewController: UIViewController {
                 emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
                 emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
-            
-            
             ])
         } else {
             emptyImage.removeFromSuperview()
@@ -152,7 +149,7 @@ final class CategoryViewController: UIViewController {
 //MARK: UITableViewDataSource
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return trackerViewController?.categories.count ?? 0
+        return  trackerViewController?.categories.count ?? 0
 //        if categoryArray.isEmpty {
 //            return 1
 //        } else {

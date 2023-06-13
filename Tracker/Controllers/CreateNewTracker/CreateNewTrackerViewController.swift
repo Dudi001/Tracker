@@ -20,7 +20,7 @@ protocol CreateTrackerViewControllerProtocol {
     func reloadTableView()
 }
 
-final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
+final class CreateNewTrackerViewController: UIViewController {
     var trackerViewController: TrackerViewProtocol?
     var typeOfTracker: TypeOfTracker?
     
@@ -39,8 +39,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     var emojies = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
         "😇", "😡", "🥶", "🤔", "🙌", "🍔",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪",
-        "🥦", "🏓", "🥇", "🎸", "🏝", "😪",
         "🥦", "🏓", "🥇", "🎸", "🏝", "😪"
     ]
     
@@ -254,21 +252,21 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
 //            scrollView.widthAnchor.constraint(equalTo: view.widthAnchor),
             
             hobbyNameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 39),
-            hobbyNameTextField.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
-            hobbyNameTextField.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            hobbyNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            hobbyNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             hobbyNameTextField.heightAnchor.constraint(equalToConstant: 75),
 //            hobbyNameTextField.bottomAnchor.constraint(equalTo: categoryAndScheduleTableView.topAnchor, constant: 34),
             
             categoryAndScheduleTableView.topAnchor.constraint(equalTo: hobbyNameTextField.bottomAnchor, constant: 24),
-            categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
-            categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),
+            categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
             collectionView.topAnchor.constraint(equalTo: categoryAndScheduleTableView.bottomAnchor, constant: 32),
-            collectionView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
-//            collectionView.heightAnchor.constraint(equalTo: scrollView.heightAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
-            collectionView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 500),
+            collectionView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor, constant: -10),
+//            collectionView.widthAnchor.constraint(equalTo: scrollView.widthAnchor),
 
             bottomButtonsStack.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor, constant: 16),
             bottomButtonsStack.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor, constant: -16),

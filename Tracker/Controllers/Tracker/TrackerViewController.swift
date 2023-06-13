@@ -11,17 +11,22 @@ import UIKit
 protocol TrackerViewProtocol: AnyObject {
     var categories: [TrackerCategory] { get set }
     var visibleCategories: [TrackerCategory] { get set }
-//    var completedTrackers: [TrackerRecord]? { get set }
-//    var emojies: [String] { get }
-//    var currentDate: Date? { get set }
-//    func filterTrackersFromDate(text: String?)
 }
 
 final class TrackerViewController: UIViewController, TrackerViewProtocol {
     var query: String = ""
     var currentDate = Date()
     var completedTrackers: Set<TrackerRecord> = []
-    var day = 1
+    var day = 1        
+    
+    lazy var categories: [TrackerCategory] = [
+        TrackerCategory(name: "Заголовок1", trackerArray: testTrakers),
+        TrackerCategory(name: "Заголовок2", trackerArray: secondTrackers)
+    ]
+    
+    
+    var visibleCategories = [TrackerCategory]()
+    
     
     private lazy var testTrakers: [Tracker] = [
         Tracker(id: UUID(), name: "Тест 1", color: .colorSelection1, emoji: "🐕", schedule:  []),
@@ -39,14 +44,6 @@ final class TrackerViewController: UIViewController, TrackerViewProtocol {
         Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection8, emoji: "🐤", schedule: []),
         Tracker(id: UUID(), name: "Найти жирафа", color: .colorSelection9, emoji: "🦒", schedule: []),
     ]
-    
-    lazy var categories: [TrackerCategory] = [
-        TrackerCategory(name: "Заголовок1", trackerArray: testTrakers),
-        TrackerCategory(name: "Заголовок2", trackerArray: secondTrackers)
-    ]
-    
-    
-    var visibleCategories = [TrackerCategory]()
     
     lazy var emptyImage: UIImageView = {
         let newImage = UIImageView()

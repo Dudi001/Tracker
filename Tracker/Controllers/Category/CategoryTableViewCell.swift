@@ -11,6 +11,7 @@ final class CategoryTableViewCell: UITableViewCell {
     
     lazy var label: UILabel = {
         let element = UILabel()
+        element.translatesAutoresizingMaskIntoConstraints = false
         element.font = .systemFont(ofSize: 17, weight: .regular)
         element.textColor = .ypBlack
         return element
