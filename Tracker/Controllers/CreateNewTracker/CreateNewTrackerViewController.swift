@@ -20,7 +20,7 @@ protocol CreateTrackerViewControllerProtocol {
 
 final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
     var typeOfTracker: TypeOfTracker?
-    var trackerStorage = TrackerStorageService.shared
+    private let trackerStorage = TrackerStorageService.shared
      
     
     lazy var titileHobbyLabel: UILabel = {

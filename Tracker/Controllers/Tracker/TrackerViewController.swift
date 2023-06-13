@@ -13,7 +13,7 @@ import UIKit
 final class TrackerViewController: UIViewController {
     var query: String = ""
     var currentDate = Date()
-    var trackerStorage = TrackerStorageService.shared
+    private let trackerStorage = TrackerStorageService.shared
     
     var day = 1
     

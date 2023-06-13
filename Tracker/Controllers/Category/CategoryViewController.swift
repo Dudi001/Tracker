@@ -7,9 +7,13 @@
 
 import UIKit
 
+protocol CategoryViewControllerProtocol: AnyObject {
+    func reloadTableView()
+}
 
-final class CategoryViewController: UIViewController {
-    var trackerStorage = TrackerStorageService.shared
+
+final class CategoryViewController: UIViewController, CategoryViewControllerProtocol {
+    private let trackerStorage = TrackerStorageService.shared
     var selectedIndexPath: IndexPath?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
     
@@ -129,9 +133,21 @@ final class CategoryViewController: UIViewController {
         ])
     }
     
-    @objc private func switchToNewCategoryViewController() {
+    @objc
+    private func switchToNewCategoryViewController() {
         let newCategoryVC = NewCategoryViewController()
+        newCategoryVC.categoryViewController = self
         present(newCategoryVC, animated: true)
+    }
+    
+    func reloadTableView() {
+        checkToSetupDumb()
+        categoryTableView.reloadData()
+    }
+    
+
+    private func checkToSetupDumb() {
+        categoryTableView.alpha = trackerStorage.categories.count == 0 ? 0 : 1
     }
     
     
