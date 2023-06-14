@@ -10,6 +10,8 @@
 		D9021F152A389EEA0080BB4D /* TrackerService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9021F142A389EEA0080BB4D /* TrackerService.swift */; };
 		D9021F182A390A840080BB4D /* FilterViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9021F172A390A840080BB4D /* FilterViewController.swift */; };
 		D9021F1A2A390A990080BB4D /* FilterTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9021F192A390A990080BB4D /* FilterTableViewCell.swift */; };
+		D9021F1C2A39E0670080BB4D /* ScheduleService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9021F1B2A39E0670080BB4D /* ScheduleService.swift */; };
+		D9021F1E2A39E1220080BB4D /* ScheduleTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9021F1D2A39E1220080BB4D /* ScheduleTableViewCell.swift */; };
 		D90E2E5E2A2A497B0000C7E1 /* TabBarViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E5D2A2A497B0000C7E1 /* TabBarViewController.swift */; };
 		D90E2E622A2A4A500000C7E1 /* TrackerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E612A2A4A500000C7E1 /* TrackerViewController.swift */; };
 		D90E2E652A2A779A0000C7E1 /* UIColor+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D90E2E642A2A779A0000C7E1 /* UIColor+Extension.swift */; };
@@ -44,6 +46,8 @@
 		D9021F142A389EEA0080BB4D /* TrackerService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerService.swift; sourceTree = "<group>"; };
 		D9021F172A390A840080BB4D /* FilterViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterViewController.swift; sourceTree = "<group>"; };
 		D9021F192A390A990080BB4D /* FilterTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FilterTableViewCell.swift; sourceTree = "<group>"; };
+		D9021F1B2A39E0670080BB4D /* ScheduleService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleService.swift; sourceTree = "<group>"; };
+		D9021F1D2A39E1220080BB4D /* ScheduleTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ScheduleTableViewCell.swift; sourceTree = "<group>"; };
 		D90E2E5D2A2A497B0000C7E1 /* TabBarViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarViewController.swift; sourceTree = "<group>"; };
 		D90E2E612A2A4A500000C7E1 /* TrackerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerViewController.swift; sourceTree = "<group>"; };
 		D90E2E642A2A779A0000C7E1 /* UIColor+Extension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+Extension.swift"; sourceTree = "<group>"; };
@@ -91,6 +95,7 @@
 		D9021F132A389ED70080BB4D /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				D9021F1B2A39E0670080BB4D /* ScheduleService.swift */,
 				D9021F142A389EEA0080BB4D /* TrackerService.swift */,
 			);
 			path = Service;
@@ -216,6 +221,7 @@
 			isa = PBXGroup;
 			children = (
 				D96239912A362CE100F61DAE /* ScheduleViewController.swift */,
+				D9021F1D2A39E1220080BB4D /* ScheduleTableViewCell.swift */,
 			);
 			path = Schedule;
 			sourceTree = "<group>";
@@ -332,8 +338,10 @@
 				D90E2E842A31DC840000C7E1 /* image + ext.swift in Sources */,
 				D96239882A351D5F00F61DAE /* CreateNewTrackerViewController.swift in Sources */,
 				D96239962A37984900F61DAE /* CategoryTableViewCell.swift in Sources */,
+				D9021F1C2A39E0670080BB4D /* ScheduleService.swift in Sources */,
 				D90E2E622A2A4A500000C7E1 /* TrackerViewController.swift in Sources */,
 				D90E2E6B2A2B44570000C7E1 /* StatisticViewController.swift in Sources */,
+				D9021F1E2A39E1220080BB4D /* ScheduleTableViewCell.swift in Sources */,
 				D96239922A362CE100F61DAE /* ScheduleViewController.swift in Sources */,
 				D96239942A363D6200F61DAE /* CreateNewTrackerSupplementaryView.swift in Sources */,
 				D90E2E5E2A2A497B0000C7E1 /* TabBarViewController.swift in Sources */,

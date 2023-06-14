@@ -153,10 +153,10 @@ final class TrackerViewController: UIViewController {
     }
     
     private func setupDatePicker() {
-        datePicker.addTarget(self, action: #selector(setupTrackersFromDatePicker(_:)), for: .valueChanged)
-        var calendar = Calendar.current
-        calendar.firstWeekday = 2
-        datePicker.calendar = calendar
+        datePicker.addTarget(self, action: #selector(setupTrackersFromDatePicker), for: .valueChanged)
+//        var calendar = Calendar.current
+//        calendar.firstWeekday = 2
+//        datePicker.calendar = calendar
     }
     
     private func setupCounterTextLabel(trackerID: UUID) -> String {
@@ -228,18 +228,18 @@ final class TrackerViewController: UIViewController {
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
     }
     
-    @objc
-    private func setupTrackersFromDatePicker(_ sender: UIDatePicker) {
-        currentDate = sender.date
-        let calendar = Calendar.current
-        let weekday: Int = {
-            let day = calendar.component(.weekday, from: currentDate) - 1
-            if day == 0 { return 7 }
-            return day
-        }()
-        day = weekday
-        filtered()
-    }
+//    @objc
+//    private func setupTrackersFromDatePicker(_ sender: UIDatePicker) {
+////        currentDate = sender.date
+////        let calendar = Calendar.current
+////        let weekday: Int = {
+////            let day = calendar.component(.weekday, from: currentDate) - 1
+////            if day == 0 { return 7 }
+////            return day
+////        }()
+////        day = weekday
+////        filtered()
+//    }
     
     @objc
     private func switchToFilterViewController() {
@@ -313,7 +313,7 @@ extension TrackerViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
-        filtered()
+//        filtered()
 
     }
     
@@ -404,44 +404,77 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackerViewController {
     
-    private func filtered() {
-        var filteredCategories = [TrackerCategory]()
+    @objc private func setupTrackersFromDatePicker() {
+        currentDate = datePicker.date
         
-        for category in trackerStorage.categories {
-            var trackers = [Tracker]()
-            for tracker in category.trackerArray {
-                let schedule = tracker.schedule
-                if schedule.contains(day) {
-                    trackers.append(tracker)
-                } else if schedule.isEmpty {
-                    trackers.append(tracker)
-                }
-                
-            }
-            if !trackers.isEmpty {
-                let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
-                filteredCategories.append(trackerCategory)
-            }
-        }
-        
-        if !query.isEmpty {
-            var trackersWithFilteredName = [TrackerCategory]()
-            for category in filteredCategories {
-                var trackers = [Tracker]()
-                for tracker in category.trackerArray {
-                    let trackerName = tracker.name.lowercased()
-                    if trackerName.range(of: query, options: .caseInsensitive) != nil {
-                        trackers.append(tracker)
-                    }
-                }
-                if !trackers.isEmpty {
-                    let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
-                    trackersWithFilteredName.append(trackerCategory)
-                }
-            }
-            filteredCategories = trackersWithFilteredName
-        }
-        updateVisibleCategories(filteredCategories)
+        filterTrackersFromDate(text: "")
+        trackerCollectionView.reloadData()
     }
+    
+    func filterTrackersFromDate(text: String?) {
+        guard let text = text?.lowercased() else { return }
+        
+        let date = currentDate
+        let categories = trackerStorage.categories
+        let calendar = Calendar.current
+        
+        trackerStorage.visibleCategories = categories.compactMap { category in
+            let filterTrackers = category.trackerArray.filter { tracker in
+                let schedule = tracker.schedule
+                let filterText = text.isEmpty || tracker.name.lowercased().contains(text)
+                let trackerDate = calendar.component(.weekday, from: date)
+                
+                return schedule.contains(trackerDate) && filterText
+            }
+            
+            if filterTrackers.isEmpty {
+                return nil
+            }
+            
+            return TrackerCategory(name: category.name,
+                                   trackerArray: filterTrackers)
+        }
+    }
+    
+    
+//    private func filtered() {
+//        var filteredCategories = [TrackerCategory]()
+//
+//        for category in trackerStorage.categories {
+//            var trackers = [Tracker]()
+//            for tracker in category.trackerArray {
+//                let schedule = tracker.schedule
+//                if schedule.contains(day) {
+//                    trackers.append(tracker)
+//                } else if schedule.isEmpty {
+//                    trackers.append(tracker)
+//                }
+//
+//            }
+//            if !trackers.isEmpty {
+//                let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+//                filteredCategories.append(trackerCategory)
+//            }
+//        }
+//
+//        if !query.isEmpty {
+//            var trackersWithFilteredName = [TrackerCategory]()
+//            for category in filteredCategories {
+//                var trackers = [Tracker]()
+//                for tracker in category.trackerArray {
+//                    let trackerName = tracker.name.lowercased()
+//                    if trackerName.range(of: query, options: .caseInsensitive) != nil {
+//                        trackers.append(tracker)
+//                    }
+//                }
+//                if !trackers.isEmpty {
+//                    let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+//                    trackersWithFilteredName.append(trackerCategory)
+//                }
+//            }
+//            filteredCategories = trackersWithFilteredName
+//        }
+//        updateVisibleCategories(filteredCategories)
+//    }
 }
 

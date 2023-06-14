@@ -262,6 +262,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     @objc
     private func switchToScheduleViewController() {
         let scheduleVC = ScheduleViewController()
+        scheduleVC.createTrackerViewController = self
         present(scheduleVC, animated: true)
     }
     
