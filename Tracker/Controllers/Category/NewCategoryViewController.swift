@@ -48,7 +48,6 @@ final class NewCategoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         textField.delegate = self
-        
         setViews()
         setConstraints()
     }
@@ -61,7 +60,6 @@ final class NewCategoryViewController: UIViewController {
         guard let name = textField.text else { return }
         trackerStorage.categories.append(TrackerCategory(name: name,
                                                          trackerArray: []))
-        
         dismiss(animated: true)
         categoryViewController?.reloadTableView()
     }
@@ -111,8 +109,3 @@ extension NewCategoryViewController {
         ])
     }
 }
-
-    
-    
-    
-

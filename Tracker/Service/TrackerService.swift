@@ -32,8 +32,6 @@ final class TrackerStorageService {
         ]
 
     private lazy var secondTrackers: [Tracker] = [
-        Tracker(id: UUID(), name: "тест2", color: .colorSelection4, emoji: "🐤", schedule: []),
-        Tracker(id: UUID(), name: "тест3333", color: .colorSelection6, emoji: "🦒", schedule: []),
         Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection7, emoji: "🐤", schedule: []),
         Tracker(id: UUID(), name: "Найти жирафа", color: .colorSelection5, emoji: "🦒", schedule: []),
         Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection8, emoji: "🐤", schedule: []),

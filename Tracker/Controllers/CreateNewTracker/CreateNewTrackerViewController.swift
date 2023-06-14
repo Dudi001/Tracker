@@ -150,7 +150,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
               let trackerName = trackerStorage.trackerName,
               let trackerEmoji = trackerStorage.trackerEmoji,
               let schedule = trackerStorage.schedule
-        
         else { return [] }
 
         let categories = trackerStorage.categories
@@ -159,7 +158,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
                                  color: trackerColor,
                                  emoji: trackerEmoji,
                                  schedule: schedule)
-
         var newCategory: [TrackerCategory] = []
 
         categories.forEach { category in
@@ -171,7 +169,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
                 newCategory.append(category)
             }
         }
-
         return newCategory
     }
     
@@ -281,7 +278,6 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         trackerStorage.trackerName = textField.text
-//        checkCreateButton()
     }
 }
 
@@ -478,8 +474,6 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         default:
             cell.backgroundColor = .gray
         }
-        
-//        checkCreateButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -487,7 +481,6 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         cell.layer.borderWidth = 0
-//        checkCreateButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {

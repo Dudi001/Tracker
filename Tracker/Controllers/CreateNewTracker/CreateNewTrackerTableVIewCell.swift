@@ -39,7 +39,6 @@ final class CreateNewTrackerTableVIewCell: UITableViewCell {
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             label.topAnchor.constraint(equalTo: topAnchor, constant: 27)
         ])
-        
     }
     
     func configureCellWithCategory(_ with: String) {
@@ -48,15 +47,11 @@ final class CreateNewTrackerTableVIewCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 27)
-        ])
-        
-        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalTo: topAnchor, constant: 27),
+            
             categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
             categoryLabel.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 2)
         ])
-        
-        
         categoryLabel.text = with
     }
 }

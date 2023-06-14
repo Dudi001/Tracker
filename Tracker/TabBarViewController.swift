@@ -16,19 +16,12 @@ final class TabBarViewController: UITabBarController {
     
     
     private func configure() {
-
-        
         tabBar.tintColor = .ypBlue
-        tabBar.barTintColor = .ypGray
+        tabBar.barTintColor = .ypWhite
         tabBar.backgroundColor = .ypWhite
         tabBar.layer.borderColor = CGColor(gray: 1, alpha: 1)
 
-        
-        
-//        let trackerViewPresenter = TrackerViewPresenter()
         let trackerViewController = TrackerViewController()
-//        trackerViewController.presenter = trackerViewPresenter
-        
         let trackerNavigationController = UINavigationController(rootViewController: trackerViewController)
         let statisticNavigationController = UINavigationController(rootViewController: StatisticViewController())
         
