@@ -154,14 +154,10 @@ final class TrackerViewController: UIViewController {
     
     private func setupDatePicker() {
         datePicker.addTarget(self, action: #selector(setupTrackersFromDatePicker), for: .valueChanged)
-//        var calendar = Calendar.current
-//        calendar.firstWeekday = 2
-//        datePicker.calendar = calendar
     }
     
     private func setupCounterTextLabel(trackerID: UUID) -> String {
         let count = trackerStorage.completedTrackers.filter { $0.id == trackerID }.count
-//        let lastDigit = count % 10
         var text: String
         text = count.days()
         return("\(text)")
@@ -176,6 +172,7 @@ final class TrackerViewController: UIViewController {
     
     private func setupCell(_ cell: TrackerCollectionViewCell, trackerModel: Tracker) {
         cell.emojiLabel.text = trackerModel.emoji
+        cell.textTrackerLabel.text = trackerModel.name
         cell.cellView.backgroundColor = trackerModel.color
         cell.trackerCompleteButton.backgroundColor = trackerModel.color
         cell.trackerCompleteButton.addTarget(self, action: #selector(completeButtonTapped(_:)), for: .touchUpInside)
@@ -228,18 +225,6 @@ final class TrackerViewController: UIViewController {
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
     }
     
-//    @objc
-//    private func setupTrackersFromDatePicker(_ sender: UIDatePicker) {
-////        currentDate = sender.date
-////        let calendar = Calendar.current
-////        let weekday: Int = {
-////            let day = calendar.component(.weekday, from: currentDate) - 1
-////            if day == 0 { return 7 }
-////            return day
-////        }()
-////        day = weekday
-////        filtered()
-//    }
     
     @objc
     private func switchToFilterViewController() {
@@ -313,8 +298,6 @@ extension TrackerViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
-//        filtered()
-
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -328,7 +311,6 @@ extension TrackerViewController: UITextFieldDelegate {
         UIView.animate(withDuration: 0.3) {
             self.cancelButton.isHidden = true
             self.view.layoutIfNeeded()
-            
         }
     }
 }
@@ -336,7 +318,6 @@ extension TrackerViewController: UITextFieldDelegate {
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         trackerStorage.visibleCategories.count
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -382,8 +363,8 @@ extension TrackerViewController: UICollectionViewDataSource {
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let width = (collectionView.bounds.width - 41) / 2
-//        let height = width * 0.8
-        return CGSize(width: width, height: 158)
+        let height = width * 0.8
+        return CGSize(width: width, height: height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
@@ -435,46 +416,5 @@ extension TrackerViewController {
                                    trackerArray: filterTrackers)
         }
     }
-    
-    
-//    private func filtered() {
-//        var filteredCategories = [TrackerCategory]()
-//
-//        for category in trackerStorage.categories {
-//            var trackers = [Tracker]()
-//            for tracker in category.trackerArray {
-//                let schedule = tracker.schedule
-//                if schedule.contains(day) {
-//                    trackers.append(tracker)
-//                } else if schedule.isEmpty {
-//                    trackers.append(tracker)
-//                }
-//
-//            }
-//            if !trackers.isEmpty {
-//                let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
-//                filteredCategories.append(trackerCategory)
-//            }
-//        }
-//
-//        if !query.isEmpty {
-//            var trackersWithFilteredName = [TrackerCategory]()
-//            for category in filteredCategories {
-//                var trackers = [Tracker]()
-//                for tracker in category.trackerArray {
-//                    let trackerName = tracker.name.lowercased()
-//                    if trackerName.range(of: query, options: .caseInsensitive) != nil {
-//                        trackers.append(tracker)
-//                    }
-//                }
-//                if !trackers.isEmpty {
-//                    let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
-//                    trackersWithFilteredName.append(trackerCategory)
-//                }
-//            }
-//            filteredCategories = trackersWithFilteredName
-//        }
-//        updateVisibleCategories(filteredCategories)
-//    }
 }
 

@@ -37,7 +37,6 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         text.adjustsFontSizeToFitWidth = true
         text.minimumScaleFactor = 0.5
         text.numberOfLines = 2
-        text.text = "test test test"
         return text
     }()
     
