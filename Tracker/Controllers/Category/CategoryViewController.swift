@@ -74,16 +74,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         checkCellsCount()
         addConstraints()
         setupTableView()
-        emptyImage.removeFromSuperview()
-        emptyLabel.removeFromSuperview()
-//        view.addSubview(categoryTableView)
-//        
-//        NSLayoutConstraint.activate([
-//            categoryTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
-//            categoryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-//            categoryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-//            categoryTableView.heightAnchor.constraint(equalToConstant: 150)
-//        ])
     }
     
     func checkCellsCount() {
@@ -94,9 +84,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
 
             NSLayoutConstraint.activate([
                 emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+                emptyImage.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 248),
                 
-                emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
                 emptyLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 emptyLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
                 emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
@@ -165,11 +154,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return  trackerStorage.categories.count
-//        if categoryArray.isEmpty {
-//            return 1
-//        } else {
-//            return categoryArray.count
-//        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
