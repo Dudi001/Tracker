@@ -7,8 +7,14 @@
 
 import UIKit
 
+protocol SelectTypeTrackerViewControllerProtocol {
+    func switchToTrackerVC()
+}
 
-final class SelectTypeTrackerViewController: UIViewController {
+
+final class SelectTypeTrackerViewController: UIViewController, SelectTypeTrackerViewControllerProtocol {
+    var trackerViewController: TrackerViewControllerProtocol?
+    
     lazy var titileLabel: UILabel = {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
@@ -58,6 +64,7 @@ final class SelectTypeTrackerViewController: UIViewController {
     private func hobbyButtonTappet() {
         let newTrackerVC = CreateNewTrackerViewController()
         newTrackerVC.typeOfTracker = .hobby
+        newTrackerVC.selecTypeTracker = self
         present(newTrackerVC, animated: true)
     }
     
@@ -65,7 +72,14 @@ final class SelectTypeTrackerViewController: UIViewController {
     private func irregularButtonTappet() {
         let newTrackerVC = CreateNewTrackerViewController()
         newTrackerVC.typeOfTracker = .irregular
+        newTrackerVC.selecTypeTracker = self
         present(newTrackerVC, animated: true)
+    }
+    
+    func switchToTrackerVC() {
+        dismiss(animated: true)
+        trackerViewController?.checkCellsCount()
+        trackerViewController?.reloadCollectionView()
     }
     
     

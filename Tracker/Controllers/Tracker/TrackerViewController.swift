@@ -7,10 +7,20 @@
 
 import UIKit
 
+protocol TrackerViewControllerProtocol: AnyObject {
+    func reloadCollectionView()
+    func checkCellsCount()
+}
 
 
-
-final class TrackerViewController: UIViewController {
+final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
+    private func setupPlaceHolder() {
+        if trackerStorage.visibleCategories.isEmpty  {
+            emptyImage.image = Resourses.Images.trackerEmptyImage
+            emptyLabel.text = "Ничего не найдено"
+        }
+    }
+    
     var query: String = ""
     var currentDate = Date()
     private let trackerStorage = TrackerStorageService.shared
@@ -52,6 +62,7 @@ final class TrackerViewController: UIViewController {
         picker.locale = Locale(identifier: "ru_RU")
         picker.calendar.firstWeekday = 2
         picker.clipsToBounds = true
+        picker.addTarget(self, action: #selector(setupTrackersFromDatePicker), for: .valueChanged)
         return picker
     }()
     
@@ -63,6 +74,7 @@ final class TrackerViewController: UIViewController {
         searchItem.returnKeyType = .search
         searchItem.textColor = .ypBlack
         searchItem.clearButtonMode = .never
+        searchItem.addTarget(self, action: #selector(setupTrackersFromTextField), for: .editingChanged)
         return searchItem
     }()
     
@@ -122,6 +134,10 @@ final class TrackerViewController: UIViewController {
             ])
         }
     }
+    
+    func reloadCollectionView() {
+        trackerCollectionView.reloadData()
+    }
 
     
     override func viewDidLoad() {
@@ -134,9 +150,12 @@ final class TrackerViewController: UIViewController {
         query = searchTextField.text ?? ""
         addConstraintSearchText()
         addConstraintsDatePicker()
-        setupDatePicker()
         updateVisibleCategories(trackerStorage.categories)
         addConstraintsCollectionView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        updateVisibleCategories(trackerStorage.categories)
     }
     
     
@@ -151,10 +170,7 @@ final class TrackerViewController: UIViewController {
             navBar.topItem?.setLeftBarButton(addButton, animated: false)
         }
     }
-    
-    private func setupDatePicker() {
-        datePicker.addTarget(self, action: #selector(setupTrackersFromDatePicker), for: .valueChanged)
-    }
+
     
     private func setupCounterTextLabel(trackerID: UUID) -> String {
         let count = trackerStorage.completedTrackers.filter { $0.id == trackerID }.count
@@ -192,7 +208,7 @@ final class TrackerViewController: UIViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
-        let date = dateFormatter.string(from: currentDate)
+        let date = dateFormatter.string(from: Date())
         let trackerRecord = TrackerRecord(id: id, date: date)
         return trackerRecord
     }
@@ -200,6 +216,7 @@ final class TrackerViewController: UIViewController {
     @objc
     private func addTrackerButton() {
         let selectVC = SelectTypeTrackerViewController()
+        selectVC.trackerViewController = self
         searchTextField.endEditing(true)
         present(selectVC, animated: true)
     }
@@ -298,6 +315,7 @@ extension TrackerViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
+        print(query)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -317,7 +335,8 @@ extension TrackerViewController: UITextFieldDelegate {
 
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        trackerStorage.visibleCategories.count
+        print("THIS IS COUNT: \(trackerStorage.visibleCategories.count)")
+        return trackerStorage.visibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -343,6 +362,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
                                                                          withReuseIdentifier: id,
                                                                          for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
+        print("INDEX: \(indexPath)")
         view.titleLabel.text = trackerStorage.categories[indexPath.section].name
     
         return view
@@ -385,27 +405,30 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackerViewController {
     
-    @objc private func setupTrackersFromDatePicker() {
-        currentDate = datePicker.date
-        
-        filterTrackersFromDate(text: "")
+    @objc
+    private func setupTrackersFromDatePicker() {
+        filterTrackersFromDate(text: "", date: datePicker.date)
         trackerCollectionView.reloadData()
     }
     
-    func filterTrackersFromDate(text: String?) {
-        guard let text = text?.lowercased() else { return }
-        
-        let date = currentDate
-        let categories = trackerStorage.categories
+    @objc
+    private func setupTrackersFromTextField() {
+        filterTrackersFromDate(text: searchTextField.text, date: datePicker.date)
+        trackerCollectionView.reloadData()
+    }
+    
+    func filterTrackersFromDate(text: String?, date: Date) {
         let calendar = Calendar.current
+        let trackerDate = calendar.component(.weekday, from: date)
+        let filterText = (text ?? "").lowercased()
+        let categories = trackerStorage.categories
         
         trackerStorage.visibleCategories = categories.compactMap { category in
             let filterTrackers = category.trackerArray.filter { tracker in
                 let schedule = tracker.schedule
-                let filterText = text.isEmpty || tracker.name.lowercased().contains(text)
-                let trackerDate = calendar.component(.weekday, from: date)
+                let filterText_2 = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
                 
-                return schedule.contains(trackerDate) && filterText
+                return schedule.contains(trackerDate) && filterText_2
             }
             
             if filterTrackers.isEmpty {

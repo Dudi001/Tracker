@@ -21,6 +21,7 @@ protocol CreateTrackerViewControllerProtocol {
 final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
     var typeOfTracker: TypeOfTracker?
     private let trackerStorage = TrackerStorageService.shared
+    var selecTypeTracker: SelectTypeTrackerViewControllerProtocol?
      
     
     lazy var titileHobbyLabel: UILabel = {
@@ -104,6 +105,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         element.backgroundColor = .ypGray
         element.isEnabled = false
         element.translatesAutoresizingMaskIntoConstraints = false
+        element.addTarget(self, action: #selector(createButtonTapped), for: .touchUpInside)
         return element
     }()
     
@@ -204,6 +206,36 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         
     }
     
+    func enableCreateButton() {
+        createButton.isEnabled = true
+        createButton.backgroundColor = .ypBlack
+        createButton.setTitleColor(.ypWhite, for: .normal)
+    }
+    
+    func disableCreateButton() {
+        createButton.isEnabled = false
+        createButton.backgroundColor = .ypGray
+    }
+    
+    func checkCreateButton() {
+        if trackerStorage.trackerName != nil &&
+            trackerStorage.selectedCategory != nil &&
+            trackerStorage.trackerEmoji != nil &&
+            trackerStorage.trackerColor != nil {
+            switch typeOfTracker {
+            case .irregular:
+                enableCreateButton()
+            case .hobby:
+                trackerStorage.selectedSchedule != nil ? enableCreateButton() : disableCreateButton()
+            default:
+                disableCreateButton()
+            }
+        } else {
+            enableCreateButton()
+            //disableCreateButton()
+        }
+    }
+    
     private func addConstant() {
         if typeOfTracker == .hobby {
             NSLayoutConstraint.activate([
@@ -268,6 +300,14 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         dismiss(animated: true)
     }
     
+    @objc
+    private func createButtonTapped() {
+        let newCategory = createNewTracker()
+        trackerStorage.categories = newCategory
+        dismiss(animated: true)
+        selecTypeTracker?.switchToTrackerVC()
+    }
+    
 }
 
 
@@ -278,6 +318,7 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         trackerStorage.trackerName = textField.text
+        checkCreateButton()
     }
 }
 
@@ -474,6 +515,7 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         default:
             cell.backgroundColor = .gray
         }
+        checkCreateButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -481,6 +523,7 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         cell.layer.borderWidth = 0
+        checkCreateButton()
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
