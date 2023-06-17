@@ -63,6 +63,7 @@ final class TrackerStorageService {
     var trackerEmoji: String?
     var trackerColor: UIColor?
     var schedule: [Int]?
+    var currentDate: Date?
     
     var emojies = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -77,4 +78,39 @@ final class TrackerStorageService {
     ]
     
     let tableViewTitle = ["Категория", "Расписание"]
+    
+    func resetNewTrackerInfo() {
+        selectedCategory = nil
+        selectedSchedule = nil
+        trackerName = nil
+        trackerColor = nil
+        trackerEmoji = nil
+        schedule = nil
+    }
+    
+    func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
+        guard let date = currentDate else { return [] }
+        
+        var newArray: [TrackerCategory] = []
+        let calendar = Calendar.current
+        
+        for category in totalTrackers {
+            var newCategory = TrackerCategory(name: category.name, trackerArray: [])
+            
+            
+            for tracker in category.trackerArray {
+                let schedule = tracker.schedule
+                let trackerDate = calendar.component(.weekday, from: date)
+                
+                if schedule.contains(trackerDate) {
+                    newCategory.trackerArray.append(tracker)
+                }
+            }
+            if !newCategory.trackerArray.isEmpty {
+                newArray.append(newCategory)
+            }
+        }
+        
+        return newArray
+    }
 }

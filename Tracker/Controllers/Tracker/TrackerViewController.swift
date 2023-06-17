@@ -10,16 +10,17 @@ import UIKit
 protocol TrackerViewControllerProtocol: AnyObject {
     func reloadCollectionView()
     func checkCellsCount()
+    func updateCollectionView()
 }
 
 
 final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
-    private func setupPlaceHolder() {
-        if trackerStorage.visibleCategories.isEmpty  {
-            emptyImage.image = Resourses.Images.trackerEmptyImage
-            emptyLabel.text = "Ничего не найдено"
-        }
-    }
+//    private func setupPlaceHolder() {
+//        if trackerStorage.visibleCategories.isEmpty  {
+//            emptyImage.image = Resourses.Images.trackerEmptyImage
+//            emptyLabel.text = "Ничего не найдено"
+//        }
+//    }
     
     var query: String = ""
     var currentDate = Date()
@@ -136,6 +137,21 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     }
     
     func reloadCollectionView() {
+        trackerCollectionView.reloadData()
+    }
+    
+    func updateCollectionView() {
+
+        let oldCategories = trackerStorage.categories
+        
+        
+        searchTextField.endEditing(true)
+        searchTextField.text = .none
+        currentDate = datePicker.date
+        
+        let newCategories = trackerStorage.showNewTrackersAfterChanges(oldCategories) 
+        
+        trackerStorage.visibleCategories = newCategories
         trackerCollectionView.reloadData()
     }
 
@@ -315,7 +331,6 @@ extension TrackerViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
-        print(query)
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
@@ -335,8 +350,7 @@ extension TrackerViewController: UITextFieldDelegate {
 
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        print("THIS IS COUNT: \(trackerStorage.visibleCategories.count)")
-        return trackerStorage.visibleCategories.count
+        trackerStorage.visibleCategories.count
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -359,11 +373,13 @@ extension TrackerViewController: UICollectionViewDataSource {
             id = ""
         }
         
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                         withReuseIdentifier: id,
-                                                                         for: indexPath) as? SupplementaryView else { return UICollectionReusableView() }
-        print("INDEX: \(indexPath)")
-        view.titleLabel.text = trackerStorage.categories[indexPath.section].name
+        guard let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: id,
+            for: indexPath) as? SupplementaryView
+        else { return UICollectionReusableView() }
+        
+        view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
     
         return view
     }
@@ -405,6 +421,13 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackerViewController {
     
+    private func setDumbImageViewAfterSearch() {
+        emptyImage.isHidden = false
+        emptyLabel.text = "Ничего не найдено"
+        
+        trackerCollectionView.alpha = 0
+    }
+    
     @objc
     private func setupTrackersFromDatePicker() {
         filterTrackersFromDate(text: "", date: datePicker.date)
@@ -417,7 +440,7 @@ extension TrackerViewController {
         trackerCollectionView.reloadData()
     }
     
-    func filterTrackersFromDate(text: String?, date: Date) {
+    func filterTrackersFromDate(text: String?, date: Date){
         let calendar = Calendar.current
         let trackerDate = calendar.component(.weekday, from: date)
         let filterText = (text ?? "").lowercased()
@@ -432,7 +455,7 @@ extension TrackerViewController {
             }
             
             if filterTrackers.isEmpty {
-                return nil
+                setDumbImageViewAfterSearch()
             }
             
             return TrackerCategory(name: category.name,

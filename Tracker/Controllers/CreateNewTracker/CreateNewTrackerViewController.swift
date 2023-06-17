@@ -150,8 +150,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     func createNewTracker() -> [TrackerCategory] {
         guard let trackerColor = trackerStorage.trackerColor,
               let trackerName = trackerStorage.trackerName,
-              let trackerEmoji = trackerStorage.trackerEmoji,
-              let schedule = trackerStorage.schedule
+              let trackerEmoji = trackerStorage.trackerEmoji
         else { return [] }
 
         let categories = trackerStorage.categories
@@ -159,7 +158,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
                                  name: trackerName,
                                  color: trackerColor,
                                  emoji: trackerEmoji,
-                                 schedule: schedule)
+                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
         var newCategory: [TrackerCategory] = []
 
         categories.forEach { category in
@@ -304,6 +303,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private func createButtonTapped() {
         let newCategory = createNewTracker()
         trackerStorage.categories = newCategory
+        trackerStorage.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()
     }
