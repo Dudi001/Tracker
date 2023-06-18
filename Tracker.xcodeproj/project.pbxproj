@@ -111,6 +111,7 @@
 		D90E2E5F2A2A4A330000C7E1 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D9B4CCE72A3F8B9000D3D41E /* TabBar */,
 				D9021F162A390A750080BB4D /* Filter */,
 				D96239902A362CD700F61DAE /* Schedule */,
 				D962398D2A362CA000F61DAE /* Category */,
@@ -244,19 +245,26 @@
 		D991ADD42A1673EE00F1F0F3 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
-				D9021F132A389ED70080BB4D /* Service */,
-				D90E2E7A2A2CA3FF0000C7E1 /* protocols */,
-				D90E2E752A2BE0E10000C7E1 /* Resourses */,
-				D90E2E6C2A2BD03D0000C7E1 /* Models */,
-				D90E2E632A2A77600000C7E1 /* Helpers */,
-				D90E2E5F2A2A4A330000C7E1 /* Controllers */,
-				D90E2E682A2B41000000C7E1 /* Application */,
+				D991ADE32A1673F000F1F0F3 /* Info.plist */,
 				D991ADDE2A1673F000F1F0F3 /* Assets.xcassets */,
 				D991ADE02A1673F000F1F0F3 /* LaunchScreen.storyboard */,
-				D991ADE32A1673F000F1F0F3 /* Info.plist */,
-				D90E2E5D2A2A497B0000C7E1 /* TabBarViewController.swift */,
+				D90E2E682A2B41000000C7E1 /* Application */,
+				D90E2E5F2A2A4A330000C7E1 /* Controllers */,
+				D90E2E632A2A77600000C7E1 /* Helpers */,
+				D90E2E6C2A2BD03D0000C7E1 /* Models */,
+				D90E2E7A2A2CA3FF0000C7E1 /* protocols */,
+				D90E2E752A2BE0E10000C7E1 /* Resourses */,
+				D9021F132A389ED70080BB4D /* Service */,
 			);
 			path = Tracker;
+			sourceTree = "<group>";
+		};
+		D9B4CCE72A3F8B9000D3D41E /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				D90E2E5D2A2A497B0000C7E1 /* TabBarViewController.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

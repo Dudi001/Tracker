@@ -21,7 +21,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
 //            emptyLabel.text = "Ничего не найдено"
 //        }
 //    }
-    
+    var countForFilterDate = 0
     var query: String = ""
     var currentDate = Date()
     private let trackerStorage = TrackerStorageService.shared
@@ -237,11 +237,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         present(selectVC, animated: true)
     }
     
-    @objc
-    private func cancelButtonTapped() {
-        searchTextField.text = ""
-        searchTextField.resignFirstResponder()
-    }
+    
     
     @objc
     private func completeButtonTapped(_ sender: UIButton) {
@@ -348,6 +344,8 @@ extension TrackerViewController: UITextFieldDelegate {
     }
 }
 
+
+//MARK: - CollectionViewDataSource
 extension TrackerViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         trackerStorage.visibleCategories.count
@@ -421,43 +419,116 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
 extension TrackerViewController {
     
-    private func setDumbImageViewAfterSearch() {
-        emptyImage.isHidden = false
-        emptyLabel.text = "Ничего не найдено"
-        
+    private func setEmptyItemsAfterSearch() {
+    
         trackerCollectionView.alpha = 0
+
+        view.addSubview(emptyImage)
+        view.addSubview(emptyLabel)
+        
+        emptyImage.image = Resourses.Images.statisticEmptyImage
+        emptyLabel.text = "Ничего не найдено"
+
+        NSLayoutConstraint.activate([
+
+            emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
+        ])
+    }
+    
+//MARK: - @OBJC FUNC
+    @objc
+    private func cancelButtonTapped() {
+        searchTextField.text = ""
+        searchTextField.resignFirstResponder()
+        emptyImage.removeFromSuperview()
+        emptyLabel.removeFromSuperview()
+        trackerCollectionView.reloadData()
+        trackerCollectionView.alpha = 1
     }
     
     @objc
     private func setupTrackersFromDatePicker() {
-        filterTrackersFromDate(text: "", date: datePicker.date)
-        trackerCollectionView.reloadData()
+        filterTrackersFromDate(date: datePicker.date)
+        
+        print("SECOND: \(countForFilterDate)")
+        if countForFilterDate == 0{
+            emptyImage.removeFromSuperview()
+            emptyLabel.removeFromSuperview()
+            trackerCollectionView.reloadData()
+            trackerCollectionView.alpha = 1
+        }
+        
     }
     
     @objc
     private func setupTrackersFromTextField() {
-        filterTrackersFromDate(text: searchTextField.text, date: datePicker.date)
+        guard let text = searchTextField.text else { return }
+        
+        trackerCollectionView.alpha = 1
         trackerCollectionView.reloadData()
+        
+        if text == "" {
+            emptyImage.removeFromSuperview()
+            emptyLabel.removeFromSuperview()
+            trackerCollectionView.reloadData()
+            trackerCollectionView.alpha = 1
+        }
+        searchTrackerByName(filledName: text)
+        
     }
     
-    func filterTrackersFromDate(text: String?, date: Date){
+    func filterTrackersFromDate(date: Date){
         let calendar = Calendar.current
         let trackerDate = calendar.component(.weekday, from: date)
-        let filterText = (text ?? "").lowercased()
         let categories = trackerStorage.categories
         
+//        print("Current date: \(trackerDate)")
         trackerStorage.visibleCategories = categories.compactMap { category in
             let filterTrackers = category.trackerArray.filter { tracker in
                 let schedule = tracker.schedule
-                let filterText_2 = filterText.isEmpty || tracker.name.lowercased().contains(filterText)
+
+                return schedule.contains(trackerDate)
+            }
+//            print("FILTER TRACKER \(filterTrackers.count)")
+            
+            if filterTrackers.count == 0 {
+                setEmptyItemsAfterSearch()
+                countForFilterDate = 1
+                print("FIRST: \(countForFilterDate)")
+            } else {
+                countForFilterDate = 0
+            }
+            
+    
+            return TrackerCategory(name: category.name,
+                                   trackerArray: filterTrackers)
+        }
+    }
+    
+    
+    func searchTrackerByName(filledName: String?){
+        let searchText = (filledName ?? "").lowercased()
+        let categories = trackerStorage.categories
+
+        trackerStorage.visibleCategories = categories.compactMap { category in
+            let filterTrackers = category.trackerArray.filter { tracker in
+
+                let filterText = searchText.isEmpty || tracker.name.lowercased().contains(searchText)
+//                print("input: \(searchText)  output: \(tracker.name)")
                 
-                return schedule.contains(trackerDate) && filterText_2
+                if filterText == false {
+                    setEmptyItemsAfterSearch()
+                }
+                
+                print("filter bool: \(filterText)")
+                return filterText
             }
             
-            if filterTrackers.isEmpty {
-                setDumbImageViewAfterSearch()
-            }
-            
+            trackerCollectionView.reloadData()
             return TrackerCategory(name: category.name,
                                    trackerArray: filterTrackers)
         }
