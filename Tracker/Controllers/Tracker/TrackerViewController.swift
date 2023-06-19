@@ -10,7 +10,6 @@ import UIKit
 protocol TrackerViewControllerProtocol: AnyObject {
     func reloadCollectionView()
     func checkCellsCount()
-    func updateCollectionView()
 }
 
 
@@ -137,23 +136,10 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     }
     
     func reloadCollectionView() {
+        trackerStorage.visibleCategories = trackerStorage.categories
         trackerCollectionView.reloadData()
     }
     
-    func updateCollectionView() {
-
-        let oldCategories = trackerStorage.categories
-        
-        
-        searchTextField.endEditing(true)
-        searchTextField.text = .none
-        currentDate = datePicker.date
-        
-        let newCategories = trackerStorage.showNewTrackersAfterChanges(oldCategories) 
-        
-        trackerStorage.visibleCategories = newCategories
-        trackerCollectionView.reloadData()
-    }
 
     
     override func viewDidLoad() {
@@ -468,8 +454,8 @@ extension TrackerViewController {
     private func setupTrackersFromTextField() {
         guard let text = searchTextField.text else { return }
         
-        trackerCollectionView.alpha = 1
-        trackerCollectionView.reloadData()
+//        trackerCollectionView.alpha = 1
+//        trackerCollectionView.reloadData()
         
         if text == "" {
             emptyImage.removeFromSuperview()

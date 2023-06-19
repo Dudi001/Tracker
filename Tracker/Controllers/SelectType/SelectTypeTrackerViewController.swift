@@ -78,8 +78,6 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
     
     func switchToTrackerVC() {
         dismiss(animated: true)
-//        trackerViewController?.checkCellsCount()
-        trackerViewController?.updateCollectionView()
         trackerViewController?.reloadCollectionView()
     }
     

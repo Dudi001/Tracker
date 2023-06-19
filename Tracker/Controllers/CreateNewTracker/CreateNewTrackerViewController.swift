@@ -20,7 +20,8 @@ protocol CreateTrackerViewControllerProtocol {
 
 final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
     var typeOfTracker: TypeOfTracker?
-    private let trackerStorage = TrackerStorageService.shared
+    var newCategory: [TrackerCategory] = []
+    var trackerStorage = TrackerStorageService.shared
     var selecTypeTracker: SelectTypeTrackerViewControllerProtocol?
      
     
@@ -33,17 +34,17 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     }()
     
     
-    lazy var hobbyNameTextField: UITextField = {
+    lazy var textField: UITextField = {
        let hobbyText = UITextField()
         hobbyText.placeholder = "Введите название трекера"
         hobbyText.backgroundColor = .ypBackground
+        hobbyText.textColor = .ypBlack
         hobbyText.clearButtonMode = .whileEditing
         hobbyText.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 16, height: 0))
         hobbyText.leftViewMode = .always
         hobbyText.returnKeyType = .done
         hobbyText.layer.cornerRadius = 16
         hobbyText.font = .systemFont(ofSize: 17, weight: .regular)
-        hobbyText.textColor = .ypBlack
         hobbyText.translatesAutoresizingMaskIntoConstraints = false
         return hobbyText
     }()
@@ -125,8 +126,8 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         addViews()
         addConstant()
         setupTableView()
+        setupTextField()
         setupCollectionView()
-        
     }
 
 //MARK: - Register cell
@@ -144,34 +145,35 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     }
     
     private func setupTextField() {
-        hobbyNameTextField.delegate = self
+        textField.delegate = self
     }
     
-    func createNewTracker() -> [TrackerCategory] {
-        guard let trackerColor = trackerStorage.trackerColor,
-              let trackerName = trackerStorage.trackerName,
-              let trackerEmoji = trackerStorage.trackerEmoji
-        else { return [] }
-
-        let categories = trackerStorage.categories
-        let newTracker = Tracker(id: UUID(),
-                                 name: trackerName,
-                                 color: trackerColor,
-                                 emoji: trackerEmoji,
-                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
-        var newCategory: [TrackerCategory] = []
-
-        categories.forEach { category in
-            if trackerStorage.selectedCategory == category.name {
-                var newTrackers = category.trackerArray
-                newTrackers.append(newTracker)
-                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
-            } else {
-                newCategory.append(category)
-            }
-        }
-        return newCategory
-    }
+//    func createNewTracker() -> [TrackerCategory] {
+//        guard let trackerColor = trackerStorage.trackerColor,
+//              let trackerName = trackerStorage.trackerName,
+//              let trackerEmoji = trackerStorage.trackerEmoji
+//        else { return [] }
+//
+//        let categories = trackerStorage.categories
+//        let newTracker = Tracker(id: UUID(),
+//                                 name: trackerName,
+//                                 color: trackerColor,
+//                                 emoji: trackerEmoji,
+//                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
+//        var newCategory: [TrackerCategory] = []
+//
+//        categories.forEach { category in
+//            if trackerStorage.selectedCategory == category.name {
+//                var newTrackers = category.trackerArray
+//                newTrackers.append(newTracker)
+//                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
+//            } else {
+//                newCategory.append(category)
+//            }
+//
+//        }
+//        return newCategory
+//    }
     
     private func setupTitle() {
         titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
@@ -199,7 +201,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     }
     
     private func setupScrollViewItems() {
-        scrollView.addSubview(hobbyNameTextField)
+        scrollView.addSubview(textField)
         scrollView.addSubview(categoryAndScheduleTableView)
         scrollView.addSubview(collectionView)
         
@@ -230,8 +232,30 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
                 disableCreateButton()
             }
         } else {
-            enableCreateButton()
-            //disableCreateButton()
+//            enableCreateButton()
+            disableCreateButton()
+        }
+    }
+    
+    private func setTextFieldWarning(_ countText: Int) {
+//        guard let countText = countText else { return }
+        if countText >= 38 {
+            view.addSubview(warningLabel)
+            
+            disableCreateButton()
+            
+            NSLayoutConstraint.activate([
+                warningLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -8),
+                warningLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+                categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -66)
+            ])
+        } else {
+            warningLabel.removeFromSuperview()
+            
+            NSLayoutConstraint.activate([
+                categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -24)
+            ])
         }
     }
     
@@ -257,12 +281,12 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
             scrollView.topAnchor.constraint(equalTo: titileHobbyLabel.bottomAnchor, constant: 14),
             scrollView.bottomAnchor.constraint(equalTo: bottomButtonsStack.topAnchor, constant: -16),
             
-            hobbyNameTextField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 39),
-            hobbyNameTextField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            hobbyNameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            hobbyNameTextField.heightAnchor.constraint(equalToConstant: 75),
+            textField.topAnchor.constraint(equalTo: scrollView.topAnchor, constant: 39),
+            textField.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            textField.heightAnchor.constraint(equalToConstant: 75),
             
-            categoryAndScheduleTableView.topAnchor.constraint(equalTo: hobbyNameTextField.bottomAnchor, constant: 24),
+            categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24),
             categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
@@ -301,7 +325,33 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     @objc
     private func createButtonTapped() {
-        let newCategory = createNewTracker()
+//        let newCategory = createNewTracker()
+        
+        guard let trackerColor = trackerStorage.trackerColor,
+              let trackerName = trackerStorage.trackerName,
+              let trackerEmoji = trackerStorage.trackerEmoji
+        else { return }
+
+        let categories = trackerStorage.categories
+        let newTracker = Tracker(id: UUID(),
+                                 name: trackerStorage.trackerName ?? "",
+                                 color: trackerStorage.trackerColor ?? .ypWhite,
+                                 emoji: trackerStorage.trackerEmoji ?? "",
+                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
+
+        categories.forEach { category in
+            if trackerStorage.selectedCategory == category.name {
+                var newTrackers = category.trackerArray
+                newTrackers.append(newTracker)
+
+                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
+            } else {
+                newCategory.append(category)
+            }
+        }
+        
+        
+        
         trackerStorage.categories = newCategory
         trackerStorage.resetNewTrackerInfo()
         dismiss(animated: true)
@@ -312,13 +362,21 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
 
 
 extension CreateNewTrackerViewController: UITextFieldDelegate {
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        textField.becomeFirstResponder()
+    }
+    
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         textField.resignFirstResponder()
     }
-    
+
     func textFieldDidEndEditing(_ textField: UITextField) {
-        trackerStorage.trackerName = textField.text
-        checkCreateButton()
+//        trackerStorage.trackerName = textField.text
+        guard let textCount = textField.text?.count,
+              let text = textField.text
+        else { return }
+        setTextFieldWarning(textCount)
+        trackerStorage.trackerName = text
     }
 }
 
@@ -359,7 +417,6 @@ extension CreateNewTrackerViewController: UITableViewDataSource {
         default:
             cell.configureCellWithoutCategory()
         }
-        
         return cell
     }
 }
@@ -426,9 +483,12 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
             id = ""
         }
         
-        guard let view = collectionView.dequeueReusableSupplementaryView(ofKind: kind,
-                                                                         withReuseIdentifier: id,
-                                                                         for: indexPath) as? CreateNewTrackerSupplementaryView else { return UICollectionReusableView() }
+        guard let view = collectionView.dequeueReusableSupplementaryView(
+            ofKind: kind,
+            withReuseIdentifier: id,
+            for: indexPath) as? CreateNewTrackerSupplementaryView
+        else { return UICollectionReusableView() }
+        
         switch indexPath.section {
         case 0:
             view.headerLabel.text = "Emoji"
