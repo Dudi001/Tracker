@@ -99,7 +99,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
                 categoryTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
                 categoryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 categoryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                categoryTableView.heightAnchor.constraint(equalToConstant: 150)
+//                categoryTableView.heightAnchor.constraint(equalToConstant: 250)
+                categoryTableView.bottomAnchor.constraint(equalTo: categoryButton.topAnchor, constant: -30)
             ])
         }
     }
