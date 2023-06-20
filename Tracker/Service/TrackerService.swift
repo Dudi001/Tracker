@@ -59,7 +59,11 @@ final class TrackerStorageService {
     var selectedCategory: String?
     var selectedSchedule: String?
     
-    var trackerName: String?
+    var trackerName: String? {
+        didSet {
+            print(trackerName)
+        }
+    }
     var trackerEmoji: String?
     var trackerColor: UIColor?
     var schedule: [Int]?
@@ -79,15 +83,15 @@ final class TrackerStorageService {
     
     let tableViewTitle = ["Категория", "Расписание"]
     
-    func resetNewTrackerInfo() {
-        selectedCategory = nil
-        selectedSchedule = nil
-        trackerName = nil
-        trackerColor = nil
-        trackerEmoji = nil
-        schedule = nil
-    }
-    
+//    func resetNewTrackerInfo() {
+//        selectedCategory = nil
+//        selectedSchedule = nil
+//        trackerName = nil
+//        trackerColor = nil
+//        trackerEmoji = nil
+//        schedule = nil
+//    }
+//    
     func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
         guard let date = currentDate else { return [] }
         

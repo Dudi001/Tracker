@@ -232,8 +232,8 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
                 disableCreateButton()
             }
         } else {
-//            enableCreateButton()
-            disableCreateButton()
+            enableCreateButton()
+//            disableCreateButton()
         }
     }
     
@@ -327,10 +327,10 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private func createButtonTapped() {
 //        let newCategory = createNewTracker()
         
-        guard let trackerColor = trackerStorage.trackerColor,
-              let trackerName = trackerStorage.trackerName,
-              let trackerEmoji = trackerStorage.trackerEmoji
-        else { return }
+//        guard let trackerColor = trackerStorage.trackerColor,
+//              let trackerName = trackerStorage.trackerName,
+//              let trackerEmoji = trackerStorage.trackerEmoji
+//        else { return }
 
         let categories = trackerStorage.categories
         let newTracker = Tracker(id: UUID(),
@@ -353,7 +353,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         
         
         trackerStorage.categories = newCategory
-        trackerStorage.resetNewTrackerInfo()
+//        trackerStorage.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()
     }
