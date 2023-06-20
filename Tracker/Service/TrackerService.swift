@@ -83,15 +83,15 @@ final class TrackerStorageService {
     
     let tableViewTitle = ["Категория", "Расписание"]
     
-//    func resetNewTrackerInfo() {
-//        selectedCategory = nil
-//        selectedSchedule = nil
-//        trackerName = nil
-//        trackerColor = nil
-//        trackerEmoji = nil
-//        schedule = nil
-//    }
-//    
+    func resetNewTrackerInfo() {
+        selectedCategory = nil
+        selectedSchedule = nil
+        trackerName = nil
+        trackerColor = nil
+        trackerEmoji = nil
+        schedule = nil
+    }
+   
     func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
         guard let date = currentDate else { return [] }
         

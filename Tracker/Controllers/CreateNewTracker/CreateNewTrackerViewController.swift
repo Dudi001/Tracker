@@ -148,32 +148,32 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         textField.delegate = self
     }
     
-//    func createNewTracker() -> [TrackerCategory] {
-//        guard let trackerColor = trackerStorage.trackerColor,
-//              let trackerName = trackerStorage.trackerName,
-//              let trackerEmoji = trackerStorage.trackerEmoji
-//        else { return [] }
-//
-//        let categories = trackerStorage.categories
-//        let newTracker = Tracker(id: UUID(),
-//                                 name: trackerName,
-//                                 color: trackerColor,
-//                                 emoji: trackerEmoji,
-//                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
-//        var newCategory: [TrackerCategory] = []
-//
-//        categories.forEach { category in
-//            if trackerStorage.selectedCategory == category.name {
-//                var newTrackers = category.trackerArray
-//                newTrackers.append(newTracker)
-//                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
-//            } else {
-//                newCategory.append(category)
-//            }
-//
-//        }
-//        return newCategory
-//    }
+    func createNewTracker() -> [TrackerCategory] {
+        guard let trackerColor = trackerStorage.trackerColor,
+              let trackerName = trackerStorage.trackerName,
+              let trackerEmoji = trackerStorage.trackerEmoji
+        else { return [] }
+
+        let categories = trackerStorage.categories
+        let newTracker = Tracker(id: UUID(),
+                                 name: trackerName,
+                                 color: trackerColor,
+                                 emoji: trackerEmoji,
+                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
+        var newCategory: [TrackerCategory] = []
+
+        categories.forEach { category in
+            if trackerStorage.selectedCategory == category.name {
+                var newTrackers = category.trackerArray
+                newTrackers.append(newTracker)
+                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
+            } else {
+                newCategory.append(category)
+            }
+
+        }
+        return newCategory
+    }
     
     private func setupTitle() {
         titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
@@ -237,8 +237,8 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         }
     }
     
-    private func setTextFieldWarning(_ countText: Int) {
-//        guard let countText = countText else { return }
+    private func setTextFieldWarning(_ countText: Int?) {
+        guard let countText = countText else { return }
         if countText >= 38 {
             view.addSubview(warningLabel)
             
@@ -325,39 +325,13 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     @objc
     private func createButtonTapped() {
-//        let newCategory = createNewTracker()
-        
-//        guard let trackerColor = trackerStorage.trackerColor,
-//              let trackerName = trackerStorage.trackerName,
-//              let trackerEmoji = trackerStorage.trackerEmoji
-//        else { return }
-
-        let categories = trackerStorage.categories
-        let newTracker = Tracker(id: UUID(),
-                                 name: trackerStorage.trackerName ?? "",
-                                 color: trackerStorage.trackerColor ?? .ypWhite,
-                                 emoji: trackerStorage.trackerEmoji ?? "",
-                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
-
-        categories.forEach { category in
-            if trackerStorage.selectedCategory == category.name {
-                var newTrackers = category.trackerArray
-                newTrackers.append(newTracker)
-
-                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
-            } else {
-                newCategory.append(category)
-            }
-        }
-        
-        
-        
+        let newCategory = createNewTracker()
+  
         trackerStorage.categories = newCategory
-//        trackerStorage.resetNewTrackerInfo()
+        trackerStorage.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()
     }
-    
 }
 
 
@@ -371,7 +345,6 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-//        trackerStorage.trackerName = textField.text
         guard let textCount = textField.text?.count,
               let text = textField.text
         else { return }
@@ -497,7 +470,6 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
         default:
             view.headerLabel.text = ""
         }
-        
         return view
     }
 }
@@ -541,10 +513,14 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
         let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                         height: collectionView.frame.height),
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
+        return headerView.systemLayoutSizeFitting(
+            CGSize(
+                width: collectionView.frame.width,
+                height: collectionView.frame.height
+            ),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {

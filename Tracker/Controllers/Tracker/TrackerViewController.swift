@@ -14,12 +14,6 @@ protocol TrackerViewControllerProtocol: AnyObject {
 
 
 final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
-//    private func setupPlaceHolder() {
-//        if trackerStorage.visibleCategories.isEmpty  {
-//            emptyImage.image = Resourses.Images.trackerEmptyImage
-//            emptyLabel.text = "Ничего не найдено"
-//        }
-//    }
     var countForFilterDate = 0
     var query: String = ""
     var currentDate = Date()
