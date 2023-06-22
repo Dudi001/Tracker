@@ -10,6 +10,7 @@ import UIKit
 protocol TrackerViewControllerProtocol: AnyObject {
     func reloadCollectionView()
     func checkCellsCount()
+    func updateVisibleCategories()
 }
 
 
@@ -111,13 +112,13 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         query = searchTextField.text ?? ""
         addConstraintSearchText()
         addConstraintsDatePicker()
-        updateVisibleCategories(trackerStorage.categories)
+        updateVisibleCategories()
         addConstraintsCollectionView()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        updateVisibleCategories(trackerStorage.categories)
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        updateVisibleCategories(trackerStorage.categories)
+//    }
     
     func reloadCollectionView() {
         trackerStorage.visibleCategories = trackerStorage.categories
@@ -175,7 +176,10 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     private func setupViews() {
         trackerCollectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
-        trackerCollectionView.register(SupplementaryView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "header")
+        trackerCollectionView.register(
+            SupplementaryView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: "header")
         trackerCollectionView.dataSource = self
         trackerCollectionView.delegate = self
     }
@@ -260,8 +264,12 @@ extension TrackerViewController {
     
     
     
-    private func updateVisibleCategories(_ newCategory: [TrackerCategory]) {
-        trackerStorage.visibleCategories = newCategory
+    func updateVisibleCategories() {
+        let totalCategory = trackerStorage.categories
+        trackerStorage.currentDate = datePicker.date
+        let newTrackerCategory = trackerStorage.showNewTrackersAfterChanges(totalCategory)
+        
+        trackerStorage.visibleCategories = newTrackerCategory
         trackerCollectionView.reloadData()
     }
     
@@ -465,7 +473,7 @@ extension TrackerViewController {
         searchTextField.resignFirstResponder()
         emptyImage.removeFromSuperview()
         emptyLabel.removeFromSuperview()
-        updateVisibleCategories(trackerStorage.categories)
+        updateVisibleCategories()
         trackerCollectionView.reloadData()
         trackerCollectionView.alpha = 1
     }
@@ -490,7 +498,7 @@ extension TrackerViewController {
         if text == "" {
             emptyImage.removeFromSuperview()
             emptyLabel.removeFromSuperview()
-            updateVisibleCategories(trackerStorage.categories)
+            updateVisibleCategories()
             trackerCollectionView.reloadData()
             trackerCollectionView.alpha = 1
         }

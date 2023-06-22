@@ -42,7 +42,7 @@ final class TrackerStorageService {
                                                                name: "Влажная уборка",
                                                                color: .colorSelection4,
                                                                emoji: "😇",
-                                                               schedule: [1, 4, 6])])
+                                                               schedule: [2, 4, 6])])
     ]
     
     
@@ -97,5 +97,26 @@ final class TrackerStorageService {
         }
         
         return newArray
+    }
+    
+    func showAllTrackersAfterChange(_ categories: [TrackerCategory]) -> [TrackerCategory] {
+        guard let currentDate = currentDate else { return [] }
+        
+        var newTrackerArray: [TrackerCategory] = []
+        
+        for item in categories {
+            for date in item.trackerArray {
+                let weekDayNumber = Calendar.current.component(.weekday, from: currentDate)
+                
+                if date.schedule.contains(weekDayNumber) {
+                    newTrackerArray.append(item)
+                
+                }
+                
+            }
+        }
+        
+        return newTrackerArray
+        
     }
 }
