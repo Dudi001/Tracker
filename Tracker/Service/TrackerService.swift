@@ -12,7 +12,15 @@ final class TrackerStorageService {
     static let shared = TrackerStorageService()
     
     private init() {}
-    var completedTrackers: Set<TrackerRecord> = []
+    
+    var selectedCategory: String?
+    var selectedSchedule: String?
+    
+    var trackerName: String?
+    var trackerEmoji: String?
+    var trackerColor: UIColor?
+    var schedule: [Int]?
+    var currentDate: Date?
     
     var categories: [TrackerCategory] = [
         TrackerCategory(name: "Важное", trackerArray: [Tracker(id: UUID(),
@@ -38,36 +46,9 @@ final class TrackerStorageService {
     ]
     
     
+    
     var visibleCategories = [TrackerCategory]()
-    
-    
-//    private lazy var testTrakers: [Tracker] = [
-//        Tracker(id: UUID(), name: "Тест 1", color: .colorSelection1, emoji: "🐕", schedule:  []),
-//            Tracker(id: UUID(), name: "Попрыгать ", color: .colorSelection2, emoji: "😇", schedule: []),
-//            Tracker(id: UUID(), name: "Сделать сальтуху", color: .colorSelection3, emoji: "🍒", schedule: []),
-//
-//
-//        ]
-//
-//    private lazy var secondTrackers: [Tracker] = [
-//        Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection7, emoji: "🐤", schedule: [1, 2, 3]),
-//        Tracker(id: UUID(), name: "Найти жирафа", color: .colorSelection5, emoji: "🦒", schedule: [4, 5, 7]),
-//        Tracker(id: UUID(), name: "Накоримить уток", color: .colorSelection8, emoji: "🐤", schedule: [9, 13, 14]),
-//        Tracker(id: UUID(), name: "Найти жирафа", color: .colorSelection9, emoji: "🦒", schedule: [15, 16, 17]),
-//    ]
-    
-    var selectedCategory: String?
-    var selectedSchedule: String?
-    
-    var trackerName: String? {
-        didSet {
-            print(trackerName)
-        }
-    }
-    var trackerEmoji: String?
-    var trackerColor: UIColor?
-    var schedule: [Int]?
-    var currentDate: Date?
+    var completedTrackers: Set<TrackerRecord> = []
     
     var emojies = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",

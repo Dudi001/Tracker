@@ -23,6 +23,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     var newCategory: [TrackerCategory] = []
     var trackerStorage = TrackerStorageService.shared
     var selecTypeTracker: SelectTypeTrackerViewControllerProtocol?
+    
      
     
     lazy var titileHobbyLabel: UILabel = {
@@ -128,14 +129,18 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         setupTableView()
         setupTextField()
         setupCollectionView()
+    
     }
 
+    
 //MARK: - Register cell
     private func setupTableView() {
             categoryAndScheduleTableView.register(CreateNewTrackerTableVIewCell.self, forCellReuseIdentifier: "TableViewCell")
             categoryAndScheduleTableView.dataSource = self
             categoryAndScheduleTableView.delegate = self
         }
+    
+    
     
     private func setupCollectionView() {
         collectionView.register(CreateNewTrackerCollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")
@@ -232,34 +237,40 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
                 disableCreateButton()
             }
         } else {
-            enableCreateButton()
-//            disableCreateButton()
+            disableCreateButton()
         }
     }
     
+//TODO: - Need fix top constraint for tableView
     private func setTextFieldWarning(_ countText: Int?) {
+        
         guard let countText = countText else { return }
         if countText >= 38 {
             view.addSubview(warningLabel)
-            
             disableCreateButton()
+//            categoryAndScheduleTableView.removeConstraint(topAnchorTableView)
             
             NSLayoutConstraint.activate([
-                warningLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -8),
+                warningLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
                 warningLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-                categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -66)
+                categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -66),
+                categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+                categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
             ])
         } else {
             warningLabel.removeFromSuperview()
             
-            NSLayoutConstraint.activate([
-                categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: -24)
-            ])
+//            NSLayoutConstraint.activate([
+//                categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24)
+//            ])
         }
     }
     
+
+    
     private func addConstant() {
+        let topAnchorTableView = categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24)
         if typeOfTracker == .hobby {
             NSLayoutConstraint.activate([
                 categoryAndScheduleTableView.heightAnchor.constraint(equalToConstant: 149)
@@ -270,6 +281,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
             ])
             categoryAndScheduleTableView.separatorStyle = .none
         }
+        
         
         NSLayoutConstraint.activate([
             titileHobbyLabel.topAnchor.constraint(equalTo: view.topAnchor, constant: 27),
@@ -286,7 +298,8 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
             textField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             textField.heightAnchor.constraint(equalToConstant: 75),
             
-            categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24),
+//            categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24),
+            topAnchorTableView,
             categoryAndScheduleTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
             categoryAndScheduleTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             
@@ -325,6 +338,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     @objc
     private func createButtonTapped() {
+        trackerStorage.trackerName = textField.text
         let newCategory = createNewTracker()
   
         trackerStorage.categories = newCategory
@@ -338,17 +352,25 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
 extension CreateNewTrackerViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.becomeFirstResponder()
-    }
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
         guard let textCount = textField.text?.count,
               let text = textField.text
         else { return }
+        checkCreateButton()
         setTextFieldWarning(textCount)
+        trackerStorage.trackerName = text
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        checkCreateButton()
+        return textField.resignFirstResponder()
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        guard //let textCount = textField.text?.count,
+              let text = textField.text
+        else { return }
+        checkCreateButton()
+//        setTextFieldWarning(textCount)
         trackerStorage.trackerName = text
     }
 }
@@ -390,6 +412,7 @@ extension CreateNewTrackerViewController: UITableViewDataSource {
         default:
             cell.configureCellWithoutCategory()
         }
+        checkCreateButton()
         return cell
     }
 }
@@ -566,6 +589,7 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
             collectionView.deselectItem(at: $0, animated: true)
         })
+        checkCreateButton()
         return true
     }
 }
