@@ -193,7 +193,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         let trackerRecord = createTrackerRecord(with: trackerModel.id)
         let isCompleted = trackerStorage.completedTrackers.contains(trackerRecord)
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: trackerRecord.id)
-        if Date() < currentDate && !trackerModel.schedule.isEmpty {
+        if datePicker.date < currentDate && !trackerModel.schedule.isEmpty {
             cell.trackerCompleteButton.isUserInteractionEnabled = false
         } else {
             cell.trackerCompleteButton.isUserInteractionEnabled = true
@@ -361,18 +361,29 @@ extension TrackerViewController: UICollectionViewDataSource {
             for: indexPath) as? SupplementaryView
         else { return UICollectionReusableView() }
         
+//        if !trackerStorage.visibleCategories[indexPath.section].trackerArray.isEmpty {
+//            view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
+//            return view
+//        }
+//        return UICollectionReusableView()
         view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
-    
         return view
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         let indexPath = IndexPath(row: 0, section: section)
-        let headerView = self.collectionView(collectionView, viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath)
-        return headerView.systemLayoutSizeFitting(CGSize(width: collectionView.frame.width,
-                                                         height: collectionView.frame.height),
-                                                  withHorizontalFittingPriority: .required,
-                                                  verticalFittingPriority: .fittingSizeLevel)
+        let headerView = self.collectionView(
+            collectionView,
+            viewForSupplementaryElementOfKind: UICollectionView.elementKindSectionHeader, at: indexPath
+        )
+        
+        return headerView.systemLayoutSizeFitting(
+            CGSize(
+                width: collectionView.frame.width,
+                height: collectionView.frame.height),
+            withHorizontalFittingPriority: .required,
+            verticalFittingPriority: .fittingSizeLevel
+        )
     }
 }
 
@@ -401,6 +412,25 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
 //MARK: - Filters cells
 extension TrackerViewController {
+    
+    private func setEmptyItemsAfterSearch() {
+        trackerCollectionView.alpha = 0
+
+        view.addSubview(emptyImage)
+        view.addSubview(emptyLabel)
+        
+        emptyImage.image = Resourses.Images.statisticEmptyImage
+        emptyLabel.text = "Ничего не найдено"
+
+        NSLayoutConstraint.activate([
+
+            emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
+        ])
+    }
     
     func filterTrackersFromDate(date: Date){
         let calendar = Calendar.current
@@ -447,25 +477,6 @@ extension TrackerViewController {
         return newVisibleArray
     }
     
-    private func setEmptyItemsAfterSearch() {
-        trackerCollectionView.alpha = 0
-
-        view.addSubview(emptyImage)
-        view.addSubview(emptyLabel)
-        
-        emptyImage.image = Resourses.Images.statisticEmptyImage
-        emptyLabel.text = "Ничего не найдено"
-
-        NSLayoutConstraint.activate([
-
-            emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
-        ])
-    }
-    
 //MARK: - FILTER @OBJC FUNC
     @objc
     private func cancelButtonTapped() {
@@ -495,15 +506,16 @@ extension TrackerViewController {
         guard let text = searchTextField.text else { return }
         let categories = trackerStorage.visibleCategories
         
-        if text == "" {
-            emptyImage.removeFromSuperview()
-            emptyLabel.removeFromSuperview()
-            updateVisibleCategories()
-            trackerCollectionView.reloadData()
-            trackerCollectionView.alpha = 1
-        }
+//        if text == "" {
+//            emptyImage.removeFromSuperview()
+//            emptyLabel.removeFromSuperview()
+//            updateVisibleCategories()
+//            trackerCollectionView.reloadData()
+//            trackerCollectionView.alpha = 1
+//        }
         
         let newCategory = searchTrackerByName(categories: categories, filledName: text)
+        
         if newCategory.count == 0 {
             setEmptyItemsAfterSearch()
         }

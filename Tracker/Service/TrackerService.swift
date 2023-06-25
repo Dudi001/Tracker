@@ -42,7 +42,7 @@ final class TrackerStorageService {
                                                                name: "Влажная уборка",
                                                                color: .colorSelection4,
                                                                emoji: "😇",
-                                                               schedule: [2, 4, 6])])
+                                                               schedule: [1, 4, 6])])
     ]
     
     
