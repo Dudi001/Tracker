@@ -15,7 +15,7 @@ final class TrackerStorageService {
     
     var selectedCategory: String?
     var selectedSchedule: String?
-    
+
     var trackerName: String?
     var trackerEmoji: String?
     var trackerColor: UIColor?
@@ -72,7 +72,7 @@ final class TrackerStorageService {
         trackerEmoji = nil
         schedule = nil
     }
-   
+    
     func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
         guard let date = currentDate else { return [] }
         
@@ -91,33 +91,11 @@ final class TrackerStorageService {
                     newCategory.trackerArray.append(tracker)
                 }
             }
-//            print(newCategory.trackerArray.count)
             if !newCategory.trackerArray.isEmpty {
                 newArray.append(newCategory)
             }
         }
-//        print("LAST \(newArray.count)")
         return newArray
     }
     
-    func showAllTrackersAfterChange(_ categories: [TrackerCategory]) -> [TrackerCategory] {
-        guard let currentDate = currentDate else { return [] }
-        
-        var newTrackerArray: [TrackerCategory] = []
-        
-        for item in categories {
-            for date in item.trackerArray {
-                let weekDayNumber = Calendar.current.component(.weekday, from: currentDate)
-                
-                if date.schedule.contains(weekDayNumber) {
-                    newTrackerArray.append(item)
-                
-                }
-                
-            }
-        }
-        
-        return newTrackerArray
-        
-    }
 }

@@ -114,10 +114,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         addConstraintsDatePicker()
         updateVisibleCategories()
         addConstraintsCollectionView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        updateVisibleCategories()
+        setupTrackersFromDatePicker()
     }
     
     func reloadCollectionView() {
@@ -176,8 +173,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         trackerCollectionView.delegate = self
     }
     
-    
-    
     private func createTrackerRecord(with id: UUID) -> TrackerRecord {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
@@ -206,10 +201,8 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         guard currentDate < Date() || tracker.schedule.isEmpty else { return }
         
         let trackerRecord = createTrackerRecord(with: tracker.id)
-        
-        print(currentDate)
-        print(datePicker.date)
-        if trackerStorage.completedTrackers.contains(trackerRecord) && currentDate == datePicker.date {
+
+        if trackerStorage.completedTrackers.contains(trackerRecord){
             trackerStorage.completedTrackers.remove(trackerRecord)
         } else {
             trackerStorage.completedTrackers.insert(trackerRecord)
@@ -219,8 +212,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     private func setupCounterTextLabel(trackerID: UUID) -> String {
         let count = trackerStorage.completedTrackers.filter { $0.id == trackerID }.count
-//        let lastDigit = count % 10
-//        print(trackerStorage.completedTrackers)
         var text: String
         text = count.days()
         return("\(text)")
@@ -259,6 +250,16 @@ extension TrackerViewController {
         let totalCategory = trackerStorage.categories
         trackerStorage.currentDate = datePicker.date
         let newTrackerCategory = trackerStorage.showNewTrackersAfterChanges(totalCategory)
+        
+        if newTrackerCategory.isEmpty {
+            setEmptyItemsAfterSearch()
+        } else {
+            emptyImage.removeFromSuperview()
+            emptyLabel.removeFromSuperview()
+            trackerCollectionView.reloadData()
+            trackerCollectionView.alpha = 1
+        }
+        
         
         trackerStorage.visibleCategories = newTrackerCategory
         trackerCollectionView.reloadData()
@@ -357,8 +358,6 @@ extension TrackerViewController: UICollectionViewDataSource {
             return view
         }
         return UICollectionReusableView()
-//        view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
-//        return view
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -425,7 +424,7 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 //MARK: - Filters cells
 extension TrackerViewController {
     
-    private func setEmptyItemsAfterSearch() {
+    func setEmptyItemsAfterSearch() {
         trackerCollectionView.alpha = 0
 
         view.addSubview(emptyImage)
@@ -500,33 +499,21 @@ extension TrackerViewController {
         updateVisibleCategories()
         trackerCollectionView.reloadData()
         trackerCollectionView.alpha = 1
+        
+        updateVisibleCategories()
     }
     
     @objc
     private func setupTrackersFromDatePicker() {
+        trackerStorage.currentDate = datePicker.date
+        updateVisibleCategories()
         trackerCollectionView.reloadData()
-        filterTrackersFromDate(date: datePicker.date)
-        
-        if countForFilterDate == 0{
-            emptyImage.removeFromSuperview()
-            emptyLabel.removeFromSuperview()
-            trackerCollectionView.reloadData()
-            trackerCollectionView.alpha = 1
-        }
     }
     
     @objc
     private func setupTrackersFromTextField() {
         guard let text = searchTextField.text else { return }
         let categories = trackerStorage.visibleCategories
-        
-//        if text == "" {
-//            emptyImage.removeFromSuperview()
-//            emptyLabel.removeFromSuperview()
-//            updateVisibleCategories()
-//            trackerCollectionView.reloadData()
-//            trackerCollectionView.alpha = 1
-//        }
         
         let newCategory = searchTrackerByName(categories: categories, filledName: text)
         
