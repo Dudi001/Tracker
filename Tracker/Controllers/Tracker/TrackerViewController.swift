@@ -116,9 +116,9 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         addConstraintsCollectionView()
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        updateVisibleCategories(trackerStorage.categories)
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        updateVisibleCategories()
+    }
     
     func reloadCollectionView() {
         trackerStorage.visibleCategories = trackerStorage.categories
@@ -166,14 +166,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         }
     }
 
-    
-    private func setupCounterTextLabel(trackerID: UUID) -> String {
-        let count = trackerStorage.completedTrackers.filter { $0.id == trackerID }.count
-        var text: String
-        text = count.days()
-        return("\(text)")
-    }
-    
     private func setupViews() {
         trackerCollectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
         trackerCollectionView.register(
@@ -184,29 +176,13 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         trackerCollectionView.delegate = self
     }
     
-    private func setupCell(_ cell: TrackerCollectionViewCell, trackerModel: Tracker) {
-        cell.emojiLabel.text = trackerModel.emoji
-        cell.textTrackerLabel.text = trackerModel.name
-        cell.cellView.backgroundColor = trackerModel.color
-        cell.trackerCompleteButton.backgroundColor = trackerModel.color
-        cell.trackerCompleteButton.addTarget(self, action: #selector(completeButtonTapped(_:)), for: .touchUpInside)
-        let trackerRecord = createTrackerRecord(with: trackerModel.id)
-        let isCompleted = trackerStorage.completedTrackers.contains(trackerRecord)
-        cell.counterDayLabel.text = setupCounterTextLabel(trackerID: trackerRecord.id)
-        if datePicker.date < currentDate && !trackerModel.schedule.isEmpty {
-            cell.trackerCompleteButton.isUserInteractionEnabled = false
-        } else {
-            cell.trackerCompleteButton.isUserInteractionEnabled = true
-        }
-        cell.trackerCompleteButton.toggled = isCompleted
-
-    }
+    
     
     private func createTrackerRecord(with id: UUID) -> TrackerRecord {
         let dateFormatter = DateFormatter()
         dateFormatter.dateStyle = .medium
         dateFormatter.timeStyle = .none
-        let date = dateFormatter.string(from: Date())
+        let date = dateFormatter.string(from: currentDate)
         let trackerRecord = TrackerRecord(id: id, date: date)
         return trackerRecord
     }
@@ -224,15 +200,30 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     private func completeButtonTapped(_ sender: UIButton) {
         guard let cell = sender.superview?.superview as? TrackerCollectionViewCell,
               let indexPath = trackerCollectionView.indexPath(for: cell) else { return }
+        
         let tracker = trackerStorage.visibleCategories[indexPath.section].trackerArray[indexPath.item]
+        
         guard currentDate < Date() || tracker.schedule.isEmpty else { return }
+        
         let trackerRecord = createTrackerRecord(with: tracker.id)
-        if trackerStorage.completedTrackers.contains(trackerRecord) {
+        
+        print(currentDate)
+        print(datePicker.date)
+        if trackerStorage.completedTrackers.contains(trackerRecord) && currentDate == datePicker.date {
             trackerStorage.completedTrackers.remove(trackerRecord)
         } else {
             trackerStorage.completedTrackers.insert(trackerRecord)
         }
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
+    }
+    
+    private func setupCounterTextLabel(trackerID: UUID) -> String {
+        let count = trackerStorage.completedTrackers.filter { $0.id == trackerID }.count
+//        let lastDigit = count % 10
+//        print(trackerStorage.completedTrackers)
+        var text: String
+        text = count.days()
+        return("\(text)")
     }
     
     
@@ -361,13 +352,13 @@ extension TrackerViewController: UICollectionViewDataSource {
             for: indexPath) as? SupplementaryView
         else { return UICollectionReusableView() }
         
-//        if !trackerStorage.visibleCategories[indexPath.section].trackerArray.isEmpty {
-//            view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
-//            return view
-//        }
-//        return UICollectionReusableView()
-        view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
-        return view
+        if !trackerStorage.visibleCategories[indexPath.section].trackerArray.isEmpty {
+            view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
+            return view
+        }
+        return UICollectionReusableView()
+//        view.titleLabel.text = trackerStorage.visibleCategories[indexPath.section].name
+//        return view
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
@@ -384,6 +375,27 @@ extension TrackerViewController: UICollectionViewDataSource {
             withHorizontalFittingPriority: .required,
             verticalFittingPriority: .fittingSizeLevel
         )
+    }
+    
+    private func setupCell(_ cell: TrackerCollectionViewCell, trackerModel: Tracker) {
+        cell.emojiLabel.text = trackerModel.emoji
+        cell.textTrackerLabel.text = trackerModel.name
+        cell.cellView.backgroundColor = trackerModel.color
+        cell.trackerCompleteButton.backgroundColor = trackerModel.color
+        cell.trackerCompleteButton.addTarget(self, action: #selector(completeButtonTapped(_:)), for: .touchUpInside)
+        
+        let trackerRecord = createTrackerRecord(with: trackerModel.id)
+        let isCompleted = trackerStorage.completedTrackers.contains(trackerRecord)
+        
+        cell.counterDayLabel.text = setupCounterTextLabel(trackerID: trackerRecord.id)
+        
+        
+        if datePicker.date < currentDate && !trackerModel.schedule.isEmpty {
+            cell.trackerCompleteButton.isUserInteractionEnabled = false
+        } else {
+            cell.trackerCompleteButton.isUserInteractionEnabled = true
+        }
+        cell.trackerCompleteButton.toggled = isCompleted
     }
 }
 
@@ -447,6 +459,7 @@ extension TrackerViewController {
             if filterTrackers.count == 0 {
                 setEmptyItemsAfterSearch()
                 countForFilterDate = 1
+                return nil
             } else {
                 countForFilterDate = 0
             }
@@ -491,6 +504,7 @@ extension TrackerViewController {
     
     @objc
     private func setupTrackersFromDatePicker() {
+        trackerCollectionView.reloadData()
         filterTrackersFromDate(date: datePicker.date)
         
         if countForFilterDate == 0{

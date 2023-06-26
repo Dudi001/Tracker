@@ -27,17 +27,17 @@ final class TrackerStorageService {
                                                                name: "Учиться делать iOS-приложения",
                                                                color: .colorSelection1,
                                                                emoji: "🐶",
-                                                               schedule: [3, 4, 1]),
+                                                               schedule: [2, 4, 1]),
                                                        Tracker(id: UUID(),
                                                                name: "Получить права",
                                                                color: .colorSelection2,
                                                                emoji: "😻",
-                                                               schedule: [3, 5, 6, 7])]),
+                                                               schedule: [2, 5, 6, 7])]),
         TrackerCategory(name: "Уборка", trackerArray: [Tracker(id: UUID(),
                                                                name: "Полить цветы",
                                                                color: .colorSelection3,
                                                                emoji: "🍔",
-                                                               schedule: [3, 4, 5, 6, 7]),
+                                                               schedule: [2, 4, 5, 6, 7]),
                                                        Tracker(id: UUID(),
                                                                name: "Влажная уборка",
                                                                color: .colorSelection4,
@@ -91,11 +91,12 @@ final class TrackerStorageService {
                     newCategory.trackerArray.append(tracker)
                 }
             }
+//            print(newCategory.trackerArray.count)
             if !newCategory.trackerArray.isEmpty {
                 newArray.append(newCategory)
             }
         }
-        
+//        print("LAST \(newArray.count)")
         return newArray
     }
     
