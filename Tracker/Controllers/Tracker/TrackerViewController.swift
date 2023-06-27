@@ -15,7 +15,6 @@ protocol TrackerViewControllerProtocol: AnyObject {
 
 
 final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
-    var countForFilterDate = 0
     var query: String = ""
     var currentDate = Date()
     private let trackerStorage = TrackerStorageService.shared
@@ -200,9 +199,11 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         
         guard currentDate < Date() || tracker.schedule.isEmpty else { return }
         
+//        print(currentDate)
+        
         let trackerRecord = createTrackerRecord(with: tracker.id)
-
-        if trackerStorage.completedTrackers.contains(trackerRecord){
+        
+        if trackerStorage.completedTrackers.contains(trackerRecord) {
             trackerStorage.completedTrackers.remove(trackerRecord)
         } else {
             trackerStorage.completedTrackers.insert(trackerRecord)
@@ -385,11 +386,10 @@ extension TrackerViewController: UICollectionViewDataSource {
         
         let trackerRecord = createTrackerRecord(with: trackerModel.id)
         let isCompleted = trackerStorage.completedTrackers.contains(trackerRecord)
+
+        cell.counterDayLabel.text = setupCounterTextLabel(trackerID: trackerRecord.id)        
         
-        cell.counterDayLabel.text = setupCounterTextLabel(trackerID: trackerRecord.id)
-        
-        
-        if datePicker.date < currentDate && !trackerModel.schedule.isEmpty {
+        if Date() < currentDate && !trackerModel.schedule.isEmpty {
             cell.trackerCompleteButton.isUserInteractionEnabled = false
         } else {
             cell.trackerCompleteButton.isUserInteractionEnabled = true
@@ -443,32 +443,6 @@ extension TrackerViewController {
         ])
     }
     
-    func filterTrackersFromDate(date: Date){
-        let calendar = Calendar.current
-        let trackerDate = calendar.component(.weekday, from: date)
-        let categories = trackerStorage.categories
-        
-        trackerStorage.visibleCategories = categories.compactMap { category in
-            let filterTrackers = category.trackerArray.filter { tracker in
-                let schedule = tracker.schedule
-
-                return schedule.contains(trackerDate)
-            }
-            
-            if filterTrackers.count == 0 {
-                setEmptyItemsAfterSearch()
-                countForFilterDate = 1
-                return nil
-            } else {
-                countForFilterDate = 0
-            }
-            
-    
-            return TrackerCategory(name: category.name,
-                                   trackerArray: filterTrackers)
-        }
-    }
-    
     func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {
         var newVisibleArray: [TrackerCategory] = []
         
@@ -505,7 +479,7 @@ extension TrackerViewController {
     
     @objc
     private func setupTrackersFromDatePicker() {
-        trackerStorage.currentDate = datePicker.date
+        currentDate = datePicker.date
         updateVisibleCategories()
         trackerCollectionView.reloadData()
     }
