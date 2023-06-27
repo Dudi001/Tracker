@@ -61,6 +61,7 @@ final class NewCategoryViewController: UIViewController {
         trackerStorage.categories.append(TrackerCategory(name: name,
                                                          trackerArray: []))
         dismiss(animated: true)
+        print(trackerStorage.categories.count)
         categoryViewController?.reloadTableView()
     }
 }

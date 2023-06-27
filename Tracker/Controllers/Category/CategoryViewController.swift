@@ -77,7 +77,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     func checkCellsCount() {
-        if trackerStorage.visibleCategories.count == 0 {
+        if trackerStorage.categories.count == 0 {
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
             categoryTableView.removeFromSuperview()
@@ -131,8 +131,9 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     func reloadTableView() {
-        checkToSetupDumb()
         categoryTableView.reloadData()
+        checkToSetupDumb()
+        
     }
     
 
