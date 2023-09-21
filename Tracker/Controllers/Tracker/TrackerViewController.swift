@@ -190,6 +190,8 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         present(selectVC, animated: true)
     }
     
+    
+    //Count day botton
     @objc
     private func completeButtonTapped(_ sender: UIButton) {
         guard let cell = sender.superview?.superview as? TrackerCollectionViewCell,

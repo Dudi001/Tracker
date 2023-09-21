@@ -8,7 +8,6 @@
 import UIKit
 
 
-
 enum TypeOfTracker {
     case hobby
     case irregular
@@ -17,6 +16,7 @@ enum TypeOfTracker {
 protocol CreateTrackerViewControllerProtocol {
     func reloadTableView()
 }
+
 
 final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
     var typeOfTracker: TypeOfTracker?
@@ -153,6 +153,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         textField.delegate = self
     }
     
+    // MARK: - Работа с бд. Созздание трекера
     func createNewTracker() -> [TrackerCategory] {
         guard let trackerColor = trackerStorage.trackerColor,
               let trackerName = trackerStorage.trackerName,
@@ -223,6 +224,8 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         createButton.backgroundColor = .ypGray
     }
     
+    
+    // MARK: - Работа с базой данных. Проверка кнопки "Создать"
     func checkCreateButton() {
         if trackerStorage.trackerName != nil &&
             trackerStorage.selectedCategory != nil &&
@@ -336,6 +339,8 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         dismiss(animated: true)
     }
     
+    
+    // MARK: - Работа с БД.
     @objc
     private func createButtonTapped() {
         trackerStorage.trackerName = textField.text
@@ -444,6 +449,7 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
         return 2
     }
     
+    // MARK: - Работа с базой данных
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
@@ -557,6 +563,7 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
+    // MARK: - Работа с базой данных. Установка ячейки
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         guard let cell = collectionView.cellForItem(at: indexPath) as? CreateNewTrackerCollectionViewCell else { return }
