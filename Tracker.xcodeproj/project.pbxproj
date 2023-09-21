@@ -40,6 +40,10 @@
 		D991ADDF2A1673F000F1F0F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D991ADDE2A1673F000F1F0F3 /* Assets.xcassets */; };
 		D991ADE22A1673F000F1F0F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D991ADE02A1673F000F1F0F3 /* LaunchScreen.storyboard */; };
 		D9EC27792AB23498000B0E3B /* model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D9EC27772AB23498000B0E3B /* model.xcdatamodeld */; };
+		D9EC277C2ABCB743000B0E3B /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC277B2ABCB743000B0E3B /* DataProvider.swift */; };
+		D9EC277E2ABCB774000B0E3B /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC277D2ABCB774000B0E3B /* TrackerStore.swift */; };
+		D9EC27802ABCB79A000B0E3B /* TrackerRecordStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC277F2ABCB79A000B0E3B /* TrackerRecordStore.swift */; };
+		D9EC27822ABCB7C1000B0E3B /* TrackerCategoryStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC27812ABCB7C1000B0E3B /* TrackerCategoryStore.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -79,6 +83,10 @@
 		D991ADE12A1673F000F1F0F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D991ADE32A1673F000F1F0F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D9EC27782AB23498000B0E3B /* model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = model.xcdatamodel; sourceTree = "<group>"; };
+		D9EC277B2ABCB743000B0E3B /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
+		D9EC277D2ABCB774000B0E3B /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
+		D9EC277F2ABCB79A000B0E3B /* TrackerRecordStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerRecordStore.swift; sourceTree = "<group>"; };
+		D9EC27812ABCB7C1000B0E3B /* TrackerCategoryStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerCategoryStore.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -247,6 +255,7 @@
 		D991ADD42A1673EE00F1F0F3 /* Tracker */ = {
 			isa = PBXGroup;
 			children = (
+				D9EC277A2ABCB6E4000B0E3B /* Domain */,
 				D9EC27762AAF86D9000B0E3B /* CoreData */,
 				D991ADE32A1673F000F1F0F3 /* Info.plist */,
 				D991ADDE2A1673F000F1F0F3 /* Assets.xcassets */,
@@ -276,6 +285,17 @@
 				D9EC27772AB23498000B0E3B /* model.xcdatamodeld */,
 			);
 			path = CoreData;
+			sourceTree = "<group>";
+		};
+		D9EC277A2ABCB6E4000B0E3B /* Domain */ = {
+			isa = PBXGroup;
+			children = (
+				D9EC277B2ABCB743000B0E3B /* DataProvider.swift */,
+				D9EC277D2ABCB774000B0E3B /* TrackerStore.swift */,
+				D9EC27812ABCB7C1000B0E3B /* TrackerCategoryStore.swift */,
+				D9EC277F2ABCB79A000B0E3B /* TrackerRecordStore.swift */,
+			);
+			path = Domain;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -353,6 +373,8 @@
 				D90E2E802A2F2D520000C7E1 /* Int + ext.swift in Sources */,
 				D90E2E842A31DC840000C7E1 /* image + ext.swift in Sources */,
 				D96239882A351D5F00F61DAE /* CreateNewTrackerViewController.swift in Sources */,
+				D9EC27802ABCB79A000B0E3B /* TrackerRecordStore.swift in Sources */,
+				D9EC27822ABCB7C1000B0E3B /* TrackerCategoryStore.swift in Sources */,
 				D96239962A37984900F61DAE /* CategoryTableViewCell.swift in Sources */,
 				D9021F1C2A39E0670080BB4D /* ScheduleService.swift in Sources */,
 				D90E2E622A2A4A500000C7E1 /* TrackerViewController.swift in Sources */,
@@ -365,7 +387,9 @@
 				D90E2E822A31CE5E0000C7E1 /* SupplementaryView.swift in Sources */,
 				D90E2E742A2BD85C0000C7E1 /* TrackerCollectionViewCell.swift in Sources */,
 				D9021F182A390A840080BB4D /* FilterViewController.swift in Sources */,
+				D9EC277E2ABCB774000B0E3B /* TrackerStore.swift in Sources */,
 				D90E2E7E2A2CE3760000C7E1 /* BottonClass.swift in Sources */,
+				D9EC277C2ABCB743000B0E3B /* DataProvider.swift in Sources */,
 				D96239982A3798E900F61DAE /* NewCategoryViewController.swift in Sources */,
 				D90E2E722A2BD06D0000C7E1 /* TrackerRecord.swift in Sources */,
 				D90E2E6E2A2BD04C0000C7E1 /* Tracker.swift in Sources */,

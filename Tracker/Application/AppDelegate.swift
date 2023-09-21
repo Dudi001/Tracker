@@ -6,11 +6,33 @@
 //
 
 import UIKit
+import CoreData
+
 
 @main
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-
+    lazy var persistentContainer: NSPersistentContainer = {
+        let container = NSPersistentContainer(name: "model")
+        container.loadPersistentStores { storeDescription, error in
+            if let error {
+                assertionFailure(error.localizedDescription)
+            }
+        }
+        return container
+    }()
+    
+    func saveContex() {
+        let context = persistentContainer.viewContext
+        
+        if context.hasChanges {
+            do {
+                try context.save()
+            } catch {
+                assertionFailure("Context save error")
+            }
+        }
+    }
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         return true
