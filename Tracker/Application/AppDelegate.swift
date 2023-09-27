@@ -22,7 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return container
     }()
     
-    func saveContex() {
+    func saveContext() {
         let context = persistentContainer.viewContext
         
         if context.hasChanges {
