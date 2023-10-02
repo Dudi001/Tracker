@@ -19,6 +19,8 @@ final class DataProvider {
     static let shared = DataProvider()
     private var schedule: [Int] = []
 //    var currentDate: Date?
+    var selectedCategory: String?
+    var selectedSchedule: String?
     
     
     var trackerName: String?

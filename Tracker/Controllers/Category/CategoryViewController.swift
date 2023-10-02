@@ -13,10 +13,10 @@ protocol CategoryViewControllerProtocol: AnyObject {
 
 
 final class CategoryViewController: UIViewController, CategoryViewControllerProtocol {
-    private let trackerStorage = TrackerStorageService.shared
+    private let dataProvider = DataProvider.shared//TrackerStorageService.shared
     var selectedIndexPath: IndexPath?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
-    
+    private var categoryArray: [String] = []
     
     lazy var titleLabel: UILabel = {
         let item = UILabel()
@@ -74,10 +74,11 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         checkCellsCount()
         addConstraints()
         setupTableView()
+        categoryArray = DataProvider.shared.getCategories()
     }
     
     func checkCellsCount() {
-        if trackerStorage.categories.count == 0 {
+        if dataProvider.categories.count == 0 {
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
             categoryTableView.removeFromSuperview()
@@ -138,7 +139,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     
 
     private func checkToSetupDumb() {
-        categoryTableView.alpha = trackerStorage.categories.count == 0 ? 0 : 1
+        categoryTableView.alpha = dataProvider.categories.count == 0 ? 0 : 1
     }
     
     
@@ -155,14 +156,19 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
 //MARK: UITableViewDataSource
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return  trackerStorage.categories.count
+//        return  dataProvider.categories.count
+        if categoryArray.isEmpty {
+            return 1
+        } else {
+            return categoryArray.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         
         
-        cell.configureCell(text: trackerStorage.categories[indexPath.row].name)
+        cell.configureCell(text: categoryArray[indexPath.row])
         
         return cell
     }
@@ -177,6 +183,15 @@ extension CategoryViewController: UITableViewDataSource {
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
+//        selectedIndexPath = indexPath
+//
+//        if !categoryArray.isEmpty {
+//            let category = categoryArray[indexPath.row]
+//            dataProvider.setCategory(category: category)
+//            createTrackerViewController?.reloadTableView()
+//            tableView.reloadData()
+//            dismiss(animated: true)
+//        }
         if let selectedIndexPath = selectedIndexPath {
             if let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? CategoryTableViewCell {
                 selectedCell.accessoryType = .none
@@ -187,15 +202,20 @@ extension CategoryViewController: UITableViewDelegate {
                 }
             }
         }
-        
-        
+
+
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell {
             cell.accessoryType = .checkmark
             selectedIndexPath = indexPath
 
-            trackerStorage.selectedCategory = cell.label.text
+            dataProvider.selectedCategory = cell.label.text
             createTrackerViewController?.reloadTableView()
             dismiss(animated: true)
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+        selectedIndexPath = nil
+        tableView.reloadData()
     }
 }
