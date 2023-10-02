@@ -21,7 +21,7 @@ protocol CreateTrackerViewControllerProtocol {
 final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
     var typeOfTracker: TypeOfTracker?
     var newCategory: [TrackerCategory] = []
-    var trackerStorage = TrackerStorageService.shared
+//    var dataProvider = TrackerStorageService.shared
     var selecTypeTracker: SelectTypeTrackerViewControllerProtocol?
     private var dataProvider = DataProvider.shared
     private lazy var trackerStore = TrackerStore()
@@ -158,17 +158,17 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     // MARK: - Работа с бд. Создание трекера
     func createNewTracker() -> [TrackerCategory] {
-        guard let trackerColor = trackerStorage.trackerColor,
-              let trackerName = trackerStorage.trackerName,
-              let trackerEmoji = trackerStorage.trackerEmoji
+        guard let trackerColor = dataProvider.trackerColor,
+              let trackerName = dataProvider.trackerName,
+              let trackerEmoji = dataProvider.trackerEmoji
         else { return [] }
 
-        let categories = trackerStorage.categories
+        let categories = dataProvider.categories
         let newTracker = Tracker(id: UUID(),
                                  name: trackerName,
                                  color: trackerColor,
                                  emoji: trackerEmoji,
-                                 schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
+                                 schedule: dataProvider.schedule ?? [1,2,3,4,5,6,7])
         
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
@@ -176,7 +176,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         var newCategory: [TrackerCategory] = []
 
         categories.forEach { category in
-            if trackerStorage.selectedCategory == category.name {
+            if dataProvider.selectedCategory == category.name {
                 var newTrackers = category.trackerArray
                 newTrackers.append(newTracker)
                 newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
@@ -234,15 +234,15 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     // MARK: - Работа с базой данных. Проверка кнопки "Создать"
     func checkCreateButton() {
-        if trackerStorage.trackerName != nil &&
-            trackerStorage.selectedCategory != nil &&
-            trackerStorage.trackerEmoji != nil &&
-            trackerStorage.trackerColor != nil {
+        if dataProvider.trackerName != nil &&
+            dataProvider.selectedCategory != nil &&
+            dataProvider.trackerEmoji != nil &&
+            dataProvider.trackerColor != nil {
             switch typeOfTracker {
             case .irregular:
                 enableCreateButton()
             case .hobby:
-                trackerStorage.selectedSchedule != nil ? enableCreateButton() : disableCreateButton()
+                dataProvider.selectedSchedule != nil ? enableCreateButton() : disableCreateButton()
             default:
                 disableCreateButton()
             }
@@ -355,7 +355,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
 
         dataProvider.categories = newCategory
         dataProvider.createTracker2()
-        trackerStorage.resetNewTrackerInfo()
+        dataProvider.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()
     }
@@ -370,7 +370,7 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
         else { return }
         checkCreateButton()
         setTextFieldWarning(textCount)
-        trackerStorage.trackerName = text
+        dataProvider.trackerName = text
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -384,7 +384,7 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
         else { return }
         checkCreateButton()
 //        setTextFieldWarning(textCount)
-        trackerStorage.trackerName = text
+        dataProvider.trackerName = text
     }
 }
 
@@ -405,18 +405,18 @@ extension CreateNewTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as? CreateNewTrackerTableVIewCell else { return UITableViewCell() }
-        cell.label.text = trackerStorage.tableViewTitle[indexPath.row]
+        cell.label.text = dataProvider.tableViewTitle[indexPath.row]
         
         switch indexPath.row {
         case 0:
-            if let selectedCategory = trackerStorage.selectedCategory {
+            if let selectedCategory = dataProvider.selectedCategory {
                 cell.label.removeConstraints(cell.label.constraints)
                 cell.configureCellWithCategory(selectedCategory)
             } else {
                 cell.configureCellWithoutCategory()
             }
         case 1:
-            if let selectedSchedule = trackerStorage.selectedSchedule {
+            if let selectedSchedule = dataProvider.selectedSchedule {
                 cell.label.removeConstraints(cell.label.constraints)
                 cell.configureCellWithCategory(selectedSchedule)
             } else {
@@ -461,9 +461,9 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return trackerStorage.emojies.count
+            return dataProvider.emojies.count
         case 1:
-            return trackerStorage.colors.count
+            return dataProvider.colors.count
         default:
             return 10
         }
@@ -474,10 +474,10 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
               
         switch indexPath.section {
         case 0:
-            cell.configureEmojiCell(emoji: trackerStorage.emojies[indexPath.row])
+            cell.configureEmojiCell(emoji: dataProvider.emojies[indexPath.row])
             return cell
         case 1:
-            cell.configureColorCell(color: trackerStorage.colors[indexPath.row])
+            cell.configureColorCell(color: dataProvider.colors[indexPath.row])
             return cell
         default:
             return UICollectionViewCell()
@@ -580,12 +580,12 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         case 0:
             cell.layer.cornerRadius = 16
             cell.backgroundColor = .ypLightGray
-            trackerStorage.trackerEmoji = cell.emojiLabel.text
+            dataProvider.trackerEmoji = cell.emojiLabel.text
         case 1:
             cell.layer.cornerRadius = 11
-            cell.layer.borderColor = trackerStorage.colors[indexPath.row].withAlphaComponent(0.3).cgColor
+            cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
-            trackerStorage.trackerColor = trackerStorage.colors[indexPath.row]
+            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
         default:
             cell.backgroundColor = .gray
         }

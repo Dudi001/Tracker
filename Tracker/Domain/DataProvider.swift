@@ -17,16 +17,16 @@ final class DataProvider {
     var category: String = "Важное"
     var color: UIColor = .gray
     static let shared = DataProvider()
-    private var schedule: [Int] = []
+//    private var schedule: [Int] = []
 //    var currentDate: Date?
     var selectedCategory: String?
     var selectedSchedule: String?
-    
+    let tableViewTitle = ["Категория", "Расписание"]
     
     var trackerName: String?
     var trackerEmoji: String?
     var trackerColor: UIColor?
-//    var schedule: [Int]?
+    var schedule: [Int]?
     var currentDate: Date?
     
     private lazy var trackerStore = TrackerStore()
@@ -38,6 +38,16 @@ final class DataProvider {
     var completedTrackers: Set<TrackerRecord> = []
     
     weak var delegate: DataProviderDelegate?
+    
+    func resetNewTrackerInfo() {
+        selectedCategory = nil
+        selectedSchedule = nil
+        trackerName = nil
+        trackerColor = nil
+        trackerEmoji = nil
+        schedule = nil
+    }
+    
     
     var emojies = [
         "🙂", "😻", "🌺", "🐶", "❤️", "😱",
@@ -79,15 +89,16 @@ final class DataProvider {
     }
     
     func addDay(day: Int){
-        schedule.append(day)
+        schedule?.append(day)
     }
     
     func removeDay(day: Int) {
-        schedule.removeAll { $0 == day }
+        schedule?.removeAll { $0 == day }
     }
     
     func scheduleContains(_ day: Int) -> Bool {
-        schedule.contains(day)
+        
+        ((schedule?.contains(day)) != nil)
     }
  
 //    func createTracker() {
@@ -112,7 +123,7 @@ final class DataProvider {
                                  name: trackerName,
                                  color: trackerColor,
                                  emoji: trackerEmoji,
-                                 schedule: schedule)
+                                 schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7])
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
         
