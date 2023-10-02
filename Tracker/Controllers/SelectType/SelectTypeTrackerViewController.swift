@@ -13,6 +13,7 @@ protocol SelectTypeTrackerViewControllerProtocol {
 
 
 final class SelectTypeTrackerViewController: UIViewController, SelectTypeTrackerViewControllerProtocol {
+    private var dataProvider = DataProvider.shared
     var trackerViewController: TrackerViewControllerProtocol?
     
     lazy var titileLabel: UILabel = {
@@ -78,7 +79,7 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
     
     func switchToTrackerVC() {
         dismiss(animated: true)
-        trackerViewController?.updateVisibleCategories()
+        trackerViewController?.updateVisibleCategories(dataProvider.categories)
     }
     
     

@@ -23,6 +23,9 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     var newCategory: [TrackerCategory] = []
     var trackerStorage = TrackerStorageService.shared
     var selecTypeTracker: SelectTypeTrackerViewControllerProtocol?
+    private var dataProvider = DataProvider.shared
+    private lazy var trackerStore = TrackerStore()
+    weak var delegate: DataProviderDelegate?
     
      
     
@@ -153,7 +156,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         textField.delegate = self
     }
     
-    // MARK: - Работа с бд. Созздание трекера
+    // MARK: - Работа с бд. Создание трекера
     func createNewTracker() -> [TrackerCategory] {
         guard let trackerColor = trackerStorage.trackerColor,
               let trackerName = trackerStorage.trackerName,
@@ -166,6 +169,10 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
                                  color: trackerColor,
                                  emoji: trackerEmoji,
                                  schedule: trackerStorage.schedule ?? [1,2,3,4,5,6,7])
+        
+        trackerStore.addTracker(model: newTracker)
+        delegate?.addTrackers()
+        
         var newCategory: [TrackerCategory] = []
 
         categories.forEach { category in
@@ -343,10 +350,11 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     // MARK: - Работа с БД.
     @objc
     private func createButtonTapped() {
-        trackerStorage.trackerName = textField.text
+        dataProvider.trackerName = textField.text
         let newCategory = createNewTracker()
-  
-        trackerStorage.categories = newCategory
+
+        dataProvider.categories = newCategory
+        dataProvider.createTracker2()
         trackerStorage.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()

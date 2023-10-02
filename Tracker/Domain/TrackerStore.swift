@@ -14,7 +14,7 @@ protocol TrackerStorageProtocol: AnyObject {
 }
 
 final class TrackerStore: NSObject, TrackerStorageProtocol{
-//    private let colorMarshaling =
+    private let colorMarshaling = UIColorMarshalling()
     private let dataProvider = DataProvider.shared
     
     private var insertIndex: IndexSet?
@@ -53,7 +53,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
     func addTracker(model: Tracker) {
         let category = dataProvider.category
         let tracker = TrackerCoreData(context: context)
-//        let color = colorMarshaling.hexString(from: model.color)
+        let color = colorMarshaling.hexString(from: model.color)
         
         let categoryFetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
             categoryFetchRequest.predicate = NSPredicate(format: "header == %@", category)
@@ -62,7 +62,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
             categoryCoreData.header = category
         
         tracker.id = model.id
-//        tracker.color = color
+        tracker.color = color
         tracker.emoji = model.emoji
         tracker.name = model.name
         tracker.schedule = model.schedule
@@ -83,7 +83,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
             
             
             for tracker in object {
-                let color = UIColor() //colorMarshaling.color(from: tracker.color ?? "")
+                let color = colorMarshaling.color(from: tracker.color ?? "")
                 let newTracker = Tracker(
                     id: tracker.id ?? UUID(),
                     name: tracker.name ?? "",
@@ -113,6 +113,6 @@ extension TrackerStore: NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         try? fetchResultController.performFetch()
-//        dataProvider.updateCategories()
+        dataProvider.updateCategories()
     }
 }

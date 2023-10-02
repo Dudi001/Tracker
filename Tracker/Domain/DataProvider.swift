@@ -18,11 +18,22 @@ final class DataProvider {
     var color: UIColor = .gray
     static let shared = DataProvider()
     private var schedule: [Int] = []
+//    var currentDate: Date?
+    
+    
+    var trackerName: String?
+    var trackerEmoji: String?
+    var trackerColor: UIColor?
+//    var schedule: [Int]?
+    var currentDate: Date?
     
     private lazy var trackerStore = TrackerStore()
     private lazy var trackerCategoryStore = TrackerCategoryStore()
     private lazy var trackerRecordStore = TrackerRecordStore()
     
+    var categories: [TrackerCategory] = []
+    var visibleCategories = [TrackerCategory]()
+    var completedTrackers: Set<TrackerRecord> = []
     
     weak var delegate: DataProviderDelegate?
     
@@ -77,15 +88,45 @@ final class DataProvider {
         schedule.contains(day)
     }
  
-    func createTracker() {
-        let tracker = Tracker(id: UUID(),
-                              name: "",
-                              color: self.color,
-                              emoji: "",
-                              schedule: schedule)
-        trackerStore.addTracker(model: tracker)
+//    func createTracker() {
+//        let tracker = Tracker(id: UUID(),
+//                              name: "",
+//                              color: self.color,
+//                              emoji: "",
+//                              schedule: schedule)
+//        trackerStore.addTracker(model: tracker)
+//        delegate?.addTrackers()
+////        clean()
+//    }
+    
+    func createTracker2() {
+        guard let trackerColor = trackerColor,
+              let trackerName = trackerName,
+              let trackerEmoji = trackerEmoji
+        else { return }
+
+//        let categories = trackerStorage.categories
+        let newTracker = Tracker(id: UUID(),
+                                 name: trackerName,
+                                 color: trackerColor,
+                                 emoji: trackerEmoji,
+                                 schedule: schedule)
+        trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
-//        clean()
+        
+//        var newCategory: [TrackerCategory] = []
+//
+//        categories.forEach { category in
+//            if trackerStorage.selectedCategory == category.name {
+//                var newTrackers = category.trackerArray
+//                newTrackers.append(newTracker)
+//                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
+//            } else {
+//                newCategory.append(category)
+//            }
+//
+//        }
+//        return newCategory
     }
     
     func addCategory(header: String) {
@@ -125,6 +166,31 @@ final class DataProvider {
     
     func deleteRecord(_ record: TrackerRecord) {
         trackerRecordStore.deleteTrackerRecord(record)
+    }
+    
+    func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
+        guard let date = currentDate else { return [] }
+        
+        var newArray: [TrackerCategory] = []
+        let calendar = Calendar.current
+        
+        for category in totalTrackers {
+            var newCategory = TrackerCategory(name: category.name, trackerArray: [])
+            
+            
+            for tracker in category.trackerArray {
+                let schedule = tracker.schedule
+                let trackerDate = calendar.component(.weekday, from: date)
+                
+                if schedule.contains(trackerDate) {
+                    newCategory.trackerArray.append(tracker)
+                }
+            }
+            if !newCategory.trackerArray.isEmpty {
+                newArray.append(newCategory)
+            }
+        }
+        return newArray
     }
     
 //    func getFormattedSchedule() -> String? {
