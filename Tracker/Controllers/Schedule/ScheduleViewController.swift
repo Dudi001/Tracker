@@ -14,7 +14,7 @@ final class ScheduleViewController: UIViewController {
     static let shared = ScheduleViewController()
     var presenter: TrackerViewPresenterProtocol?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
-    private let trackerStorage = TrackerStorageService.shared
+    private let dataProvider = DataProvider.shared
     
 
     private let scheduleService = ScheduleService()
@@ -71,8 +71,8 @@ final class ScheduleViewController: UIViewController {
     
     @objc private func returnToNewTrackerVC() {
         let scheduleDay = daysInInt.count == 7 ? "Каждый день" : scheduleService.arrayToString(array: daysInInt)
-        trackerStorage.selectedSchedule = scheduleDay
-        trackerStorage.schedule = daysInInt
+        dataProvider.selectedSchedule = scheduleDay
+        dataProvider.schedule = daysInInt
         createTrackerViewController?.reloadTableView()
         dismiss(animated: true)
     }

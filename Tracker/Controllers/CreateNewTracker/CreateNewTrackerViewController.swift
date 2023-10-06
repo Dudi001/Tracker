@@ -21,7 +21,6 @@ protocol CreateTrackerViewControllerProtocol {
 final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewControllerProtocol {
     var typeOfTracker: TypeOfTracker?
     var newCategory: [TrackerCategory] = []
-//    var dataProvider = TrackerStorageService.shared
     var selecTypeTracker: SelectTypeTrackerViewControllerProtocol?
     private var dataProvider = DataProvider.shared
     private lazy var trackerStore = TrackerStore()
@@ -157,13 +156,13 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     }
     
     // MARK: - Работа с бд. Создание трекера
-    func createNewTracker() -> [TrackerCategory] {
+    func createNewTracker() {
         guard let trackerColor = dataProvider.trackerColor,
               let trackerName = dataProvider.trackerName,
               let trackerEmoji = dataProvider.trackerEmoji
-        else { return [] }
+        else { return }
 
-        let categories = dataProvider.categories
+//        let categories = dataProvider.categories
         let newTracker = Tracker(id: UUID(),
                                  name: trackerName,
                                  color: trackerColor,
@@ -173,19 +172,19 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
         
-        var newCategory: [TrackerCategory] = []
-
-        categories.forEach { category in
-            if dataProvider.selectedCategory == category.name {
-                var newTrackers = category.trackerArray
-                newTrackers.append(newTracker)
-                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
-            } else {
-                newCategory.append(category)
-            }
-
-        }
-        return newCategory
+//        var newCategory: [TrackerCategory] = []
+//
+//        categories.forEach { category in
+//            if dataProvider.selectedCategory == category.name {
+//                var newTrackers = category.trackerArray
+//                newTrackers.append(newTracker)
+//                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
+//            } else {
+//                newCategory.append(category)
+//            }
+//
+//        }
+//        return newCategory
     }
     
     private func setupTitle() {
@@ -351,11 +350,11 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     @objc
     private func createButtonTapped() {
         dataProvider.trackerName = textField.text
-        let newCategory = createNewTracker()
+//        let newCategory = createNewTracker()
 
-        dataProvider.categories = newCategory
+//        dataProvider.categories = newCategory
         dataProvider.createTracker2()
-        dataProvider.resetNewTrackerInfo()
+//        dataProvider.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()
     }

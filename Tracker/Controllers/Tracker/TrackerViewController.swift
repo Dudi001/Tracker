@@ -109,10 +109,12 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         super.viewDidLoad()
         dataProvider.setMainCategory()
         dataProvider.categories = dataProvider.getTrackers()
+        dataProvider.updateRecords()
         addTracker()
         addViews()
         setupViews()
         checkCellsCount()
+        dataProvider.delegate = self
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
         addConstraintSearchText()
@@ -250,18 +252,19 @@ extension TrackerViewController {
         view.addSubview(trackerCollectionView)
         view.addSubview(datePicker)
         view.addSubview(searchContainerView)
+        
         navBar.addSubview(datePicker)
     }
     
     
     
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
-//        let totalCategory = dataProvider.categories
-        dataProvider.currentDate = datePicker.date
-        dataProvider.visibleCategories = newCategories
-//        let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(totalCategory)
         
-        print(dataProvider.visibleCategories)
+//        dataProvider.visibleCategories = newCategories
+        dataProvider.currentDate = datePicker.date
+//        let totalCategory = dataProvider.categories
+        let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
+        
         if dataProvider.visibleCategories.isEmpty {
             setEmptyItemsAfterSearch()
         } else {
@@ -272,7 +275,7 @@ extension TrackerViewController {
         }
         
         
-//        dataProvider.visibleCategories = newTrackerCategory
+        dataProvider.visibleCategories = newTrackerCategory
         trackerCollectionView.reloadData()
     }
     
@@ -509,12 +512,12 @@ extension TrackerViewController {
         trackerCollectionView.reloadData()
     }
     
-//    private func dismissAllModalControllers(from viewController: UIViewController) {
-//        if let presentedViewController = viewController.presentedViewController {
-//            viewController.dismiss(animated: true, completion: nil)
-//            dismissAllModalControllers(from: presentedViewController)
-//        }
-//    }
+    private func dismissAllModalControllers(from viewController: UIViewController) {
+        if let presentedViewController = viewController.presentedViewController {
+            viewController.dismiss(animated: true, completion: nil)
+            dismissAllModalControllers(from: presentedViewController)
+        }
+    }
 }
 
 
@@ -523,7 +526,7 @@ extension TrackerViewController {
 extension TrackerViewController: DataProviderDelegate {
     func addTrackers() {
         updateVisibleCategories(dataProvider.categories)
-//        dismissAllModalControllers(from: self)
+        dismissAllModalControllers(from: self)
     }
     
     func updateCategories(_ newCategory: [TrackerCategory]) {
