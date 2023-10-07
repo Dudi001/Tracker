@@ -155,37 +155,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         textField.delegate = self
     }
     
-    // MARK: - Работа с бд. Создание трекера
-    func createNewTracker() {
-        guard let trackerColor = dataProvider.trackerColor,
-              let trackerName = dataProvider.trackerName,
-              let trackerEmoji = dataProvider.trackerEmoji
-        else { return }
-
-//        let categories = dataProvider.categories
-        let newTracker = Tracker(id: UUID(),
-                                 name: trackerName,
-                                 color: trackerColor,
-                                 emoji: trackerEmoji,
-                                 schedule: dataProvider.schedule ?? [1,2,3,4,5,6,7])
-        
-        trackerStore.addTracker(model: newTracker)
-        delegate?.addTrackers()
-        
-//        var newCategory: [TrackerCategory] = []
-//
-//        categories.forEach { category in
-//            if dataProvider.selectedCategory == category.name {
-//                var newTrackers = category.trackerArray
-//                newTrackers.append(newTracker)
-//                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
-//            } else {
-//                newCategory.append(category)
-//            }
-//
-//        }
-//        return newCategory
-    }
     
     private func setupTitle() {
         titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
@@ -231,7 +200,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     }
     
     
-    // MARK: - Работа с базой данных. Проверка кнопки "Создать"
     func checkCreateButton() {
         if dataProvider.trackerName != nil &&
             dataProvider.selectedCategory != nil &&
@@ -346,14 +314,10 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     }
     
     
-    // MARK: - Работа с БД.
     @objc
     private func createButtonTapped() {
         dataProvider.trackerName = textField.text
-//        let newCategory = createNewTracker()
-
-//        dataProvider.categories = newCategory
-        dataProvider.createTracker2()
+        dataProvider.createTracker()
 //        dataProvider.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()

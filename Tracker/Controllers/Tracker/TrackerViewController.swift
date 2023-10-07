@@ -17,11 +17,7 @@ protocol TrackerViewControllerProtocol: AnyObject {
 final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
     var query: String = ""
     var currentDate = Date()
-    
-    
-    
-    private let dataProvider = DataProvider.shared //TrackerStorageService.shared
-//    private let dataProvider = DataProvider.shared
+    private let dataProvider = DataProvider.shared
     
     var day = 1
     
@@ -199,7 +195,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     }
     
     
-    //Count day botton
     @objc
     private func completeButtonTapped(_ sender: UIButton) {
         guard let cell = sender.superview?.superview as? TrackerCollectionViewCell,
@@ -208,8 +203,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         let tracker = dataProvider.visibleCategories[indexPath.section].trackerArray[indexPath.item]
         
         guard currentDate < Date() || tracker.schedule.isEmpty else { return }
-        
-//        print(currentDate)
         
         let trackerRecord = createTrackerRecord(with: tracker.id)
         
@@ -236,6 +229,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     }
 }
 
+
 //MARK: - Constraints
 extension TrackerViewController {
     private func setupSearchContainerView() {
@@ -259,10 +253,7 @@ extension TrackerViewController {
     
     
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
-        
-//        dataProvider.visibleCategories = newCategories
         dataProvider.currentDate = datePicker.date
-//        let totalCategory = dataProvider.categories
         let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
         
         if dataProvider.visibleCategories.isEmpty {
@@ -486,8 +477,7 @@ extension TrackerViewController {
         updateVisibleCategories(dataProvider.categories)
         trackerCollectionView.reloadData()
         trackerCollectionView.alpha = 1
-        
-//        updateVisibleCategories(da)
+
     }
     
     @objc

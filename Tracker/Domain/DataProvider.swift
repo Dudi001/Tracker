@@ -88,37 +88,12 @@ final class DataProvider {
         self.category = category
     }
     
-    func addDay(day: Int){
-        schedule?.append(day)
-    }
-    
-    func removeDay(day: Int) {
-        schedule?.removeAll { $0 == day }
-    }
-    
-    func scheduleContains(_ day: Int) -> Bool {
-        
-        ((schedule?.contains(day)) != nil)
-    }
- 
-//    func createTracker() {
-//        let tracker = Tracker(id: UUID(),
-//                              name: "",
-//                              color: self.color,
-//                              emoji: "",
-//                              schedule: schedule)
-//        trackerStore.addTracker(model: tracker)
-//        delegate?.addTrackers()
-////        clean()
-//    }
-    
-    func createTracker2() {
+    func createTracker() {
         guard let trackerColor = trackerColor,
               let trackerName = trackerName,
               let trackerEmoji = trackerEmoji
         else { return }
 
-//        let categories = trackerStorage.categories
         let newTracker = Tracker(id: UUID(),
                                  name: trackerName,
                                  color: trackerColor,
@@ -126,20 +101,6 @@ final class DataProvider {
                                  schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7])
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
-        
-//        var newCategory: [TrackerCategory] = []
-//
-//        categories.forEach { category in
-//            if trackerStorage.selectedCategory == category.name {
-//                var newTrackers = category.trackerArray
-//                newTrackers.append(newTracker)
-//                newCategory.append(TrackerCategory(name: category.name, trackerArray: newTrackers))
-//            } else {
-//                newCategory.append(category)
-//            }
-//
-//        }
-//        return newCategory
     }
     
     func addCategory(header: String) {
@@ -158,16 +119,8 @@ final class DataProvider {
         trackerCategoryStore.setMainCategory()
     }
     
-//    func updateButtonEnabled() -> Bool {
-//        if !emoji.isEmpty && color != .black && !title.isEmpty {
-//            return true
-//        } else {
-//            return false
-//        }
-//    }
     
     //MARK: - TreckerRecord
-    
     func updateRecords() {
         let newRecords = trackerRecordStore.getRecords()
         delegate?.updateRecords(newRecords)
@@ -205,21 +158,5 @@ final class DataProvider {
         }
         return newArray
     }
-    
-//    func getFormattedSchedule() -> String? {
-//        guard !schedule.isEmpty else {
-//            return nil
-//        }
-//
-//        let days = schedule.map { shortDayArray[$0 - 1] }
-//        return days.joined(separator: ", ")
-//    }
-    
-//    private func clean() {
-//        schedule = []
-//        color = .black
-//        emoji = ""
-//        title = ""
-//    }
     
 }
