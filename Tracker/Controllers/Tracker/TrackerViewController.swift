@@ -406,8 +406,8 @@ extension TrackerViewController: UICollectionViewDataSource {
 //MARK: - UICollectionViewDelegateFlowLayout
 extension TrackerViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = (collectionView.bounds.width - 41) / 2
-        let height = width * 0.8
+        let width = (collectionView.bounds.width - 9) / 2
+        let height = width * 0.887
         return CGSize(width: width, height: height)
     }
     
@@ -419,9 +419,10 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         return 9
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 0, left: 16, bottom: 16, right: 16)
-    }
+//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
+//    }
+    
 }
 
 
@@ -434,8 +435,8 @@ extension TrackerViewController {
         view.addSubview(emptyImage)
         view.addSubview(emptyLabel)
         
-        emptyImage.image = Resourses.Images.statisticEmptyImage
-        emptyLabel.text = "Ничего не найдено"
+        emptyImage.image = Resourses.Images.arrayEmptyImage
+        emptyLabel.text = "Что будем отслеживать?"
 
         NSLayoutConstraint.activate([
 
@@ -472,9 +473,9 @@ extension TrackerViewController {
     private func cancelButtonTapped() {
         searchTextField.text = ""
         searchTextField.resignFirstResponder()
+        updateVisibleCategories(dataProvider.categories)
         emptyImage.removeFromSuperview()
         emptyLabel.removeFromSuperview()
-        updateVisibleCategories(dataProvider.categories)
         trackerCollectionView.reloadData()
         trackerCollectionView.alpha = 1
 
