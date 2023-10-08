@@ -13,7 +13,7 @@ protocol CategoryViewControllerProtocol: AnyObject {
 
 
 final class CategoryViewController: UIViewController, CategoryViewControllerProtocol {
-    private let dataProvider = DataProvider.shared//TrackerStorageService.shared
+    private let dataProvider = DataProvider.shared
     var selectedIndexPath: IndexPath?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
     private var categoryArray: [String] = []
@@ -71,14 +71,15 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     override func viewDidLoad() {
         super.viewDidLoad()
         addViews()
+        categoryArray = DataProvider.shared.getCategories()
         checkCellsCount()
         addConstraints()
         setupTableView()
-        categoryArray = DataProvider.shared.getCategories()
+        
     }
     
     func checkCellsCount() {
-        if dataProvider.categories.count == 0 {
+        if categoryArray.isEmpty {
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
             categoryTableView.removeFromSuperview()
@@ -132,6 +133,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     func reloadTableView() {
+        categoryArray = dataProvider.getCategories()
         categoryTableView.reloadData()
         checkToSetupDumb()
         
@@ -139,7 +141,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     
 
     private func checkToSetupDumb() {
-        categoryTableView.alpha = dataProvider.categories.count == 0 ? 0 : 1
+        categoryTableView.alpha = categoryArray.isEmpty ? 0 : 1
     }
     
     
