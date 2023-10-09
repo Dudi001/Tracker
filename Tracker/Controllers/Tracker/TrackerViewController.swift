@@ -31,7 +31,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     lazy var emptyLabel: UILabel = {
        let newLabel = UILabel()
         newLabel.translatesAutoresizingMaskIntoConstraints = false
-        newLabel.text = "Что будем отслеживать?"
+        newLabel.text = "Ничего не найдено"
         newLabel.tintColor = .ypBlack
         newLabel.textAlignment = .center
         newLabel.font = .systemFont(ofSize: 12, weight: .medium)
@@ -432,7 +432,7 @@ extension TrackerViewController {
         view.addSubview(emptyLabel)
         
         emptyImage.image = Resourses.Images.arrayEmptyImage
-        emptyLabel.text = "Что будем отслеживать?"
+        emptyLabel.text = "Ничего не найдено"
 
         NSLayoutConstraint.activate([
 
@@ -489,7 +489,7 @@ extension TrackerViewController {
         guard let text = searchTextField.text else { return }
         let categories = dataProvider.visibleCategories
         
-        let newCategory = searchTrackerByName(categories: categories, filledName: text)
+        let newCategory = searchTrackerByName(categories: categories, filledName: text.lowercased())
         
         if newCategory.count == 0 {
             setEmptyItemsAfterSearch()

@@ -60,8 +60,6 @@ final class NewCategoryViewController: UIViewController {
         guard let name = textField.text else { return }
         dataProvider.addCategory(header: name)
         dataProvider.updateCategories()
-//        trackerStorage.categories.append(TrackerCategory(name: name,
-//                                                         trackerArray: []))
         dismiss(animated: true)
 
         categoryViewController?.reloadTableView()
