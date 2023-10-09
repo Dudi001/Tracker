@@ -104,7 +104,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     override func viewDidLoad() {
         super.viewDidLoad()
         dataProvider.setMainCategory()
-        dataProvider.categories = dataProvider.getTrackers()
+//        dataProvider.categories = dataProvider.getTrackers()
         dataProvider.updateRecords()
         addTracker()
         addViews()
@@ -419,10 +419,6 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
         return 9
     }
     
-//    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-//        return UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 16)
-//    }
-    
 }
 
 
@@ -521,7 +517,7 @@ extension TrackerViewController: DataProviderDelegate {
     }
     
     func updateCategories(_ newCategory: [TrackerCategory]) {
-        dataProvider.categories = newCategory
+//        dataProvider.categories = newCategory
         updateVisibleCategories(dataProvider.categories)
         
     }

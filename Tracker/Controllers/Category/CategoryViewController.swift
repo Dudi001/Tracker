@@ -158,7 +158,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
 //MARK: UITableViewDataSource
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return  dataProvider.categories.count
         if categoryArray.isEmpty {
             return 1
         } else {
@@ -185,15 +184,7 @@ extension CategoryViewController: UITableViewDataSource {
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-//        selectedIndexPath = indexPath
-//
-//        if !categoryArray.isEmpty {
-//            let category = categoryArray[indexPath.row]
-//            dataProvider.setCategory(category: category)
-//            createTrackerViewController?.reloadTableView()
-//            tableView.reloadData()
-//            dismiss(animated: true)
-//        }
+        
         if let selectedIndexPath = selectedIndexPath {
             if let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? CategoryTableViewCell {
                 selectedCell.accessoryType = .none

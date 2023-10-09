@@ -33,7 +33,9 @@ final class DataProvider {
     private lazy var trackerCategoryStore = TrackerCategoryStore()
     private lazy var trackerRecordStore = TrackerRecordStore()
     
-    var categories: [TrackerCategory] = []
+    var categories: [TrackerCategory]{
+        trackerStore.fetchTracker()
+    }
     var visibleCategories = [TrackerCategory]()
     var completedTrackers: Set<TrackerRecord> = []
     
