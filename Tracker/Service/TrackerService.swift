@@ -22,31 +22,7 @@ final class TrackerStorageService {
     var schedule: [Int]?
     var currentDate: Date?
     
-    var categories: [TrackerCategory] = [
-        TrackerCategory(name: "Важное", trackerArray: [Tracker(id: UUID(),
-                                                               name: "Учиться делать iOS-приложения",
-                                                               color: .colorSelection1,
-                                                               emoji: "🐶",
-                                                               schedule: [1, 4, 1]),
-                                                       Tracker(id: UUID(),
-                                                               name: "Получить права",
-                                                               color: .colorSelection2,
-                                                               emoji: "😻",
-                                                               schedule: [2, 5, 6, 7])]),
-        TrackerCategory(name: "Уборка", trackerArray: [Tracker(id: UUID(),
-                                                               name: "Полить цветы",
-                                                               color: .colorSelection3,
-                                                               emoji: "🍔",
-                                                               schedule: [2, 4, 5, 6, 7]),
-                                                       Tracker(id: UUID(),
-                                                               name: "Влажная уборка",
-                                                               color: .colorSelection4,
-                                                               emoji: "😇",
-                                                               schedule: [1, 4, 6])])
-    ]
-    
-    
-    
+    var categories: [TrackerCategory] = []
     var visibleCategories = [TrackerCategory]()
     var completedTrackers: Set<TrackerRecord> = []
     

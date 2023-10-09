@@ -9,7 +9,7 @@ import UIKit
 
 final class NewCategoryViewController: UIViewController {
     var categoryViewController: CategoryViewControllerProtocol?
-    private let trackerStorage = TrackerStorageService.shared
+    private let dataProvider = DataProvider.shared
     
     lazy var titleLabel: UILabel = {
        let label = UILabel()
@@ -58,10 +58,12 @@ final class NewCategoryViewController: UIViewController {
     
     @objc private func createNewCategory() {
         guard let name = textField.text else { return }
-        trackerStorage.categories.append(TrackerCategory(name: name,
-                                                         trackerArray: []))
+        dataProvider.addCategory(header: name)
+        dataProvider.updateCategories()
+//        trackerStorage.categories.append(TrackerCategory(name: name,
+//                                                         trackerArray: []))
         dismiss(animated: true)
-        print(trackerStorage.categories.count)
+
         categoryViewController?.reloadTableView()
     }
 }
