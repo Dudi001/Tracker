@@ -39,6 +39,8 @@
 		D991ADD82A1673EE00F1F0F3 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D991ADD72A1673EE00F1F0F3 /* SceneDelegate.swift */; };
 		D991ADDF2A1673F000F1F0F3 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D991ADDE2A1673F000F1F0F3 /* Assets.xcassets */; };
 		D991ADE22A1673F000F1F0F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D991ADE02A1673F000F1F0F3 /* LaunchScreen.storyboard */; };
+		D9C9DBFD2AE1A603004FF08D /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C9DBFC2AE1A603004FF08D /* OnboardingViewController.swift */; };
+		D9C9DBFF2AE1A62B004FF08D /* OnboardinMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C9DBFE2AE1A62B004FF08D /* OnboardinMainViewController.swift */; };
 		D9EC27792AB23498000B0E3B /* model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D9EC27772AB23498000B0E3B /* model.xcdatamodeld */; };
 		D9EC277C2ABCB743000B0E3B /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC277B2ABCB743000B0E3B /* DataProvider.swift */; };
 		D9EC277E2ABCB774000B0E3B /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC277D2ABCB774000B0E3B /* TrackerStore.swift */; };
@@ -83,6 +85,8 @@
 		D991ADDE2A1673F000F1F0F3 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D991ADE12A1673F000F1F0F3 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D991ADE32A1673F000F1F0F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D9C9DBFC2AE1A603004FF08D /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
+		D9C9DBFE2AE1A62B004FF08D /* OnboardinMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardinMainViewController.swift; sourceTree = "<group>"; };
 		D9EC27782AB23498000B0E3B /* model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = model.xcdatamodel; sourceTree = "<group>"; };
 		D9EC277B2ABCB743000B0E3B /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		D9EC277D2ABCB774000B0E3B /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
@@ -123,6 +127,7 @@
 		D90E2E5F2A2A4A330000C7E1 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				D9C9DBF92AE1A408004FF08D /* OnBoardingVIew */,
 				D9B4CCE72A3F8B9000D3D41E /* TabBar */,
 				D9021F162A390A750080BB4D /* Filter */,
 				D96239902A362CD700F61DAE /* Schedule */,
@@ -281,6 +286,15 @@
 			path = TabBar;
 			sourceTree = "<group>";
 		};
+		D9C9DBF92AE1A408004FF08D /* OnBoardingVIew */ = {
+			isa = PBXGroup;
+			children = (
+				D9C9DBFC2AE1A603004FF08D /* OnboardingViewController.swift */,
+				D9C9DBFE2AE1A62B004FF08D /* OnboardinMainViewController.swift */,
+			);
+			path = OnBoardingVIew;
+			sourceTree = "<group>";
+		};
 		D9EC27762AAF86D9000B0E3B /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
@@ -385,6 +399,7 @@
 				D9021F1E2A39E1220080BB4D /* ScheduleTableViewCell.swift in Sources */,
 				D96239922A362CE100F61DAE /* ScheduleViewController.swift in Sources */,
 				D96239942A363D6200F61DAE /* CreateNewTrackerSupplementaryView.swift in Sources */,
+				D9C9DBFF2AE1A62B004FF08D /* OnboardinMainViewController.swift in Sources */,
 				D90E2E5E2A2A497B0000C7E1 /* TabBarViewController.swift in Sources */,
 				D9021F1A2A390A990080BB4D /* FilterTableViewCell.swift in Sources */,
 				D90E2E822A31CE5E0000C7E1 /* SupplementaryView.swift in Sources */,
@@ -402,6 +417,7 @@
 				D9EC27842AC48448000B0E3B /* UIColorMarshalling.swift in Sources */,
 				D991ADD62A1673EE00F1F0F3 /* AppDelegate.swift in Sources */,
 				D90E2E7C2A2CA4160000C7E1 /* TrackerViewPresenterProtocol.swift in Sources */,
+				D9C9DBFD2AE1A603004FF08D /* OnboardingViewController.swift in Sources */,
 				D991ADD82A1673EE00F1F0F3 /* SceneDelegate.swift in Sources */,
 				D962398A2A36261000F61DAE /* CreateNewTrackerTableVIewCell.swift in Sources */,
 				D9021F152A389EEA0080BB4D /* TrackerService.swift in Sources */,
