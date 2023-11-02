@@ -41,6 +41,7 @@
 		D991ADE22A1673F000F1F0F3 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D991ADE02A1673F000F1F0F3 /* LaunchScreen.storyboard */; };
 		D9C9DBFD2AE1A603004FF08D /* OnboardingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C9DBFC2AE1A603004FF08D /* OnboardingViewController.swift */; };
 		D9C9DBFF2AE1A62B004FF08D /* OnboardinMainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C9DBFE2AE1A62B004FF08D /* OnboardinMainViewController.swift */; };
+		D9C9DC212AF429B8004FF08D /* Observable.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9C9DC202AF429B8004FF08D /* Observable.swift */; };
 		D9EC27792AB23498000B0E3B /* model.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = D9EC27772AB23498000B0E3B /* model.xcdatamodeld */; };
 		D9EC277C2ABCB743000B0E3B /* DataProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC277B2ABCB743000B0E3B /* DataProvider.swift */; };
 		D9EC277E2ABCB774000B0E3B /* TrackerStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9EC277D2ABCB774000B0E3B /* TrackerStore.swift */; };
@@ -87,6 +88,7 @@
 		D991ADE32A1673F000F1F0F3 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D9C9DBFC2AE1A603004FF08D /* OnboardingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingViewController.swift; sourceTree = "<group>"; };
 		D9C9DBFE2AE1A62B004FF08D /* OnboardinMainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardinMainViewController.swift; sourceTree = "<group>"; };
+		D9C9DC202AF429B8004FF08D /* Observable.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Observable.swift; sourceTree = "<group>"; };
 		D9EC27782AB23498000B0E3B /* model.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = model.xcdatamodel; sourceTree = "<group>"; };
 		D9EC277B2ABCB743000B0E3B /* DataProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataProvider.swift; sourceTree = "<group>"; };
 		D9EC277D2ABCB774000B0E3B /* TrackerStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TrackerStore.swift; sourceTree = "<group>"; };
@@ -229,6 +231,7 @@
 				D962398E2A362CAA00F61DAE /* CategoryViewController.swift */,
 				D96239952A37984900F61DAE /* CategoryTableViewCell.swift */,
 				D96239972A3798E900F61DAE /* NewCategoryViewController.swift */,
+				D9C9DC202AF429B8004FF08D /* Observable.swift */,
 			);
 			path = Category;
 			sourceTree = "<group>";
@@ -398,6 +401,7 @@
 				D90E2E6B2A2B44570000C7E1 /* StatisticViewController.swift in Sources */,
 				D9021F1E2A39E1220080BB4D /* ScheduleTableViewCell.swift in Sources */,
 				D96239922A362CE100F61DAE /* ScheduleViewController.swift in Sources */,
+				D9C9DC212AF429B8004FF08D /* Observable.swift in Sources */,
 				D96239942A363D6200F61DAE /* CreateNewTrackerSupplementaryView.swift in Sources */,
 				D9C9DBFF2AE1A62B004FF08D /* OnboardinMainViewController.swift in Sources */,
 				D90E2E5E2A2A497B0000C7E1 /* TabBarViewController.swift in Sources */,
