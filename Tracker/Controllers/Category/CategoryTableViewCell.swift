@@ -17,6 +17,12 @@ final class CategoryTableViewCell: UITableViewCell {
         return element
     }()
     
+    var configureCell: String? {
+        didSet {
+            label.text = configureCell
+        }
+    }
+    
     override func layoutSubviews() {
         super.layoutSubviews()
         backgroundColor = .ypBackground
@@ -24,9 +30,9 @@ final class CategoryTableViewCell: UITableViewCell {
         addConstraints()
     }
     
-    func configureCell(text: String) {
-        label.text = text
-    }
+//    func configureCell(text: String) {
+//        label.text = text
+//    }
     
     private func setupView() {
         addSubview(label)

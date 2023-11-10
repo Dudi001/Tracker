@@ -8,7 +8,7 @@
 import Foundation
 
 
-final class CreateCategoryViewModel {
+final class NewCategoryViewModel {
     
     @Observable
     private(set) var isCreateButtonEnabled: Bool = false

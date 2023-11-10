@@ -10,8 +10,8 @@ import Foundation
 
 @propertyWrapper
 final class Observable<Value> {
-    private var onChange: ((Value) -> Void)? = nil
     
+    private var onChange: ((Value) -> Void)? = nil
     
     var wrappedValue: Value {
         didSet {
@@ -19,7 +19,7 @@ final class Observable<Value> {
         }
     }
     
-    var projectValue: Observable<Value> {
+    var projectedValue: Observable<Value> {
         return self
     }
     
@@ -30,5 +30,4 @@ final class Observable<Value> {
     func bind(action: @escaping (Value) -> Void) {
         self.onChange = action
     }
-    
 }

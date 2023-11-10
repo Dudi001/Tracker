@@ -14,7 +14,11 @@ final class CategoryViewModel {
     @Observable
     var categoryArray: [String] = []
     
-    var selectIndexPath: IndexPath?
+    var selectedIndexPath: IndexPath?
+    
+    var categoriesCount: Int {
+        categoryArray.count
+    }
     
     init() {
         self.categoryArray = dataProvider.getCategories()
@@ -26,19 +30,26 @@ final class CategoryViewModel {
     }
     
     func didSelectRow(at indexPath: IndexPath) {
-        selectIndexPath = indexPath
+        selectedIndexPath = indexPath
         if !categoryArray.isEmpty {
             let category = categoryArray[indexPath.row]
             DataProvider.shared.setCategory(category: category)
         }
     }
     
+    func test() -> Bool {
+        if !categoryArray.isEmpty {
+            return true
+        }
+        return false
+    }
+    
     func cellIsSelected(at indexPath: IndexPath) -> Bool {
-        selectIndexPath == indexPath
+        selectedIndexPath == indexPath
     }
     
     func clearSelection() {
-        selectIndexPath = nil
+        selectedIndexPath = nil
     }
     
     func updateData() {

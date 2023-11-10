@@ -10,6 +10,7 @@ import UIKit
 final class NewCategoryViewController: UIViewController {
     var categoryViewController: CategoryViewControllerProtocol?
     private let dataProvider = DataProvider.shared
+    var viewModel: NewCategoryViewModel?
     
     lazy var titleLabel: UILabel = {
        let label = UILabel()
@@ -30,6 +31,7 @@ final class NewCategoryViewController: UIViewController {
         text.layer.cornerRadius = 16
         text.backgroundColor = .ypBackground
         text.placeholder = "Введите название категории"
+        text.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         return text
     }()
     
@@ -50,19 +52,38 @@ final class NewCategoryViewController: UIViewController {
         textField.delegate = self
         setViews()
         setConstraints()
+        bind()
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         view.endEditing(true)
     }
     
+    private func bind() {
+        guard let viewModel else { return }
+        viewModel.$isCreateButtonEnabled.bind {[weak self] newValue in
+            self?.setCreateButton(enabled: newValue)
+        }
+    }
+    
+    private func setCreateButton(enabled: Bool) {
+        completeButton.isUserInteractionEnabled = enabled
+        completeButton.backgroundColor = enabled ? .ypWhite : .ypGray
+    }
+    
     @objc private func createNewCategory() {
         guard let name = textField.text else { return }
-        dataProvider.addCategory(header: name)
-        dataProvider.updateCategories()
+//        dataProvider.addCategory(header: name)
+//        dataProvider.updateCategories()
+        viewModel?.createButtonPressed(category: name)
         dismiss(animated: true)
 
         categoryViewController?.reloadTableView()
+    }
+    
+    @objc
+    private func textFieldDidChange() {
+        viewModel?.didEnter(header: self.textField.text)
     }
 }
 
