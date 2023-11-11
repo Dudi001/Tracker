@@ -75,13 +75,12 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = CategoryViewModel()
         addViews()
-//        categoryArray = DataProvider.shared. ()
+//        viewModel.categoryArray = DataProvider.shared.getCategories()
         checkCellsCount()
         addConstraints()
         setupTableView()
-        viewModel = CategoryViewModel()
-        bind()
         
     }
     
@@ -132,6 +131,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         view.backgroundColor = .ypWhite
         view.addSubview(titleLabel)
         view.addSubview(categoryButton)
+        bind()
     }
     
     private func addConstraints() {
@@ -157,7 +157,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
 //        categoryArray = dataProvider.getCategories()
         viewModel.updateData()
         categoryTableView.reloadData()
-//        checkToSetupDumb()
+        checkToSetupDumb()
         
     }
     
@@ -205,30 +205,30 @@ extension CategoryViewController: UITableViewDataSource {
 //MARK: UITableViewDelegate
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        viewModel.didSelectRow(at: indexPath)
+//        viewModel.didSelectRow(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
-//
-//        if let selectedIndexPath = viewModel.selectedIndexPath {
-//            if let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? CategoryTableViewCell {
-//                selectedCell.accessoryType = .none
-//
-//                if selectedIndexPath == indexPath {
-//                    viewModel.clearSelection()
-//                    return
-//                }
-//            }
-//        }
-//
-//
-//        if let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell {
-//            cell.accessoryType = .checkmark
-//            viewModel.selectedIndexPath = indexPath
-//
-//            dataProvider.selectedCategory = cell.label.text
-//            createTrackerViewController?.reloadTableView()
-//            dismiss(animated: true)
-//        }
+
+        if let selectedIndexPath = viewModel.selectedIndexPath {
+            if let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? CategoryTableViewCell {
+                selectedCell.accessoryType = .none
+
+                if selectedIndexPath == indexPath {
+                    viewModel.clearSelection()
+                    return
+                }
+            }
+        }
+
+
+        if let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell {
+            cell.accessoryType = .checkmark
+            viewModel.selectedIndexPath = indexPath
+
+            dataProvider.selectedCategory = cell.label.text
+            createTrackerViewController?.reloadTableView()
+            dismiss(animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
