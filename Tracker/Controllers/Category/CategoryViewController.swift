@@ -18,9 +18,7 @@ protocol NewTrackerViewModelDelegate: AnyObject {
 
 final class CategoryViewController: UIViewController, CategoryViewControllerProtocol {
     private let dataProvider = DataProvider.shared
-//    var selectedIndexPath: IndexPath?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
-//    private var categoryArray: [String] = []
     private var viewModel: CategoryViewModel!
     
     lazy var titleLabel: UILabel = {
@@ -77,7 +75,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         super.viewDidLoad()
         viewModel = CategoryViewModel()
         addViews()
-//        viewModel.categoryArray = DataProvider.shared.getCategories()
         checkCellsCount()
         addConstraints()
         setupTableView()
@@ -121,7 +118,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
                 categoryTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
                 categoryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 categoryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-//                categoryTableView.heightAnchor.constraint(equalToConstant: 250)
                 categoryTableView.bottomAnchor.constraint(equalTo: categoryButton.topAnchor, constant: -30)
             ])
         }
@@ -154,7 +150,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     }
     
     func reloadTableView() {
-//        categoryArray = dataProvider.getCategories()
         viewModel.updateData()
         categoryTableView.reloadData()
         checkToSetupDumb()
@@ -191,8 +186,7 @@ extension CategoryViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         
         cell.configureCell = viewModel.getCategory(at: indexPath.row)
-//        cell.configureCell(text: viewModel.categoryArray[indexPath.row])
-        
+
         return cell
     }
     
@@ -205,7 +199,6 @@ extension CategoryViewController: UITableViewDataSource {
 //MARK: UITableViewDelegate
 extension CategoryViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        viewModel.didSelectRow(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
 
@@ -219,8 +212,7 @@ extension CategoryViewController: UITableViewDelegate {
                 }
             }
         }
-
-
+        
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell {
             cell.accessoryType = .checkmark
             viewModel.selectedIndexPath = indexPath

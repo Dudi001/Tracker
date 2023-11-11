@@ -9,7 +9,6 @@ import UIKit
 
 final class NewCategoryViewController: UIViewController {
     var categoryViewController: CategoryViewControllerProtocol?
-    private let dataProvider = DataProvider.shared
     var viewModel: NewCategoryViewModel!
     
     lazy var titleLabel: UILabel = {
