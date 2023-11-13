@@ -181,7 +181,7 @@ extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         
-        cell.configureCell = viewModel.getCategory(at: indexPath.row)
+        cell.configureCell(text: viewModel.getCategory(at: indexPath.row))
 
         return cell
     }
