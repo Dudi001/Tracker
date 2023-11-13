@@ -53,7 +53,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         element.separatorStyle = .singleLine
         element.layer.cornerRadius = 16
         element.isScrollEnabled = false
-        element.backgroundColor = .ypBackground
+//        element.backgroundColor = .ypBackground
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
@@ -118,7 +118,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
                 categoryTableView.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 38),
                 categoryTableView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
                 categoryTableView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-                categoryTableView.bottomAnchor.constraint(equalTo: categoryButton.topAnchor, constant: -30)
+                categoryTableView.bottomAnchor.constraint(equalTo: categoryButton.topAnchor, constant: -8)
             ])
         }
     }
@@ -182,8 +182,19 @@ extension CategoryViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "CategoryTableViewCell", for: indexPath) as? CategoryTableViewCell else { return UITableViewCell() }
         
         cell.configureCell(text: viewModel.getCategory(at: indexPath.row))
+        
+        if indexPath.row == 0 {
+            cell.layer.cornerRadius = 10
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        }
+        if indexPath.row == (viewModel.categoriesCount - 1)  {
+            cell.layer.cornerRadius = 10
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+            cell.separatorInset = UIEdgeInsets(top: 0, left: categoryTableView.bounds.size.width, bottom: 0, right: 0)
+        }
 
         return cell
+
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
