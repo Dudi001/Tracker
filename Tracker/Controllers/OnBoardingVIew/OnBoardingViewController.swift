@@ -8,7 +8,7 @@
 import UIKit
 
 
-class OnboardingViewController: UIViewController {
+final class OnboardingViewController: UIViewController {
     var header: String
     private var backgroundImage: UIImage?
     
