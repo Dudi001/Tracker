@@ -9,7 +9,7 @@ import UIKit
 
 final class CategoryTableViewCell: UITableViewCell {
     
-    private lazy var label: UILabel = {
+    lazy var label: UILabel = {
         let element = UILabel()
         element.translatesAutoresizingMaskIntoConstraints = false
         element.font = .systemFont(ofSize: 17, weight: .regular)

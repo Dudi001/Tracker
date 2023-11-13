@@ -9,7 +9,7 @@ import UIKit
 
 
 final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
-    private lazy var emojiLabel: UILabel = {
+    lazy var emojiLabel: UILabel = {
        let emoji = UILabel()
         emoji.font = UIFont.systemFont(ofSize: 32)
         emoji.translatesAutoresizingMaskIntoConstraints = false

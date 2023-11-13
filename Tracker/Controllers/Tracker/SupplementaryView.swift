@@ -9,7 +9,7 @@ import UIKit
 
 
 final class SupplementaryView: UICollectionReusableView {
-    private lazy var titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
         let element = UILabel()
         element.font = .boldSystemFont(ofSize: 19)
         return element

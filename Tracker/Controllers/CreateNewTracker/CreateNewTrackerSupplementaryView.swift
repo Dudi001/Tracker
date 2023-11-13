@@ -9,7 +9,7 @@ import UIKit
 
 
 final class CreateNewTrackerSupplementaryView: UICollectionReusableView {
-    private lazy var headerLabel: UILabel = {
+    lazy var headerLabel: UILabel = {
         let header = UILabel()
         header.textColor = .ypBlack
         header.font = UIFont.systemFont(ofSize: 19)
