@@ -9,7 +9,7 @@ import UIKit
 
 
 final class CreateNewTrackerTableVIewCell: UITableViewCell {
-    lazy var label: UILabel = {
+    private lazy var label: UILabel = {
         let labelItem = UILabel()
         labelItem.font = .systemFont(ofSize: 17, weight: .regular)
         labelItem.textColor = .ypBlack

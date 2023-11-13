@@ -11,7 +11,7 @@ final class NewCategoryViewController: UIViewController {
     var categoryViewController: CategoryViewControllerProtocol?
     var viewModel: NewCategoryViewModel!
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -20,7 +20,7 @@ final class NewCategoryViewController: UIViewController {
        return label
     }()
     
-    lazy var textField: UITextField = {
+    private lazy var textField: UITextField = {
        let text = UITextField()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.clearButtonMode = .whileEditing
@@ -34,7 +34,7 @@ final class NewCategoryViewController: UIViewController {
         return text
     }()
     
-    lazy var completeButton: UIButton = {
+    private lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.setTitle("Готово", for: .normal)

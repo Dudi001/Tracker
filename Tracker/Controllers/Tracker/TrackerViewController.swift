@@ -21,14 +21,14 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     var day = 1
     
-    lazy var emptyImage: UIImageView = {
+    private lazy var emptyImage: UIImageView = {
         let newImage = UIImageView()
         newImage.translatesAutoresizingMaskIntoConstraints = false
         newImage.image = Resourses.Images.trackerEmptyImage
         return newImage
     }()
     
-    lazy var emptyLabel: UILabel = {
+    private lazy var emptyLabel: UILabel = {
        let newLabel = UILabel()
         newLabel.translatesAutoresizingMaskIntoConstraints = false
         newLabel.text = "Ничего не найдено"
@@ -38,7 +38,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return newLabel
     }()
     
-    lazy var trackerCollectionView: UICollectionView = {
+    private lazy var trackerCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: collectionViewLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +47,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return collectionView
     }()
     
-    lazy var datePicker: UIDatePicker = {
+    private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.preferredDatePickerStyle = .automatic
@@ -60,7 +60,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return picker
     }()
     
-    lazy var searchTextField: UISearchTextField = {
+    private lazy var searchTextField: UISearchTextField = {
         let searchItem = UISearchTextField()
         searchItem.translatesAutoresizingMaskIntoConstraints = false
         searchItem.placeholder = "Поиск"
@@ -72,7 +72,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return searchItem
     }()
     
-    lazy var cancelButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let cancel = UIButton(type: .system)
         cancel.translatesAutoresizingMaskIntoConstraints = false
         cancel.tintColor = .ypBlue
@@ -82,7 +82,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return cancel
     }()
     
-    lazy var filterButton: UIButton = {
+    private lazy var filterButton: UIButton = {
         let filterButton = UIButton(type: .system)
         filterButton.translatesAutoresizingMaskIntoConstraints = false
         filterButton.backgroundColor = .ypBlue

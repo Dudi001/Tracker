@@ -21,7 +21,7 @@ final class ScheduleViewController: UIViewController {
     var daysInInt: [Int] = []
     var days: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
     
-    lazy var scheduleLabel: UILabel = {
+    private lazy var scheduleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Расписание"
@@ -30,7 +30,7 @@ final class ScheduleViewController: UIViewController {
         return label
     }()
     
-    lazy var scheduleTableView: UITableView = {
+    private lazy var scheduleTableView: UITableView = {
         let table = UITableView()
         table.translatesAutoresizingMaskIntoConstraints = false
         table.layer.cornerRadius = 16
@@ -39,7 +39,7 @@ final class ScheduleViewController: UIViewController {
         return table
     }()
     
-    lazy var doneButton: UIButton = {
+    private lazy var doneButton: UIButton = {
         let done = UIButton(type: .system)
         done.translatesAutoresizingMaskIntoConstraints = false
         done.setTitle("Готово", for: .normal)

@@ -28,7 +28,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
      
     
-    lazy var titileHobbyLabel: UILabel = {
+    private lazy var titileHobbyLabel: UILabel = {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -37,7 +37,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     }()
     
     
-    lazy var textField: UITextField = {
+    private lazy var textField: UITextField = {
        let hobbyText = UITextField()
         hobbyText.placeholder = "Введите название трекера"
         hobbyText.backgroundColor = .ypBackground
@@ -52,7 +52,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         return hobbyText
     }()
     
-    lazy var warningLabel: UILabel = {
+    private lazy var warningLabel: UILabel = {
         let element = UILabel()
         element.text = "Ограничение 38 символов"
         element.font = .systemFont(ofSize: 17, weight: .regular)
@@ -61,7 +61,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         return element
     }()
     
-    lazy var categoryAndScheduleTableView: UITableView = {
+    private lazy var categoryAndScheduleTableView: UITableView = {
         let element = UITableView()
         element.separatorStyle = .singleLine
         element.layer.cornerRadius = 16
@@ -70,13 +70,13 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         return element
     }()
     
-    lazy var scrollView: UIScrollView = {
+    private lazy var scrollView: UIScrollView = {
         let element = UIScrollView()
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()
     
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let element = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         element.backgroundColor = .ypWhite
         element.isScrollEnabled = false
@@ -85,7 +85,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         return element
     }()
     
-    lazy var cancelButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let element = UIButton(type: .system)
         element.layer.cornerRadius = 16
         element.layer.borderWidth = 1
@@ -100,7 +100,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         return element
     }()
     
-    lazy var createButton: UIButton = {
+    private lazy var createButton: UIButton = {
         let element = UIButton(type: .system)
         element.layer.cornerRadius = 16
         element.setTitle("Создать", for: .normal)
@@ -113,7 +113,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         return element
     }()
     
-    let bottomButtonsStack: UIStackView = {
+    private let bottomButtonsStack: UIStackView = {
         let stackView = UIStackView()
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal

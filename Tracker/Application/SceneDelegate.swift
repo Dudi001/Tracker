@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         let window = UIWindow(windowScene: scene)
         
-        if onboardingViewViewControllerWasShown() == false {
+        if UserDefaults.standard.bool(forKey: "isFirstLaunch") == false {
             window.rootViewController = OnboardinMainViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
         } else {
             window.rootViewController = tabBar
@@ -26,11 +26,6 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         self.window = window
         window.makeKeyAndVisible()
-    }
-    
-    func onboardingViewViewControllerWasShown() -> Bool {
-        let isFirstLaunch = UserDefaults.standard.bool(forKey: "isFirstLaunch")
-        return isFirstLaunch
     }
     
     

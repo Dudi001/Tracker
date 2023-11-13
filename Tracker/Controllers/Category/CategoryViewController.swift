@@ -21,7 +21,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
     private var viewModel: CategoryViewModel!
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
         let item = UILabel()
         item.text = "Категория"
         item.textColor = .ypBlack
@@ -30,14 +30,14 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         return item
     }()
     
-    lazy var emptyImage: UIImageView = {
+    private lazy var emptyImage: UIImageView = {
         let newImage = UIImageView()
         newImage.translatesAutoresizingMaskIntoConstraints = false
         newImage.image = Resourses.Images.trackerEmptyImage
         return newImage
     }()
     
-    lazy var emptyLabel: UILabel = {
+    private lazy var emptyLabel: UILabel = {
        let newLabel = UILabel()
         newLabel.translatesAutoresizingMaskIntoConstraints = false
         newLabel.text = "Привычки и события можно\nобъединить по смыслу"
@@ -48,7 +48,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         return newLabel
     }()
     
-    lazy var categoryTableView: UITableView = {
+    private lazy var categoryTableView: UITableView = {
         let element = UITableView()
         element.separatorStyle = .singleLine
         element.layer.cornerRadius = 16
@@ -58,7 +58,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         return element
     }()
     
-    lazy var categoryButton: UIButton = {
+    private lazy var categoryButton: UIButton = {
         let item = UIButton(type: .system)
         item.translatesAutoresizingMaskIntoConstraints = false
         item.setTitle("Добавить категорию", for: .normal)
@@ -175,11 +175,7 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
 //MARK: UITableViewDataSource
 extension CategoryViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if viewModel.categoryArray.isEmpty {
-            return 1
-        } else {
-            return viewModel.categoriesCount
-        }
+        viewModel.categoryArray.isEmpty ? 1 : viewModel.categoriesCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

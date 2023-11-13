@@ -10,7 +10,7 @@ import UIKit
 
 class OnboardingViewController: UIViewController {
     var header: String
-    var backgroundImage: UIImage?
+    private var backgroundImage: UIImage?
     
     init(header: String, backgroundImage: UIImage) {
         self.header = header
@@ -22,14 +22,14 @@ class OnboardingViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    lazy var backgroundImageView: UIImageView = {
+    private lazy var backgroundImageView: UIImageView = {
       let backImage = UIImageView()
         backImage.translatesAutoresizingMaskIntoConstraints = false
         backImage.contentMode = .scaleAspectFill
         return backImage
     }()
     
-    lazy var headerLabel: UILabel = {
+    private lazy var headerLabel: UILabel = {
         let textLabel = UILabel()
         textLabel.translatesAutoresizingMaskIntoConstraints = false
         textLabel.text = header

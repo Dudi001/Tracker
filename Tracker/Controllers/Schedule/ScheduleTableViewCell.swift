@@ -17,7 +17,7 @@ final class ScheduleTableViewCell: UITableViewCell {
     
     var delegate: ScheduleViewControllerDelegate?
     
-    lazy var label: UILabel = {
+    private lazy var label: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = .systemFont(ofSize: 17, weight: .regular)
@@ -25,7 +25,7 @@ final class ScheduleTableViewCell: UITableViewCell {
         return label
     }()
     
-    lazy var switcher: UISwitch = {
+    private lazy var switcher: UISwitch = {
         let switcher = UISwitch()
         switcher.translatesAutoresizingMaskIntoConstraints = false
         switcher.onTintColor = .ypBlue

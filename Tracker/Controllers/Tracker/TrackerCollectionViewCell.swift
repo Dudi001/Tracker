@@ -9,7 +9,7 @@ import UIKit
 
 
 final class TrackerCollectionViewCell: UICollectionViewCell {
-    lazy var cellView: UIView = {
+    private lazy var cellView: UIView = {
         let cell = UIView()
         cell.translatesAutoresizingMaskIntoConstraints = false
         cell.backgroundColor = .colorSelection1
@@ -17,7 +17,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return cell
     }()
     
-    lazy var emojiLabel: UILabel = {
+    private lazy var emojiLabel: UILabel = {
         let emoji = UILabel()
         emoji.translatesAutoresizingMaskIntoConstraints = false
         emoji.textAlignment = .center
@@ -29,7 +29,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return emoji
     }()
     
-    lazy var textTrackerLabel: UILabel = {
+    private lazy var textTrackerLabel: UILabel = {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 12)
@@ -40,7 +40,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return text
     }()
     
-    lazy var trackerCompleteButton: RoundedButton = {
+    private lazy var trackerCompleteButton: RoundedButton = {
         let button = RoundedButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = .colorSelection1
@@ -50,7 +50,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
         return button
     }()
     
-    lazy var counterDayLabel: UILabel = {
+    private lazy var counterDayLabel: UILabel = {
         let day = UILabel()
         day.translatesAutoresizingMaskIntoConstraints = false
         day.textAlignment = .left
