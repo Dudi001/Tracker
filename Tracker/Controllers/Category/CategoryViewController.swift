@@ -53,7 +53,6 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         element.separatorStyle = .singleLine
         element.layer.cornerRadius = 16
         element.isScrollEnabled = false
-//        element.backgroundColor = .ypBackground
         element.translatesAutoresizingMaskIntoConstraints = false
         return element
     }()

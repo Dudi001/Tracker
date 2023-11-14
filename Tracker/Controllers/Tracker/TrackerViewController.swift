@@ -31,7 +31,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     private lazy var emptyLabel: UILabel = {
        let newLabel = UILabel()
         newLabel.translatesAutoresizingMaskIntoConstraints = false
-        newLabel.text = "Ничего не найдено"
+        newLabel.text = "Что будем отслеживать?"
         newLabel.tintColor = .ypBlack
         newLabel.textAlignment = .center
         newLabel.font = .systemFont(ofSize: 12, weight: .medium)
@@ -117,7 +117,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         addConstraintsDatePicker()
         updateVisibleCategories(dataProvider.categories)
         addConstraintsCollectionView()
-        setupTrackersFromDatePicker()
+//        setupTrackersFromDatePicker()
     }
     
     func reloadCollectionView() {
@@ -130,7 +130,9 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
             filterButton.removeFromSuperview()
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
-                
+//            emptyImage.image = Resourses.Images.trackerEmptyImage
+//            emptyLabel.text = "Что будем отслеживать?"
+            
             NSLayoutConstraint.activate([
 
                 emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -256,6 +258,11 @@ extension TrackerViewController {
         dataProvider.currentDate = datePicker.date
         let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
         
+        dataProvider.visibleCategories = newTrackerCategory
+        trackerCollectionView.reloadData()
+    }
+    
+    private func setEmptyImage() {
         if dataProvider.visibleCategories.isEmpty {
             setEmptyItemsAfterSearch()
         } else {
@@ -264,10 +271,6 @@ extension TrackerViewController {
             trackerCollectionView.reloadData()
             trackerCollectionView.alpha = 1
         }
-        
-        
-        dataProvider.visibleCategories = newTrackerCategory
-        trackerCollectionView.reloadData()
     }
     
     
@@ -470,6 +473,7 @@ extension TrackerViewController {
         searchTextField.text = ""
         searchTextField.resignFirstResponder()
         updateVisibleCategories(dataProvider.categories)
+        setEmptyImage()
         emptyImage.removeFromSuperview()
         emptyLabel.removeFromSuperview()
         trackerCollectionView.reloadData()
@@ -481,6 +485,7 @@ extension TrackerViewController {
     private func setupTrackersFromDatePicker() {
         currentDate = datePicker.date
         updateVisibleCategories(dataProvider.categories)
+//        setEmptyImage()
         trackerCollectionView.reloadData()
     }
     
