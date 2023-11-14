@@ -105,19 +105,18 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         super.viewDidLoad()
         dataProvider.setMainCategory()
 //        dataProvider.categories = dataProvider.getTrackers()
+        updateVisibleCategories(dataProvider.categories)
         dataProvider.updateRecords()
+        dataProvider.delegate = self
         addTracker()
         addViews()
         setupViews()
         checkCellsCount()
-        dataProvider.delegate = self
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
         addConstraintSearchText()
         addConstraintsDatePicker()
-        updateVisibleCategories(dataProvider.categories)
         addConstraintsCollectionView()
-//        setupTrackersFromDatePicker()
     }
     
     func reloadCollectionView() {
@@ -130,8 +129,8 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
             filterButton.removeFromSuperview()
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
-//            emptyImage.image = Resourses.Images.trackerEmptyImage
-//            emptyLabel.text = "Что будем отслеживать?"
+            emptyImage.image = Resourses.Images.trackerEmptyImage
+            emptyLabel.text = "Что будем отслеживать?"
             
             NSLayoutConstraint.activate([
 
@@ -209,10 +208,9 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         let trackerRecord = createTrackerRecord(with: tracker.id)
         
         if dataProvider.completedTrackers.contains(trackerRecord) {
-            dataProvider.completedTrackers.remove(trackerRecord)
+            dataProvider.deleteRecord(trackerRecord)
         } else {
-            dataProvider.completedTrackers.insert(trackerRecord)
-        }
+            dataProvider.addRecord(trackerRecord)        }
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
     }
     
@@ -485,7 +483,7 @@ extension TrackerViewController {
     private func setupTrackersFromDatePicker() {
         currentDate = datePicker.date
         updateVisibleCategories(dataProvider.categories)
-//        setEmptyImage()
+        setEmptyImage()
         trackerCollectionView.reloadData()
     }
     
