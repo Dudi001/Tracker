@@ -106,8 +106,8 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         dataProvider.setMainCategory()
         dataProvider.categories = dataProvider.getTrackers()
         updateVisibleCategories(dataProvider.categories)
-        dataProvider.updateRecords()
         dataProvider.delegate = self
+        dataProvider.updateRecords()
         initialDay()
         addTracker()
         addViews()
@@ -267,7 +267,7 @@ extension TrackerViewController {
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
         dataProvider.currentDate = datePicker.date
         let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
-
+//        
         dataProvider.visibleCategories = newTrackerCategory
         trackerCollectionView.reloadData()
     }
@@ -537,7 +537,7 @@ extension TrackerViewController: DataProviderDelegate {
         
     }
     
-    func updateRecords(_ newRecord: Set<TrackerRecord>) {
-        dataProvider.completedTrackers = newRecord
+    func updateRecords(_ newRecords: Set<TrackerRecord>) {
+        dataProvider.completedTrackers = newRecords
     }
 }

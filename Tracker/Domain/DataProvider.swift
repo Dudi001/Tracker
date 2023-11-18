@@ -14,15 +14,13 @@ protocol DataProviderDelegate: AnyObject {
 }
 
 final class DataProvider {
+    
+    static let shared = DataProvider()
     var category: String = "Важное"
     var color: UIColor = .gray
-    static let shared = DataProvider()
-//    private var schedule: [Int] = []
-//    var currentDate: Date?
     var selectedCategory: String?
     var selectedSchedule: String?
     let tableViewTitle = ["Категория", "Расписание"]
-    
     var trackerName: String?
     var trackerEmoji: String?
     var trackerColor: UIColor?
@@ -142,7 +140,7 @@ final class DataProvider {
         
         var newArray: [TrackerCategory] = []
         let calendar = Calendar.current
-//        print(totalTrackers)
+
         for category in totalTrackers {
             var newCategory = TrackerCategory(name: category.name, trackerArray: [])
             
@@ -161,5 +159,4 @@ final class DataProvider {
         }
         return newArray
     }
-    
 }
