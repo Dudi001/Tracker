@@ -104,10 +104,11 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     override func viewDidLoad() {
         super.viewDidLoad()
         dataProvider.setMainCategory()
-//        dataProvider.categories = dataProvider.getTrackers()
+        dataProvider.categories = dataProvider.getTrackers()
         updateVisibleCategories(dataProvider.categories)
         dataProvider.updateRecords()
         dataProvider.delegate = self
+        initialDay()
         addTracker()
         addViews()
         setupViews()
@@ -210,7 +211,8 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         if dataProvider.completedTrackers.contains(trackerRecord) {
             dataProvider.deleteRecord(trackerRecord)
         } else {
-            dataProvider.addRecord(trackerRecord)        }
+            dataProvider.addRecord(trackerRecord)
+        }
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
     }
     
@@ -219,6 +221,16 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         var text: String
         text = count.days()
         return("\(text)")
+    }
+    
+    private func initialDay() {
+        let calendar = Calendar.current
+        let weekday: Int = {
+            let day = calendar.component(.weekday, from: currentDate) - 1
+            if day == 0 { return 7 }
+            return day
+        }()
+        day = weekday
     }
     
     
@@ -255,7 +267,7 @@ extension TrackerViewController {
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
         dataProvider.currentDate = datePicker.date
         let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
-        
+
         dataProvider.visibleCategories = newTrackerCategory
         trackerCollectionView.reloadData()
     }
@@ -520,7 +532,7 @@ extension TrackerViewController: DataProviderDelegate {
     }
     
     func updateCategories(_ newCategory: [TrackerCategory]) {
-//        dataProvider.categories = newCategory
+        dataProvider.categories = newCategory
         updateVisibleCategories(dataProvider.categories)
         
     }

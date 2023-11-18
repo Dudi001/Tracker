@@ -58,6 +58,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
         let categoryFetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
             categoryFetchRequest.predicate = NSPredicate(format: "header == %@", category)
             let categoryResults = try? context.fetch(categoryFetchRequest)
+
             let categoryCoreData = categoryResults?.first ?? TrackerCategoryCoreData(context: context)
             categoryCoreData.header = category
         
@@ -97,11 +98,11 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
             let trackerCategory = TrackerCategory(name: section.name, trackerArray: trackers)
             trackerCategoryArray.append(trackerCategory)
         }
+//        print(trackerCategoryArray)
         return trackerCategoryArray
-        
-        
-        
     }
+    
+    
     
 }
 

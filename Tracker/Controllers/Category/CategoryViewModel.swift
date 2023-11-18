@@ -35,4 +35,12 @@ final class CategoryViewModel {
     func updateData() {
         categoryArray = DataProvider.shared.getCategories()
     }
+    
+    func didSelectRow(at indexPath: IndexPath) {
+        selectedIndexPath = indexPath
+        if !categoryArray.isEmpty {
+            let category = categoryArray[indexPath.row]
+            DataProvider.shared.setCategory(category: category)
+        }
+    }
 }

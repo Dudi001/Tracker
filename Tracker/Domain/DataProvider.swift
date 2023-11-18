@@ -28,14 +28,15 @@ final class DataProvider {
     var trackerColor: UIColor?
     var schedule: [Int]?
     var currentDate: Date?
+    var trackerCat: String?
     
     private lazy var trackerStore = TrackerStore()
     private lazy var trackerCategoryStore = TrackerCategoryStore()
     private lazy var trackerRecordStore = TrackerRecordStore()
     
-    var categories: [TrackerCategory]{
-        trackerStore.fetchTracker()
-    }
+    var categories: [TrackerCategory] = []
+//        trackerStore.fetchTracker()
+//    }
     var visibleCategories = [TrackerCategory]()
     var completedTrackers: Set<TrackerRecord> = []
     
@@ -141,7 +142,7 @@ final class DataProvider {
         
         var newArray: [TrackerCategory] = []
         let calendar = Calendar.current
-        
+//        print(totalTrackers)
         for category in totalTrackers {
             var newCategory = TrackerCategory(name: category.name, trackerArray: [])
             
