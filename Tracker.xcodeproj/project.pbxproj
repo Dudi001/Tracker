@@ -138,9 +138,9 @@
 				D9021F162A390A750080BB4D /* Filter */,
 				D96239902A362CD700F61DAE /* Schedule */,
 				D962398D2A362CA000F61DAE /* Category */,
-				D96239862A351D3600F61DAE /* CreateNewTracker */,
 				D96239832A35143500F61DAE /* SelectType */,
 				D90E2E692A2B443E0000C7E1 /* Statistic */,
+				D96239862A351D3600F61DAE /* CreateNewTracker */,
 				D90E2E602A2A4A3F0000C7E1 /* Tracker */,
 			);
 			path = Controllers;
