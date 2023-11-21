@@ -63,12 +63,11 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     private lazy var searchTextField: UISearchTextField = {
         let searchItem = UISearchTextField()
         searchItem.translatesAutoresizingMaskIntoConstraints = false
-        searchItem.placeholder = "Поиск"
+        searchItem.placeholder = "Поиск.."
         searchItem.font = .systemFont(ofSize: 17, weight: .regular)
         searchItem.returnKeyType = .search
         searchItem.textColor = .ypBlack
         searchItem.clearButtonMode = .never
-        searchItem.addTarget(self, action: #selector(setupTrackersFromTextField), for: .editingChanged)
         return searchItem
     }()
     
@@ -267,7 +266,6 @@ extension TrackerViewController {
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
         dataProvider.currentDate = datePicker.date
         let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
-//        
         dataProvider.visibleCategories = newTrackerCategory
         trackerCollectionView.reloadData()
     }
@@ -315,28 +313,6 @@ extension TrackerViewController {
     }
 }
 
-
-//MARK: - UITextFieldDelegate
-extension TrackerViewController: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let queryTextFiled = textField.text else { return }
-        query = queryTextFiled
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.3) {
-            self.cancelButton.isHidden = false
-            self.view.layoutIfNeeded()
-        }
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.3) {
-            self.cancelButton.isHidden = true
-            self.view.layoutIfNeeded()
-        }
-    }
-}
 
 
 //MARK: - CollectionViewDataSource
@@ -456,25 +432,45 @@ extension TrackerViewController {
             emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
         ])
     }
+   
     
-    func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {
-        var newVisibleArray: [TrackerCategory] = []
-        
-        for category in categories {
-            var newCategory = TrackerCategory(name: category.name, trackerArray: [])
-            
+    private func filtered() {
+        var newCategory = [TrackerCategory]()
+        for category in dataProvider.categories {
+            var trackers = [Tracker]()
             for tracker in category.trackerArray {
-                if tracker.name.contains(filledName) {
-                    newCategory.trackerArray.append(tracker)
+                let schedule = tracker.schedule
+                if schedule.contains(day) {
+                    trackers.append(tracker)
+                } else if schedule.isEmpty {
+                    trackers.append(tracker)
                 }
+                
             }
-            
-            if !newCategory.trackerArray.isEmpty {
-                newVisibleArray.append(newCategory)
+            if !trackers.isEmpty {
+                let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                newCategory.append(trackerCategory)
             }
         }
         
-        return newVisibleArray
+        if !query.isEmpty {
+            var trackersWithFilteredName = [TrackerCategory]()
+            for category in newCategory {
+                var trackers = [Tracker]()
+                for tracker in category.trackerArray {
+                    let trackerName = tracker.name.lowercased()
+                    if trackerName.range(of: query, options: .caseInsensitive) != nil {
+                        trackers.append(tracker)
+                    }
+                }
+                if !trackers.isEmpty {
+                    let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                    trackersWithFilteredName.append(trackerCategory)
+                }
+            }
+            newCategory = trackersWithFilteredName
+        }
+        updateVisibleCategories(newCategory)
     }
     
 //MARK: - FILTER @OBJC FUNC
@@ -496,21 +492,6 @@ extension TrackerViewController {
         currentDate = datePicker.date
         updateVisibleCategories(dataProvider.categories)
         setEmptyImage()
-        trackerCollectionView.reloadData()
-    }
-    
-    @objc
-    private func setupTrackersFromTextField() {
-        guard let text = searchTextField.text else { return }
-        let categories = dataProvider.visibleCategories
-        
-        let newCategory = searchTrackerByName(categories: categories, filledName: text.lowercased())
-        
-        if newCategory.count == 0 {
-            setEmptyItemsAfterSearch()
-        }
-        
-        dataProvider.visibleCategories = newCategory
         trackerCollectionView.reloadData()
     }
     
@@ -539,5 +520,41 @@ extension TrackerViewController: DataProviderDelegate {
     
     func updateRecords(_ newRecords: Set<TrackerRecord>) {
         dataProvider.completedTrackers = newRecords
+    }
+}
+
+
+//MARK: - UITextFieldDelegate
+extension TrackerViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let queryTextFiled = textField.text else { return }
+        query = queryTextFiled
+        filtered()
+        setEmptyImage()
+        
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3) {
+            self.cancelButton.isHidden = false
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3) {
+            self.cancelButton.isHidden = true
+            self.view.layoutIfNeeded()
+        }
+        
+        if dataProvider.visibleCategories.isEmpty  {
+            emptyImage.image = .notFound
+            emptyLabel.text = "Ничего не найдено"
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchTextField.resignFirstResponder()
+        return true
     }
 }
