@@ -16,7 +16,7 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
     private var dataProvider = DataProvider.shared
     var trackerViewController: TrackerViewControllerProtocol?
     
-    lazy var titileLabel: UILabel = {
+    private lazy var titileLabel: UILabel = {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.text = "Создание трекера"
@@ -25,7 +25,7 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
         return text
     }()
     
-    lazy var hobbyButton: UIButton = {
+    private lazy var hobbyButton: UIButton = {
         let hobby = UIButton(type: .system)
         hobby.translatesAutoresizingMaskIntoConstraints = false
         hobby.setTitle("Привычка", for: .normal)
@@ -38,7 +38,7 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
         return hobby
     }()
     
-    lazy var irregularButton: UIButton = {
+    private lazy var irregularButton: UIButton = {
         let irregular = UIButton(type: .system)
         irregular.translatesAutoresizingMaskIntoConstraints = false
         irregular.setTitle("Нерегуляное событие", for: .normal)

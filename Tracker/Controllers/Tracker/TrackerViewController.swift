@@ -21,14 +21,14 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     var day = 1
     
-    lazy var emptyImage: UIImageView = {
+    private lazy var emptyImage: UIImageView = {
         let newImage = UIImageView()
         newImage.translatesAutoresizingMaskIntoConstraints = false
         newImage.image = Resourses.Images.trackerEmptyImage
         return newImage
     }()
     
-    lazy var emptyLabel: UILabel = {
+    private lazy var emptyLabel: UILabel = {
        let newLabel = UILabel()
         newLabel.translatesAutoresizingMaskIntoConstraints = false
         newLabel.text = "Что будем отслеживать?"
@@ -38,7 +38,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return newLabel
     }()
     
-    lazy var trackerCollectionView: UICollectionView = {
+    private lazy var trackerCollectionView: UICollectionView = {
         let collectionViewLayout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: collectionViewLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -47,7 +47,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return collectionView
     }()
     
-    lazy var datePicker: UIDatePicker = {
+    private lazy var datePicker: UIDatePicker = {
         let picker = UIDatePicker()
         picker.translatesAutoresizingMaskIntoConstraints = false
         picker.preferredDatePickerStyle = .automatic
@@ -60,19 +60,18 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return picker
     }()
     
-    lazy var searchTextField: UISearchTextField = {
+    private lazy var searchTextField: UISearchTextField = {
         let searchItem = UISearchTextField()
         searchItem.translatesAutoresizingMaskIntoConstraints = false
-        searchItem.placeholder = "Поиск"
+        searchItem.placeholder = "Поиск.."
         searchItem.font = .systemFont(ofSize: 17, weight: .regular)
         searchItem.returnKeyType = .search
         searchItem.textColor = .ypBlack
         searchItem.clearButtonMode = .never
-        searchItem.addTarget(self, action: #selector(setupTrackersFromTextField), for: .editingChanged)
         return searchItem
     }()
     
-    lazy var cancelButton: UIButton = {
+    private lazy var cancelButton: UIButton = {
         let cancel = UIButton(type: .system)
         cancel.translatesAutoresizingMaskIntoConstraints = false
         cancel.tintColor = .ypBlue
@@ -82,7 +81,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return cancel
     }()
     
-    lazy var filterButton: UIButton = {
+    private lazy var filterButton: UIButton = {
         let filterButton = UIButton(type: .system)
         filterButton.translatesAutoresizingMaskIntoConstraints = false
         filterButton.backgroundColor = .ypBlue
@@ -104,20 +103,20 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     override func viewDidLoad() {
         super.viewDidLoad()
         dataProvider.setMainCategory()
-//        dataProvider.categories = dataProvider.getTrackers()
+        dataProvider.categories = dataProvider.getTrackers()
+        updateVisibleCategories(dataProvider.categories)
+        dataProvider.delegate = self
         dataProvider.updateRecords()
+        initialDay()
         addTracker()
         addViews()
         setupViews()
         checkCellsCount()
-        dataProvider.delegate = self
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
         addConstraintSearchText()
         addConstraintsDatePicker()
-        updateVisibleCategories(dataProvider.categories)
         addConstraintsCollectionView()
-        setupTrackersFromDatePicker()
     }
     
     func reloadCollectionView() {
@@ -130,7 +129,9 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
             filterButton.removeFromSuperview()
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
-                
+            emptyImage.image = Resourses.Images.trackerEmptyImage
+            emptyLabel.text = "Что будем отслеживать?"
+            
             NSLayoutConstraint.activate([
 
                 emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
@@ -207,9 +208,9 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         let trackerRecord = createTrackerRecord(with: tracker.id)
         
         if dataProvider.completedTrackers.contains(trackerRecord) {
-            dataProvider.completedTrackers.remove(trackerRecord)
+            dataProvider.deleteRecord(trackerRecord)
         } else {
-            dataProvider.completedTrackers.insert(trackerRecord)
+            dataProvider.addRecord(trackerRecord)
         }
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
     }
@@ -219,6 +220,16 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         var text: String
         text = count.days()
         return("\(text)")
+    }
+    
+    private func initialDay() {
+        let calendar = Calendar.current
+        let weekday: Int = {
+            let day = calendar.component(.weekday, from: currentDate) - 1
+            if day == 0 { return 7 }
+            return day
+        }()
+        day = weekday
     }
     
     
@@ -255,7 +266,11 @@ extension TrackerViewController {
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
         dataProvider.currentDate = datePicker.date
         let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
-        
+        dataProvider.visibleCategories = newTrackerCategory
+        trackerCollectionView.reloadData()
+    }
+    
+    private func setEmptyImage() {
         if dataProvider.visibleCategories.isEmpty {
             setEmptyItemsAfterSearch()
         } else {
@@ -264,10 +279,6 @@ extension TrackerViewController {
             trackerCollectionView.reloadData()
             trackerCollectionView.alpha = 1
         }
-        
-        
-        dataProvider.visibleCategories = newTrackerCategory
-        trackerCollectionView.reloadData()
     }
     
     
@@ -302,28 +313,6 @@ extension TrackerViewController {
     }
 }
 
-
-//MARK: - UITextFieldDelegate
-extension TrackerViewController: UITextFieldDelegate {
-    func textFieldDidChangeSelection(_ textField: UITextField) {
-        guard let queryTextFiled = textField.text else { return }
-        query = queryTextFiled
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.3) {
-            self.cancelButton.isHidden = false
-            self.view.layoutIfNeeded()
-        }
-    }
-
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        UIView.animate(withDuration: 0.3) {
-            self.cancelButton.isHidden = true
-            self.view.layoutIfNeeded()
-        }
-    }
-}
 
 
 //MARK: - CollectionViewDataSource
@@ -432,7 +421,7 @@ extension TrackerViewController {
         view.addSubview(emptyLabel)
         
         emptyImage.image = Resourses.Images.arrayEmptyImage
-        emptyLabel.text = "Что будем отслеживать?"
+        emptyLabel.text = "Ничего не найдено"
 
         NSLayoutConstraint.activate([
 
@@ -443,25 +432,45 @@ extension TrackerViewController {
             emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
         ])
     }
+   
     
-    func searchTrackerByName(categories: [TrackerCategory], filledName: String) -> [TrackerCategory] {
-        var newVisibleArray: [TrackerCategory] = []
-        
-        for category in categories {
-            var newCategory = TrackerCategory(name: category.name, trackerArray: [])
-            
+    private func filtered() {
+        var newCategory = [TrackerCategory]()
+        for category in dataProvider.categories {
+            var trackers = [Tracker]()
             for tracker in category.trackerArray {
-                if tracker.name.contains(filledName) {
-                    newCategory.trackerArray.append(tracker)
+                let schedule = tracker.schedule
+                if schedule.contains(day) {
+                    trackers.append(tracker)
+                } else if schedule.isEmpty {
+                    trackers.append(tracker)
                 }
+                
             }
-            
-            if !newCategory.trackerArray.isEmpty {
-                newVisibleArray.append(newCategory)
+            if !trackers.isEmpty {
+                let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                newCategory.append(trackerCategory)
             }
         }
         
-        return newVisibleArray
+        if !query.isEmpty {
+            var trackersWithFilteredName = [TrackerCategory]()
+            for category in newCategory {
+                var trackers = [Tracker]()
+                for tracker in category.trackerArray {
+                    let trackerName = tracker.name.lowercased()
+                    if trackerName.range(of: query, options: .caseInsensitive) != nil {
+                        trackers.append(tracker)
+                    }
+                }
+                if !trackers.isEmpty {
+                    let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                    trackersWithFilteredName.append(trackerCategory)
+                }
+            }
+            newCategory = trackersWithFilteredName
+        }
+        updateVisibleCategories(newCategory)
     }
     
 //MARK: - FILTER @OBJC FUNC
@@ -470,6 +479,7 @@ extension TrackerViewController {
         searchTextField.text = ""
         searchTextField.resignFirstResponder()
         updateVisibleCategories(dataProvider.categories)
+        setEmptyImage()
         emptyImage.removeFromSuperview()
         emptyLabel.removeFromSuperview()
         trackerCollectionView.reloadData()
@@ -481,21 +491,7 @@ extension TrackerViewController {
     private func setupTrackersFromDatePicker() {
         currentDate = datePicker.date
         updateVisibleCategories(dataProvider.categories)
-        trackerCollectionView.reloadData()
-    }
-    
-    @objc
-    private func setupTrackersFromTextField() {
-        guard let text = searchTextField.text else { return }
-        let categories = dataProvider.visibleCategories
-        
-        let newCategory = searchTrackerByName(categories: categories, filledName: text)
-        
-        if newCategory.count == 0 {
-            setEmptyItemsAfterSearch()
-        }
-        
-        dataProvider.visibleCategories = newCategory
+        setEmptyImage()
         trackerCollectionView.reloadData()
     }
     
@@ -517,12 +513,48 @@ extension TrackerViewController: DataProviderDelegate {
     }
     
     func updateCategories(_ newCategory: [TrackerCategory]) {
-//        dataProvider.categories = newCategory
+        dataProvider.categories = newCategory
         updateVisibleCategories(dataProvider.categories)
         
     }
     
-    func updateRecords(_ newRecord: Set<TrackerRecord>) {
-        dataProvider.completedTrackers = newRecord
+    func updateRecords(_ newRecords: Set<TrackerRecord>) {
+        dataProvider.completedTrackers = newRecords
+    }
+}
+
+
+//MARK: - UITextFieldDelegate
+extension TrackerViewController: UITextFieldDelegate {
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let queryTextFiled = textField.text else { return }
+        query = queryTextFiled
+        filtered()
+        setEmptyImage()
+        
+    }
+    
+    func textFieldDidBeginEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3) {
+            self.cancelButton.isHidden = false
+            self.view.layoutIfNeeded()
+        }
+    }
+
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        UIView.animate(withDuration: 0.3) {
+            self.cancelButton.isHidden = true
+            self.view.layoutIfNeeded()
+        }
+        
+        if dataProvider.visibleCategories.isEmpty  {
+            emptyImage.image = .notFound
+            emptyLabel.text = "Ничего не найдено"
+        }
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        searchTextField.resignFirstResponder()
+        return true
     }
 }

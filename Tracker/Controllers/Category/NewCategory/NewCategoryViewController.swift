@@ -9,9 +9,9 @@ import UIKit
 
 final class NewCategoryViewController: UIViewController {
     var categoryViewController: CategoryViewControllerProtocol?
-    private let dataProvider = DataProvider.shared
+    var viewModel: NewCategoryViewModel!
     
-    lazy var titleLabel: UILabel = {
+    private lazy var titleLabel: UILabel = {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -20,7 +20,7 @@ final class NewCategoryViewController: UIViewController {
        return label
     }()
     
-    lazy var textField: UITextField = {
+    private lazy var textField: UITextField = {
        let text = UITextField()
         text.translatesAutoresizingMaskIntoConstraints = false
         text.clearButtonMode = .whileEditing
@@ -30,10 +30,11 @@ final class NewCategoryViewController: UIViewController {
         text.layer.cornerRadius = 16
         text.backgroundColor = .ypBackground
         text.placeholder = "Введите название категории"
+        text.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         return text
     }()
     
-    lazy var completeButton: UIButton = {
+    private lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
         button.setTitle("Готово", for: .normal)
@@ -47,25 +48,40 @@ final class NewCategoryViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        viewModel = NewCategoryViewModel()
         textField.delegate = self
         setViews()
         setConstraints()
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        view.endEditing(true)
+        bind()
     }
     
     @objc private func createNewCategory() {
         guard let name = textField.text else { return }
-        dataProvider.addCategory(header: name)
-        dataProvider.updateCategories()
-//        trackerStorage.categories.append(TrackerCategory(name: name,
-//                                                         trackerArray: []))
+        viewModel.createButtonPressed(category: name)
         dismiss(animated: true)
 
         categoryViewController?.reloadTableView()
     }
+    
+    @objc
+    private func textFieldDidChange() {
+        viewModel.didEnter(header: self.textField.text)
+    }
+    
+    
+    private func bind() {
+        guard let viewModel else { return }
+        viewModel.$isCreateButtonEnabled.bind {[weak self] newValue in
+            self?.setCreateButton(enabled: newValue)
+        }
+    }
+    
+    private func setCreateButton(enabled: Bool) {
+        completeButton.isUserInteractionEnabled = enabled
+        completeButton.backgroundColor = enabled ? .ypWhite : .ypGray
+    }
+    
+
 }
 
 extension NewCategoryViewController: UITextFieldDelegate {

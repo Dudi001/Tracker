@@ -13,14 +13,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
+        
         let tabBar = TabBarViewController()
         guard let scene = (scene as? UIWindowScene) else { return }
-        window = UIWindow(frame: scene.coordinateSpace.bounds)
-        window?.windowScene = scene
-        window?.rootViewController = tabBar
-        window?.makeKeyAndVisible()
-    }
+        let window = UIWindow(windowScene: scene)
+        
+        if UserDefaults.standard.bool(forKey: "isFirstLaunch") == false {
+            window.rootViewController = OnboardinMainViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
+        } else {
+            window.rootViewController = tabBar
+        }
 
+        self.window = window
+        window.makeKeyAndVisible()
+    }
+    
+    
     func sceneDidDisconnect(_ scene: UIScene) {
     }
 

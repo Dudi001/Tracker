@@ -17,7 +17,7 @@ final class CreateNewTrackerTableVIewCell: UITableViewCell {
         return labelItem
     }()
     
-    private lazy var categoryLabel: UILabel = {
+    lazy var categoryLabel: UILabel = {
         let item = UILabel()
         item.font = .systemFont(ofSize: 17, weight: .regular)
         item.textColor = .ypGray
