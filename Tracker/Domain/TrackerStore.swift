@@ -90,7 +90,8 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
                     name: tracker.name ?? "",
                     color: color,
                     emoji: tracker.emoji ?? "",
-                    schedule: tracker.schedule ?? [])
+                    schedule: tracker.schedule ?? [],
+                    pinned: tracker.pinned)
                 
                 trackers.append(newTracker)
             }
@@ -100,6 +101,34 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
         }
 //        print(trackerCategoryArray)
         return trackerCategoryArray
+    }
+    
+    func pinTacker(model: Tracker) {
+            let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", model.id as CVarArg)
+            do {
+                let trackers = try context.fetch(fetchRequest)
+                if let tracker = trackers.first {
+                    tracker.pinned = !model.pinned
+                    appDelegate.saveContext()
+                }
+            } catch {
+                print("Error deleting tracker record: \(error.localizedDescription)")
+            }
+    }
+    
+    func deleteTacker(model: Tracker) {
+            let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", model.id as CVarArg)
+            do {
+                let trackers = try context.fetch(fetchRequest)
+                if let tracker = trackers.first {
+                    context.delete(tracker)
+                    appDelegate.saveContext()
+                }
+            } catch {
+                print("Error deleting tracker record: \(error.localizedDescription)")
+            }
     }
     
     

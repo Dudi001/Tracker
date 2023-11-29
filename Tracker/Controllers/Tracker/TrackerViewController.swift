@@ -43,6 +43,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         let collectionView = UICollectionView(frame: view.bounds, collectionViewLayout: collectionViewLayout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .ypWhite
+        collectionView.allowsMultipleSelection = false
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
         return collectionView
     }()
@@ -327,6 +328,8 @@ extension TrackerViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TrackerCollectionViewCell", for: indexPath) as! TrackerCollectionViewCell
+        let menu = UIContextMenuInteraction(delegate: self)
+        cell.addInteraction(menu)
         let tracker = dataProvider.visibleCategories[indexPath.section].trackerArray[indexPath.item]
         setupCell(cell, trackerModel: tracker)
         return cell
@@ -556,5 +559,99 @@ extension TrackerViewController: UITextFieldDelegate {
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         searchTextField.resignFirstResponder()
         return true
+    }
+}
+
+
+//MARK: - UIContextMenuInteractionDelegate
+
+extension TrackerViewController: UIContextMenuInteractionDelegate {
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
+        
+        guard let cell = interaction.view as? TrackerCollectionViewCell else {
+            return nil
+        }
+        
+        guard let indexPath = trackerCollectionView.indexPath(for: cell) else {
+            return nil
+        }
+        let category = dataProvider.visibleCategories[indexPath.section]
+        let tracker = category.trackerArray[indexPath.item]
+        let pinTitle = tracker.pinned ? NSLocalizedString("contextMenu.unpin", comment: "") : NSLocalizedString("contextMenu.pin", comment: "")
+        return UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+            
+            let pickAction = UIAction(title: pinTitle, image: nil, identifier: nil) { _ in
+                self.pinTracker(at: indexPath)
+            }
+            let editAction = UIAction(title: NSLocalizedString("contextMenu.edit", comment: ""), image: nil, identifier: nil) { _ in
+//                self.analyticsService.report(event: .click, screen: .main, item: .edit)
+                self.editTracker(at: indexPath)
+            }
+            let deleteAction = UIAction(title: NSLocalizedString("contextMenu.delete", comment: ""), image: nil, identifier: nil) { _ in
+//                self.analyticsService.report(event: .click, screen: .main, item: .delete)
+                self.showDeleteAlert(at: indexPath)
+            }
+            deleteAction.attributes = .destructive
+            let menu = UIMenu(title: "", children: [pickAction, editAction, deleteAction])
+            return menu
+        }
+    }
+    
+    func contextMenuInteraction(_ interaction: UIContextMenuInteraction, previewForHighlightingMenuWithConfiguration configuration: UIContextMenuConfiguration) -> UITargetedPreview? {
+        guard let cell = interaction.view as? UICollectionViewCell else {
+            return nil
+        }
+        
+        let highlightedArea = CGRect(x: cell.bounds.origin.x, y: cell.bounds.origin.y, width: cell.bounds.width, height: cell.bounds.height - 61)
+        let cornerRadius: CGFloat = 16.0
+        let roundedPath = UIBezierPath(roundedRect: highlightedArea, cornerRadius: cornerRadius)
+        let parameters = UIDragPreviewParameters()
+        parameters.visiblePath = roundedPath
+        
+        let targetedPreview = UITargetedPreview(view: cell, parameters: parameters)
+        return targetedPreview
+    }
+    
+    private func editTracker(at indexPath: IndexPath) {
+        let category = dataProvider.visibleCategories[indexPath.section]
+        let tracker = category.trackerArray[indexPath.item]
+        let isEvent = tracker.schedule.isEmpty
+        let counterText = setupCounterTextLabel(trackerID: tracker.id)
+        present(EditTrackerViewController(
+            type: isEvent ? .event : .habits,
+            tracker: tracker,
+            counterHeaderText: counterText,
+            category: category.name), animated: true)
+    }
+    
+    private func pinTracker(at indexPath: IndexPath) {
+        let category = dataProvider.visibleCategories[indexPath.section]
+        let tracker = category.trackerArray[indexPath.item]
+        
+        dataProvider.pinTracker(model: tracker)
+        filtered()
+        
+    }
+    
+    private func deleteTracker(at indexPath: IndexPath) {
+        let category = dataProvider.visibleCategories[indexPath.section]
+        let tracker = category.trackerArray[indexPath.item]
+        
+        dataProvider.deleteTracker(model: tracker)
+        filtered()
+    }
+    
+    private func showDeleteAlert(at indexPath: IndexPath) {
+        let alert = UIAlertController(title: nil,
+                                      message: NSLocalizedString("deleteAlert.text", comment: ""),
+                                      preferredStyle: .actionSheet)
+        let cancelAction = UIAlertAction(title: NSLocalizedString("deleteAlert.cancelAction.text", comment: ""), style: .cancel)
+        let deleteAction = UIAlertAction(title: NSLocalizedString("deleteAlert.deleteAction.text", comment: ""), style: .destructive) { [weak self] _ in
+            guard let self else { return }
+            self.deleteTracker(at: indexPath)
+        }
+        alert.addAction(cancelAction)
+        alert.addAction(deleteAction)
+        present(alert, animated: true)
     }
 }

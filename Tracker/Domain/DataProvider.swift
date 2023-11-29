@@ -16,6 +16,7 @@ protocol DataProviderDelegate: AnyObject {
 final class DataProvider {
     
     static let shared = DataProvider()
+    @Observable
     var category: String = "Важное"
     var color: UIColor = .gray
     var selectedCategory: String?
@@ -27,6 +28,8 @@ final class DataProvider {
     var schedule: [Int]?
     var currentDate: Date?
     var trackerCat: String?
+    var title = ""
+    var emoji = ""
     
     private lazy var trackerStore = TrackerStore()
     private lazy var trackerCategoryStore = TrackerCategoryStore()
@@ -77,6 +80,12 @@ final class DataProvider {
         .colorSelection18,
     ]
     
+    private func clean() {
+        schedule = []
+        color = .black
+        emoji = ""
+        title = ""
+    }
     
     private let shortDayArray = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     
@@ -99,9 +108,31 @@ final class DataProvider {
                                  name: trackerName,
                                  color: trackerColor,
                                  emoji: trackerEmoji,
-                                 schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7])
+                                 schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7],
+                                pinned: false)
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
+    }
+    
+    func updateTracker(model: Tracker) {
+        trackerStore.deleteTacker(model: model)
+        let tracker = Tracker(id: model.id,
+                              name: title,
+                              color: self.color,
+                              emoji: emoji,
+                              schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7],
+                              pinned: false)
+        trackerStore.addTracker(model: tracker)
+        delegate?.addTrackers()
+//        clean()
+    }
+    
+    func updateButtonEnabled() -> Bool {
+        if !emoji.isEmpty && color != .black && !title.isEmpty {
+            return true
+        } else {
+            return false
+        }
     }
     
     func addCategory(header: String) {
@@ -120,6 +151,14 @@ final class DataProvider {
         trackerCategoryStore.setMainCategory()
     }
     
+    func deleteTracker(model: Tracker) {
+        trackerStore.deleteTacker(model: model)
+    }
+    
+    func pinTracker(model: Tracker) {
+        trackerStore.pinTacker(model: model)
+    }
+    
     
     //MARK: - TreckerRecord
     func updateRecords() {
@@ -134,6 +173,9 @@ final class DataProvider {
     func deleteRecord(_ record: TrackerRecord) {
         trackerRecordStore.deleteTrackerRecord(record)
     }
+    
+    
+    
     
     func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
         guard let date = currentDate else { return [] }

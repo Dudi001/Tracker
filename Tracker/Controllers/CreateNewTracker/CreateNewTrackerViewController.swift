@@ -420,7 +420,6 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
         return 2
     }
     
-    // MARK: - Работа с базой данных
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:

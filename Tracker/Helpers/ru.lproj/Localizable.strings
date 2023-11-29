@@ -1,0 +1,59 @@
+/* 
+  Localizable.strings
+  
+
+  Created by Мурад Манапов on 29.11.2023.
+  
+*/
+
+
+"mo" = "Пн";
+"tu" = "Вт";
+"we" ="Ср";
+"th" = "Чт";
+"fr" = "Пт";
+"sa" = "Сб";
+"su" = "Вс";
+"monday" = "Понедельник";
+"tuesday" = "Вторник";
+"wednesday" = "Среда";
+"thursday" = "Четверг";
+"friday" = "Пятница";
+"saturday" = "Суббота";
+"sunday" = "Воскресенье";
+"placeholder.title" = "Что будем отслеживать?";
+"newCategory.title" = "Новая категория";
+"newCategory.placeholder" = "Введите название категории";
+"newCategory.readyButton.title" = "Готово";
+"category.addButton.title" = "Добавить категорию";
+"category.title" = "Категория";
+"createTracker.title" = "Новая привычка";
+"createTracker.textField.placeholder" = "Введите название трекера";
+"createTracker.button.category" = "Категория";
+"createTracker.button.schedule" = "Расписание";
+"createTracker.emojiTitle" = "Emoji";
+"createTracker.colorTitle" = "Цвет";
+"createTracker.cancelButtonTitle" = "Отменить";
+"createTracker.createButtonTitle" = "Создать";
+"selectType.title" = "Создание трекера";
+"selectType.habitButton.title" = "Привычка";
+"selectType.eventButton.title" = "Нерегулярное событие";
+"onboard.titleOne" = "Отслеживайте только то, что хотите";
+"onboard.titleTwo" = "Даже если это не литры воды и йога";
+"onboard.startButton.title" = "Вот это технологии!";
+"trackers.title" = "Трекеры";
+"trackers.searchTextField.placeholder" = "Поиск";
+"trackers.cancelButton.title" = "Отменить";
+"trackers.notFoundPlaceholder.title" = "Ничего не найдено";
+"tabBar.trackers.title" = "Трекеры";
+"tabBar.stats.title" = "Статистика";
+"stats.placeHolder.title" = "Анализировать пока нечего";
+"editTacker.saveButtonTitle" = "Сохранить";
+"createTracker.title" = "Редактирование привычки";
+"contextMenu.pin" = "Закрепить";
+"contextMenu.unpin" = "Открепить";
+"contextMenu.edit" = "Редактировать";
+"contextMenu.delete" = "Удалить";
+"deleteAlert.text" = "Уверены что хотите удалить трекер?";
+"deleteAlert.cancelAction.text" = "Отмена";
+"deleteAlert.deleteAction.text" = "Удалить";
