@@ -2,26 +2,28 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>completedTrackers</key>
+	<key>StringKey</key>
 	<dict>
 		<key>NSStringLocalizedFormatKey</key>
-		<string>%#@days@</string>
-		<key>days</key>
+		<string>%#@VARIABLE@</string>
+		<key>VARIABLE</key>
 		<dict>
 			<key>NSStringFormatSpecTypeKey</key>
 			<string>NSStringPluralRuleType</string>
 			<key>NSStringFormatValueTypeKey</key>
-			<string>d</string>
+			<string></string>
 			<key>zero</key>
-			<string>%d дней</string>
+			<string></string>
 			<key>one</key>
-			<string>%d день</string>
+			<string></string>
+			<key>two</key>
+			<string></string>
 			<key>few</key>
-			<string>%d дня</string>
-			<key>other</key>
-			<string>%d дня</string>
+			<string></string>
 			<key>many</key>
-			<string>%d дней</string>
+			<string></string>
+			<key>other</key>
+			<string></string>
 		</dict>
 	</dict>
 </dict>
