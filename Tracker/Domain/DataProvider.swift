@@ -18,7 +18,7 @@ final class DataProvider {
     static let shared = DataProvider()
     @Observable
     var category: String = "Важное"
-    var color: UIColor = .gray
+    var color: UIColor = .black
     var selectedCategory: String?
     var selectedSchedule: String?
     let tableViewTitle = ["Категория", "Расписание"]

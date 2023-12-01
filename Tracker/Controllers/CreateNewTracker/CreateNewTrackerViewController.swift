@@ -26,6 +26,9 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private lazy var trackerStore = TrackerStore()
     weak var delegate: DataProviderDelegate?
     
+    private var selectedEmojiIndexPatch: IndexPath?
+    private var selectedColorIndexPatch: IndexPath?
+    
      
     
     private lazy var titileHobbyLabel: UILabel = {
@@ -543,6 +546,7 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
             cell.layer.cornerRadius = 16
             cell.backgroundColor = .ypLightGray
             dataProvider.trackerEmoji = cell.emojiLabel.text
+            selectedEmojiIndexPatch = indexPath
         case 1:
             cell.layer.cornerRadius = 11
             cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor

@@ -16,7 +16,7 @@ final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
         return emoji
     }()
     
-    private lazy var colorImage: UIImageView = {
+    lazy var colorImage: UIImageView = {
        let colorItem = UIImageView()
         colorItem.translatesAutoresizingMaskIntoConstraints = false
         colorItem.layer.cornerRadius = 8
