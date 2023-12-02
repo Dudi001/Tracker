@@ -79,7 +79,6 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
     
     func switchToTrackerVC() {
         dismiss(animated: true)
-        
         trackerViewController?.updateVisibleCategories(dataProvider.categories)
     }
     

@@ -17,6 +17,7 @@ protocol TrackerViewControllerProtocol: AnyObject {
 final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
     var query: String = ""
     var currentDate = Date()
+    var datePicker: UIDatePicker?
     private let dataProvider = DataProvider.shared
     
     var day = 1
@@ -46,19 +47,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         collectionView.allowsMultipleSelection = false
         collectionView.contentInset = UIEdgeInsets(top: 24, left: 0, bottom: 0, right: 0)
         return collectionView
-    }()
-    
-    private lazy var datePicker: UIDatePicker = {
-        let picker = UIDatePicker()
-        picker.translatesAutoresizingMaskIntoConstraints = false
-        picker.preferredDatePickerStyle = .automatic
-        picker.datePickerMode = .date
-        picker.layer.cornerRadius = 8
-        picker.locale = Locale(identifier: "ru_RU")
-        picker.calendar.firstWeekday = 2
-        picker.clipsToBounds = true
-        picker.addTarget(self, action: #selector(setupTrackersFromDatePicker), for: .valueChanged)
-        return picker
     }()
     
     private lazy var searchTextField: UISearchTextField = {
@@ -110,15 +98,14 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         dataProvider.delegate = self
         dataProvider.updateRecords()
         initialDay()
-        addTracker()
         addViews()
         setupViews()
         checkCellsCount()
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
         addConstraintSearchText()
-        addConstraintsDatePicker()
         addConstraintsCollectionView()
+        setupDatePicker()
     }
     
     func reloadCollectionView() {
@@ -157,17 +144,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     }
     
 //MARK: - Private func
-    private func addTracker() {
-        if let navBar = navigationController?.navigationBar {
-            let addButton = UIBarButtonItem(
-                barButtonSystemItem: .add,
-                target: self,
-                action: #selector(addTrackerButton)
-            )
-            addButton.tintColor = .ypBlack
-            navBar.topItem?.setLeftBarButton(addButton, animated: false)
-        }
-    }
 
     private func setupViews() {
         trackerCollectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
@@ -188,14 +164,53 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         return trackerRecord
     }
     
-//MARK: - @OBJC FUNC
-    @objc
-    private func addTrackerButton() {
+    func presentSelectTypeVC() {
         let selectVC = SelectTypeTrackerViewController()
         selectVC.trackerViewController = self
         searchTextField.endEditing(true)
         present(selectVC, animated: true)
     }
+    
+    private func setupDatePicker() {
+        datePicker?.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
+        var calendar = Calendar.current
+        calendar.firstWeekday = 2
+        datePicker?.calendar = calendar
+    }
+    
+    @objc
+    private func dateChanged(_ sender: UIDatePicker) {
+        currentDate = sender.date
+        let calendar = Calendar.current
+        let weekday: Int = {
+            let day = calendar.component(.weekday, from: currentDate) - 1
+            if day == 0 { return 7 }
+            return day
+        }()
+        day = weekday
+        filtered()
+        setupStandardPlaceholder()
+    }
+    
+    
+    private func setupStandardPlaceholder() {
+        if searchTextField.text == "" {
+            emptyImage.image = .placeHolder
+            emptyLabel.text = NSLocalizedString("placeholder.title", comment: "placeholder title")
+        } else {
+            setupPlaceHolder()
+        }
+    }
+    
+    private func setupPlaceHolder() {
+        if dataProvider.visibleCategories.isEmpty  {
+            emptyImage.image = .notFound
+            emptyLabel.text = NSLocalizedString("trackers.notFoundPlaceholder.title", comment: "")
+        }
+    }
+    
+//MARK: - @OBJC FUNC
+    
     
     
     @objc
@@ -232,6 +247,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
             return day
         }()
         day = weekday
+        filtered()
     }
     
     
@@ -253,23 +269,25 @@ extension TrackerViewController {
     
     
     private func addViews() {
-        guard let navBar = navigationController?.navigationBar else { return }
         setupSearchContainerView()
         view.backgroundColor = .ypWhite
         view.addSubview(trackerCollectionView)
-        view.addSubview(datePicker)
         view.addSubview(searchContainerView)
-        
-        navBar.addSubview(datePicker)
     }
     
     
     
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
-        dataProvider.currentDate = datePicker.date
-        let newTrackerCategory = dataProvider.showNewTrackersAfterChanges(newCategories)
-        dataProvider.visibleCategories = newTrackerCategory
+        dataProvider.visibleCategories = newCategories
         trackerCollectionView.reloadData()
+        updateCollectionViewVisibility()
+        setEmptyImage()
+    }
+    
+    private func updateCollectionViewVisibility() {
+        let hasData = !dataProvider.visibleCategories.isEmpty
+        trackerCollectionView.isHidden = !hasData
+        emptyImage.isHidden = hasData
     }
     
     private func setEmptyImage() {
@@ -301,16 +319,6 @@ extension TrackerViewController {
             
             cancelButton.trailingAnchor.constraint(equalTo: searchContainerView.trailingAnchor),
             cancelButton.centerYAnchor.constraint(equalTo: searchContainerView.centerYAnchor)
-        ])
-    }
-    
-    private func addConstraintsDatePicker() {
-        guard let navBar = navigationController?.navigationBar else { return }
-        NSLayoutConstraint.activate([
-            datePicker.heightAnchor.constraint(equalToConstant: 34),
-            datePicker.widthAnchor.constraint(equalToConstant: 97),
-            datePicker.trailingAnchor.constraint(equalTo: navBar.trailingAnchor, constant: -16),
-            datePicker.bottomAnchor.constraint(equalTo: navBar.bottomAnchor, constant: -11)
         ])
     }
 }
@@ -506,15 +514,6 @@ extension TrackerViewController {
 
     }
     
-    @objc
-    private func setupTrackersFromDatePicker() {
-        currentDate = datePicker.date
-        updateVisibleCategories(dataProvider.categories)
-        setEmptyImage()
-        trackerCollectionView.reloadData()
-        
-    }
-    
     private func dismissAllModalControllers(from viewController: UIViewController) {
         if let presentedViewController = viewController.presentedViewController {
             viewController.dismiss(animated: true, completion: nil)
@@ -529,6 +528,7 @@ extension TrackerViewController {
 extension TrackerViewController: DataProviderDelegate {
     func addTrackers() {
         updateVisibleCategories(dataProvider.categories)
+        filtered()
         dismissAllModalControllers(from: self)
     }
     
@@ -647,8 +647,6 @@ extension TrackerViewController: UIContextMenuInteractionDelegate {
         
         dataProvider.pinTracker(model: tracker)
         filtered()
-        updateVisibleCategories(dataProvider.visibleCategories)
-        
     }
     
     private func deleteTracker(at indexPath: IndexPath) {

@@ -322,8 +322,8 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         dataProvider.trackerName = textField.text
         dataProvider.createTracker()
 //        dataProvider.resetNewTrackerInfo()
-        dismiss(animated: true)
-        selecTypeTracker?.switchToTrackerVC()
+//        dismiss(animated: true)
+//        selecTypeTracker?.switchToTrackerVC()
     }
 }
 

@@ -30,14 +30,16 @@ final class DataProvider {
     var trackerCat: String?
     var title = ""
     var emoji = ""
+    var query: String = ""
+    var day = 1
     
     private lazy var trackerStore = TrackerStore()
     private lazy var trackerCategoryStore = TrackerCategoryStore()
     private lazy var trackerRecordStore = TrackerRecordStore()
-    
+//    var trackerViewController: TrackerViewController
     var categories: [TrackerCategory] = []
-//        trackerStore.fetchTracker()
-//    }
+    //        trackerStore.fetchTracker()
+    //    }
     var visibleCategories = [TrackerCategory]()
     var completedTrackers: Set<TrackerRecord> = []
     
@@ -90,12 +92,12 @@ final class DataProvider {
     private let shortDayArray = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     
     private let shortDaysArray = [NSLocalizedString("mo", comment: ""),
-                                 NSLocalizedString("tu", comment: ""),
-                                 NSLocalizedString("we", comment: ""),
-                                 NSLocalizedString("th", comment: ""),
-                                 NSLocalizedString("fr", comment: ""),
-                                 NSLocalizedString("sa", comment: ""),
-                                 NSLocalizedString("su", comment: "")]
+                                  NSLocalizedString("tu", comment: ""),
+                                  NSLocalizedString("we", comment: ""),
+                                  NSLocalizedString("th", comment: ""),
+                                  NSLocalizedString("fr", comment: ""),
+                                  NSLocalizedString("sa", comment: ""),
+                                  NSLocalizedString("su", comment: "")]
     
     func getFormattedSchedule() -> String? {
         guard let schedule = schedule else {
@@ -120,13 +122,13 @@ final class DataProvider {
               let trackerName = trackerName,
               let trackerEmoji = trackerEmoji
         else { return }
-
+        
         let newTracker = Tracker(id: UUID(),
                                  name: trackerName,
                                  color: trackerColor,
                                  emoji: trackerEmoji,
                                  schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7],
-                                pinned: false)
+                                 pinned: false)
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
     }
@@ -141,7 +143,7 @@ final class DataProvider {
                               pinned: false)
         trackerStore.addTracker(model: tracker)
         delegate?.addTrackers()
-//        clean()
+        //        clean()
     }
     
     func updateButtonEnabled() -> Bool {
@@ -193,8 +195,8 @@ final class DataProvider {
     func deleteRecord(_ record: TrackerRecord) {
         trackerRecordStore.deleteTrackerRecord(record)
         let currentCount = UserDefaults.standard.integer(forKey: "completedTrackers")
-            let newCount = max(currentCount - 1, 0)
-            UserDefaults.standard.set(newCount, forKey: "completedTrackers")
+        let newCount = max(currentCount - 1, 0)
+        UserDefaults.standard.set(newCount, forKey: "completedTrackers")
     }
     
     func getCompletedTrackers() -> Int {
@@ -207,25 +209,25 @@ final class DataProvider {
     func showNewTrackersAfterChanges(_ totalTrackers: [TrackerCategory]) -> [TrackerCategory] {
         guard let date = currentDate else { return [] }
         
-        var newArray: [TrackerCategory] = []
-        let calendar = Calendar.current
-
-        for category in totalTrackers {
-            var newCategory = TrackerCategory(name: category.name, trackerArray: [])
-            
-            
-            for tracker in category.trackerArray {
-                let schedule = tracker.schedule
-                let trackerDate = calendar.component(.weekday, from: date)
-                
-                if schedule.contains(trackerDate) {
-                    newCategory.trackerArray.append(tracker)
+                var newArray: [TrackerCategory] = []
+                let calendar = Calendar.current
+        
+                for category in totalTrackers {
+                    var newCategory = TrackerCategory(name: category.name, trackerArray: [])
+        
+        
+                    for tracker in category.trackerArray {
+                        let schedule = tracker.schedule
+                        let trackerDate = calendar.component(.weekday, from: date)
+        
+                        if schedule.contains(trackerDate) {
+                            newCategory.trackerArray.append(tracker)
+                        }
+                    }
+                    if !newCategory.trackerArray.isEmpty {
+                        newArray.append(newCategory)
+                    }
                 }
+                return newArray
             }
-            if !newCategory.trackerArray.isEmpty {
-                newArray.append(newCategory)
-            }
-        }
-        return newArray
-    }
 }
