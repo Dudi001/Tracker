@@ -166,24 +166,23 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     
     private func fillTrackerData() {
         textField.text = tracker.name
-        dataProvider.title = tracker.name
-        dataProvider.emoji = tracker.emoji
-        dataProvider.color = tracker.color
+        dataProvider.trackerName = tracker.name
+        dataProvider.trackerEmoji = tracker.emoji
+        dataProvider.trackerColor = tracker.color
         dataProvider.schedule = tracker.schedule
-        dataProvider.category = category
-        
+        dataProvider.selectedCategory = category
         if let emojiIndex = dataProvider.emojies.firstIndex(of: tracker.emoji) {
             let emojiIndexPath = IndexPath(row: emojiIndex, section: 0)
             collectionView2.selectItem(at: IndexPath(row: 1, section: 0), animated: false, scrollPosition: .centeredHorizontally)
             selectedEmojiIndexPatch = emojiIndexPath
-            print("EMOOOOOO \(selectedEmojiIndexPatch)")
+            
         }
         
         if let colorIndex = dataProvider.colors.firstIndex(of: tracker.color) {
             let colorIndexPath = IndexPath(row: colorIndex, section: 1)
             collectionView2.selectItem(at: colorIndexPath, animated: false, scrollPosition: .centeredHorizontally)
             selectedColorIndexPatch = colorIndexPath
-            print("EMOOOOOO \(selectedColorIndexPatch)")
+            
         }
         createButtonPressedIsEnabled()
 //        checkCreateButton()
@@ -509,18 +508,36 @@ extension EditTrackerViewController: UICollectionViewDataSource {
         case 0:
             cell.isSelected = true
             cell.configureEmojiCell(emoji: dataProvider.emojies[indexPath.row])
-            cell.layer.cornerRadius = 16
-            cell.backgroundColor = .ypLightGray
-            dataProvider.trackerEmoji = cell.emojiLabel.text
-            cell.isSelected = false
+//            cell.layer.cornerRadius = 16
+//            cell.backgroundColor = .ypLightGray
+            
+//            cell.isSelected = false
+//            dataProvider.trackerEmoji = cell.emojiLabel.text
+//            cell.emojiLabel.text = dataProvider.emojies[indexPath.row]
+            if indexPath.row == selectedEmojiIndexPatch?.row {
+                cell.isSelected = true
+                cell.layer.cornerRadius = 16
+                cell.backgroundColor = .ypLightGray
+            } else {
+                cell.isSelected = false
+            }
             return cell
         case 1:
-            cell.isSelected = true
-            cell.configureColorCell(color: dataProvider.colors[indexPath.row])
-            cell.layer.cornerRadius = 11
-            cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
-            cell.layer.borderWidth = 3
-            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
+//            cell.isSelected = true
+//            cell.configureColorCell(color: dataProvider.colors[indexPath.row])
+//            cell.layer.cornerRadius = 11
+//            cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
+//            cell.colorImage.backgroundColor = dataProvider.colors[indexPath.row]
+//            cell.layer.borderWidth = 3
+//            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
+            cell.colorImage.backgroundColor = dataProvider.colors[indexPath.row]
+//            if indexPath.row == selectedColorIndexPatch?.row {
+//                cell.isSelected = true
+//                cell.layer.cornerRadius = 16
+//                cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
+//            } else {
+//                cell.isSelected = false
+//            }
             return cell
         default:
             return UICollectionViewCell()
@@ -619,6 +636,12 @@ extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         switch indexPath.section {
         case 0:
+            
+            if let selectedEmojiIndexPatch = selectedEmojiIndexPatch, let previousCell = collectionView.cellForItem(at: selectedEmojiIndexPatch) as? CreateNewTrackerCollectionViewCell
+            {
+                previousCell.isSelected = false
+                previousCell.backgroundColor = .clear
+            }
             cell.layer.cornerRadius = 16
             cell.backgroundColor = .ypLightGray
             dataProvider.trackerEmoji = cell.emojiLabel.text
@@ -628,7 +651,7 @@ extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
             cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
             dataProvider.trackerColor = dataProvider.colors[indexPath.row]
-            selectedColorIndexPatch = indexPath
+            
         default:
             cell.backgroundColor = .gray
         }

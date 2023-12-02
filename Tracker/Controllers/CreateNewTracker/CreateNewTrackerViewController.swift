@@ -552,6 +552,7 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
             cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
             dataProvider.trackerColor = dataProvider.colors[indexPath.row]
+            selectedColorIndexPatch = indexPath
         default:
             cell.backgroundColor = .gray
         }
