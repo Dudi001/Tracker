@@ -89,6 +89,23 @@ final class DataProvider {
     
     private let shortDayArray = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     
+    private let shortDaysArray = [NSLocalizedString("mo", comment: ""),
+                                 NSLocalizedString("tu", comment: ""),
+                                 NSLocalizedString("we", comment: ""),
+                                 NSLocalizedString("th", comment: ""),
+                                 NSLocalizedString("fr", comment: ""),
+                                 NSLocalizedString("sa", comment: ""),
+                                 NSLocalizedString("su", comment: "")]
+    
+    func getFormattedSchedule() -> String? {
+        guard let schedule = schedule else {
+            return nil
+        }
+        
+        let days = schedule.map { shortDaysArray[$0 - 1] }
+        return days.joined(separator: ", ")
+    }
+    
     func updateCategories() {
         let category = trackerStore.fetchTracker()
         delegate?.updateCategories(category)
@@ -168,12 +185,22 @@ final class DataProvider {
     
     func addRecord(_ record: TrackerRecord) {
         trackerRecordStore.addTrackerRecord(record)
+        let currentCount = UserDefaults.standard.integer(forKey: "completedTrackers")
+        let newCount = currentCount + 1
+        UserDefaults.standard.set(newCount, forKey: "completedTrackers")
     }
     
     func deleteRecord(_ record: TrackerRecord) {
         trackerRecordStore.deleteTrackerRecord(record)
+        let currentCount = UserDefaults.standard.integer(forKey: "completedTrackers")
+            let newCount = max(currentCount - 1, 0)
+            UserDefaults.standard.set(newCount, forKey: "completedTrackers")
     }
     
+    func getCompletedTrackers() -> Int {
+        let completedTrackers = UserDefaults.standard.integer(forKey: "completedTrackers")
+        return completedTrackers
+    }
     
     
     

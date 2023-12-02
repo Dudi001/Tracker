@@ -31,7 +31,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     private lazy var emptyLabel: UILabel = {
        let newLabel = UILabel()
         newLabel.translatesAutoresizingMaskIntoConstraints = false
-        newLabel.text = "Что будем отслеживать?"
+        newLabel.text = NSLocalizedString("placeholder.title", comment: "placeholder title")
         newLabel.tintColor = .ypBlack
         newLabel.textAlignment = .center
         newLabel.font = .systemFont(ofSize: 12, weight: .medium)
@@ -64,7 +64,8 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     private lazy var searchTextField: UISearchTextField = {
         let searchItem = UISearchTextField()
         searchItem.translatesAutoresizingMaskIntoConstraints = false
-        searchItem.placeholder = "Поиск.."
+        searchItem.attributedPlaceholder = NSAttributedString(
+            string: NSLocalizedString("trackers.searchTextField.placeholder", comment: ""))
         searchItem.font = .systemFont(ofSize: 17, weight: .regular)
         searchItem.returnKeyType = .search
         searchItem.textColor = .ypBlack
@@ -76,7 +77,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         let cancel = UIButton(type: .system)
         cancel.translatesAutoresizingMaskIntoConstraints = false
         cancel.tintColor = .ypBlue
-        cancel.setTitle("Отменить", for: .normal)
+        cancel.setTitle(NSLocalizedString("trackers.cancelButton.title", comment: ""), for: .normal)
         cancel.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         cancel.addTarget(self, action: #selector(cancelButtonTapped), for: .touchUpInside)
         return cancel
@@ -131,7 +132,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
             view.addSubview(emptyImage)
             view.addSubview(emptyLabel)
             emptyImage.image = Resourses.Images.trackerEmptyImage
-            emptyLabel.text = "Что будем отслеживать?"
+            emptyLabel.text = NSLocalizedString("placeholder.title", comment: "placeholder title")
             
             NSLayoutConstraint.activate([
 
@@ -424,7 +425,7 @@ extension TrackerViewController {
         view.addSubview(emptyLabel)
         
         emptyImage.image = Resourses.Images.arrayEmptyImage
-        emptyLabel.text = "Ничего не найдено"
+        emptyLabel.text = NSLocalizedString("trackers.notFoundPlaceholder.title", comment: "")
 
         NSLayoutConstraint.activate([
 
@@ -439,14 +440,24 @@ extension TrackerViewController {
     
     private func filtered() {
         var newCategory = [TrackerCategory]()
+        var pinnedTrackers = [Tracker]()
+        
         for category in dataProvider.categories {
             var trackers = [Tracker]()
             for tracker in category.trackerArray {
                 let schedule = tracker.schedule
                 if schedule.contains(day) {
-                    trackers.append(tracker)
+                    if tracker.pinned {
+                        pinnedTrackers.append(tracker)
+                    } else {
+                        trackers.append(tracker)
+                    }
                 } else if schedule.isEmpty {
-                    trackers.append(tracker)
+                    if tracker.pinned {
+                        pinnedTrackers.append(tracker)
+                    } else {
+                        trackers.append(tracker)
+                    }
                 }
                 
             }
@@ -473,6 +484,11 @@ extension TrackerViewController {
             }
             newCategory = trackersWithFilteredName
         }
+        
+        if !pinnedTrackers.isEmpty {
+            let pinnedCategory = TrackerCategory(name: "Закрепленные", trackerArray: pinnedTrackers)
+            newCategory.insert(pinnedCategory, at: 0)
+        }
         updateVisibleCategories(newCategory)
     }
     
@@ -496,6 +512,7 @@ extension TrackerViewController {
         updateVisibleCategories(dataProvider.categories)
         setEmptyImage()
         trackerCollectionView.reloadData()
+        
     }
     
     private func dismissAllModalControllers(from viewController: UIViewController) {
@@ -630,6 +647,7 @@ extension TrackerViewController: UIContextMenuInteractionDelegate {
         
         dataProvider.pinTracker(model: tracker)
         filtered()
+        updateVisibleCategories(dataProvider.visibleCategories)
         
     }
     
@@ -638,6 +656,7 @@ extension TrackerViewController: UIContextMenuInteractionDelegate {
         let tracker = category.trackerArray[indexPath.item]
         
         dataProvider.deleteTracker(model: tracker)
+        setEmptyImage()
         filtered()
     }
     
