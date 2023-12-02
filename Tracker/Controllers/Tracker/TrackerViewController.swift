@@ -19,6 +19,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     var currentDate = Date()
     var datePicker: UIDatePicker?
     private let dataProvider = DataProvider.shared
+    private lazy var analyticsService = AnalyticsService()
     
     var day = 1
     
@@ -106,6 +107,16 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         addConstraintSearchText()
         addConstraintsCollectionView()
         setupDatePicker()
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        analyticsService.reportScreen(event: .open, onScreen: .main)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        analyticsService.reportScreen(event: .close, onScreen: .main)
     }
     
     func reloadCollectionView() {
@@ -230,6 +241,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
             dataProvider.addRecord(trackerRecord)
         }
         cell.counterDayLabel.text = setupCounterTextLabel(trackerID: tracker.id)
+        analyticsService.report(event: .click, screen: .main, item: .track)
     }
     
     private func setupCounterTextLabel(trackerID: UUID) -> String {
@@ -601,11 +613,11 @@ extension TrackerViewController: UIContextMenuInteractionDelegate {
                 self.pinTracker(at: indexPath)
             }
             let editAction = UIAction(title: NSLocalizedString("contextMenu.edit", comment: ""), image: nil, identifier: nil) { _ in
-//                self.analyticsService.report(event: .click, screen: .main, item: .edit)
+                self.analyticsService.report(event: .click, screen: .main, item: .edit)
                 self.editTracker(at: indexPath)
             }
             let deleteAction = UIAction(title: NSLocalizedString("contextMenu.delete", comment: ""), image: nil, identifier: nil) { _ in
-//                self.analyticsService.report(event: .click, screen: .main, item: .delete)
+                self.analyticsService.report(event: .click, screen: .main, item: .delete)
                 self.showDeleteAlert(at: indexPath)
             }
             deleteAction.attributes = .destructive
