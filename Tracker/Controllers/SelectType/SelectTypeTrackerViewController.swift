@@ -19,7 +19,7 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
     private lazy var titileLabel: UILabel = {
        let text = UILabel()
         text.translatesAutoresizingMaskIntoConstraints = false
-        text.text = "Создание трекера"
+        text.text = NSLocalizedString("selectType.title", comment: "")
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = .ypBlack
         return text
@@ -28,7 +28,7 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
     private lazy var hobbyButton: UIButton = {
         let hobby = UIButton(type: .system)
         hobby.translatesAutoresizingMaskIntoConstraints = false
-        hobby.setTitle("Привычка", for: .normal)
+        hobby.setTitle(NSLocalizedString("selectType.habitButton.title", comment: ""), for: .normal)
         hobby.titleLabel?.textAlignment = .center
         hobby.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         hobby.backgroundColor = .ypBlack
@@ -41,7 +41,7 @@ final class SelectTypeTrackerViewController: UIViewController, SelectTypeTracker
     private lazy var irregularButton: UIButton = {
         let irregular = UIButton(type: .system)
         irregular.translatesAutoresizingMaskIntoConstraints = false
-        irregular.setTitle("Нерегуляное событие", for: .normal)
+        irregular.setTitle(NSLocalizedString("selectType.eventButton.title", comment: ""), for: .normal)
         irregular.titleLabel?.textAlignment = .center
         irregular.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         irregular.backgroundColor = .ypBlack

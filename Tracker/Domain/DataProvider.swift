@@ -21,7 +21,8 @@ final class DataProvider {
     var color: UIColor = .black
     var selectedCategory: String?
     var selectedSchedule: String?
-    let tableViewTitle = ["Категория", "Расписание"]
+    let tableViewTitle = [NSLocalizedString("createTracker.button.category", comment: ""),
+                          NSLocalizedString("createTracker.button.schedule", comment: "")]
     var trackerName: String?
     var trackerEmoji: String?
     var trackerColor: UIColor?

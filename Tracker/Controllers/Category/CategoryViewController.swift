@@ -23,7 +23,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     
     private lazy var titleLabel: UILabel = {
         let item = UILabel()
-        item.text = "Категория"
+        let title = NSLocalizedString("category.title", comment: "")
+        item.text = title
         item.textColor = .ypBlack
         item.translatesAutoresizingMaskIntoConstraints = false
         item.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -60,7 +61,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     private lazy var categoryButton: UIButton = {
         let item = UIButton(type: .system)
         item.translatesAutoresizingMaskIntoConstraints = false
-        item.setTitle("Добавить категорию", for: .normal)
+        let title = NSLocalizedString("category.addButton.title", comment: "")
+        item.setTitle(title, for: .normal)
         item.backgroundColor = .ypBlack
         item.tintColor = .ypWhite
         item.layer.cornerRadius = 16

@@ -21,6 +21,7 @@
 "friday" = "Пятница";
 "saturday" = "Суббота";
 "sunday" = "Воскресенье";
+"filter.button.title" = "Фильтры";
 "placeholder.title" = "Что будем отслеживать?";
 "newCategory.title" = "Новая категория";
 "newCategory.placeholder" = "Введите название категории";

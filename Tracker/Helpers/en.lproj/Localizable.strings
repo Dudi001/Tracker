@@ -21,6 +21,7 @@
 "friday" = "Friday";
 "saturday" = "Saturday";
 "sunday" = "Sunday";
+"filter.button.title" = "Filters";
 "placeholder.title" = "What will we track??";
 "newCategory.title" = "New category";
 "newCategory.placeholder" = "Enter category name";

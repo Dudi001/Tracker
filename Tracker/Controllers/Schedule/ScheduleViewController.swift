@@ -50,7 +50,8 @@ final class ScheduleViewController: UIViewController {
     private lazy var doneButton: UIButton = {
         let done = UIButton(type: .system)
         done.translatesAutoresizingMaskIntoConstraints = false
-        done.setTitle("Готово", for: .normal)
+        let titile = NSLocalizedString("newCategory.readyButton.title", comment: "")
+        done.setTitle(titile, for: .normal)
         done.titleLabel?.textAlignment = .center
         done.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         done.backgroundColor = .ypBlack

@@ -78,7 +78,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         filterButton.backgroundColor = .ypBlue
         filterButton.tintColor = .white
         filterButton.layer.cornerRadius = 16
-        filterButton.setTitle("Фильтры", for: .normal)
+        filterButton.setTitle(NSLocalizedString("filter.button.title", comment: ""), for: .normal)
         filterButton.titleLabel?.font = .systemFont(ofSize: 17, weight: .regular)
         filterButton.addTarget(self, action: #selector(switchToFilterViewController), for: .touchUpInside)
         return filterButton

@@ -42,7 +42,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     private lazy var textField: UITextField = {
        let hobbyText = UITextField()
-        hobbyText.placeholder = "Введите название трекера"
+        hobbyText.placeholder = NSLocalizedString("createTracker.textField.placeholder", comment: "placeholder textfield")
         hobbyText.backgroundColor = .ypBackground
         hobbyText.textColor = .ypBlack
         hobbyText.clearButtonMode = .whileEditing
@@ -93,7 +93,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         element.layer.cornerRadius = 16
         element.layer.borderWidth = 1
         element.layer.borderColor = UIColor.ypRed.cgColor
-        element.setTitle("Отменить", for: .normal)
+        element.setTitle(NSLocalizedString("createTracker.cancelButtonTitle", comment: ""), for: .normal)
         element.titleLabel?.textAlignment = .center
         element.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         element.backgroundColor = .ypWhite
@@ -106,7 +106,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private lazy var createButton: UIButton = {
         let element = UIButton(type: .system)
         element.layer.cornerRadius = 16
-        element.setTitle("Создать", for: .normal)
+        element.setTitle(NSLocalizedString("createTracker.createButtonTitle", comment: ""), for: .normal)
         element.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         element.setTitleColor(.white, for: .normal)
         element.backgroundColor = .ypGray
@@ -160,7 +160,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     
     private func setupTitle() {
-        titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
+        titileHobbyLabel.text = typeOfTracker == .hobby ? NSLocalizedString("createTracker.title", comment: "") : NSLocalizedString("createTracker.title", comment: "")
     }
     
     func reloadTableView() {
@@ -466,9 +466,9 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
         
         switch indexPath.section {
         case 0:
-            view.headerLabel.text = "Emoji"
+            view.headerLabel.text = NSLocalizedString("createTracker.emojiTitle", comment: "")
         case 1:
-            view.headerLabel.text = "Цвет"
+            view.headerLabel.text = NSLocalizedString("createTracker.colorTitle", comment: "")
         default:
             view.headerLabel.text = ""
         }
