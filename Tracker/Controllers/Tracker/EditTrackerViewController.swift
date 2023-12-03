@@ -53,6 +53,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     
     private lazy var titileHobbyLabel: UILabel = {
        let text = UILabel()
+        text.text = NSLocalizedString("createTracker.title", comment: "")
         text.translatesAutoresizingMaskIntoConstraints = false
         text.font = UIFont.systemFont(ofSize: 16, weight: .medium)
         text.textColor = .ypBlack
@@ -61,7 +62,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     
     private lazy var textField: UITextField = {
        let hobbyText = UITextField()
-        hobbyText.placeholder = "Введите название трекера"
+        hobbyText.placeholder = NSLocalizedString("createTracker.textField.placeholder", comment: "placeholder textfield")
         hobbyText.backgroundColor = .ypBackground
         hobbyText.textColor = .ypBlack
         hobbyText.clearButtonMode = .whileEditing
@@ -112,7 +113,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
         element.layer.cornerRadius = 16
         element.layer.borderWidth = 1
         element.layer.borderColor = UIColor.ypRed.cgColor
-        element.setTitle("Отменить", for: .normal)
+        element.setTitle(NSLocalizedString("createTracker.cancelButtonTitle", comment: ""), for: .normal)
         element.titleLabel?.textAlignment = .center
         element.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         element.backgroundColor = .ypWhite
@@ -160,7 +161,6 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
         super.viewWillAppear(animated)
         self.categoryAndScheduleTableView.reloadData()
     }
-    
     
     
     private func fillTrackerData() {
@@ -217,7 +217,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     
     
     private func setupTitle() {
-        titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
+        titileHobbyLabel.text = typeOfTracker == .hobby ? NSLocalizedString("createTracker.title", comment: "") : NSLocalizedString("createTracker.title", comment: "")
     }
     
     func reloadTableView() {
@@ -359,7 +359,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     @objc
     private func createButtonTapped() {
         dataProvider.trackerName = textField.text
-        dataProvider.createTracker()
+        dataProvider.updateTracker(model: tracker)
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()
     }

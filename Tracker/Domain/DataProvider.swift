@@ -85,9 +85,9 @@ final class DataProvider {
     
     private func clean() {
         schedule = []
-        color = .black
-        emoji = ""
-        title = ""
+        trackerColor = nil
+        trackerEmoji = ""
+        trackerName = ""
     }
     
     private let shortDayArray = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
@@ -135,20 +135,25 @@ final class DataProvider {
     }
     
     func updateTracker(model: Tracker) {
+        guard let trackerColor = trackerColor,
+              let trackerName = trackerName,
+              let trackerEmoji = trackerEmoji
+        else { return }
+        
         trackerStore.deleteTacker(model: model)
         let tracker = Tracker(id: model.id,
-                              name: title,
-                              color: self.color,
-                              emoji: emoji,
+                              name: trackerName,
+                              color: trackerColor,
+                              emoji: trackerEmoji,
                               schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7],
                               pinned: false)
         trackerStore.addTracker(model: tracker)
         delegate?.addTrackers()
-        //        clean()
+        clean()
     }
     
     func updateButtonEnabled() -> Bool {
-        if !trackerEmoji!.isEmpty && trackerColor != .black && !trackerName!.isEmpty {
+        if !trackerEmoji!.isEmpty && trackerColor != nil && !trackerName!.isEmpty {
             return true
         } else {
             return false
