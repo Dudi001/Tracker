@@ -20,6 +20,14 @@ final class ScheduleViewController: UIViewController {
     private let scheduleService = ScheduleService()
     var daysInInt: [Int] = []
     var days: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    private let dayArray = [NSLocalizedString("monday", comment: ""),
+                            NSLocalizedString("tuesday", comment: ""),
+                            NSLocalizedString("wednesday", comment: ""),
+                            NSLocalizedString("thursday", comment: ""),
+                            NSLocalizedString("friday", comment: ""),
+                            NSLocalizedString("saturday", comment: ""),
+                            NSLocalizedString("sunday", comment: "")
+    ]
     
     private lazy var scheduleLabel: UILabel = {
         let label = UILabel()
@@ -81,14 +89,14 @@ final class ScheduleViewController: UIViewController {
 //MARK: UITableViewDataSource
 extension ScheduleViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return days.count
+        7
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleTableViewCell", for: indexPath) as? ScheduleTableViewCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.configureCell(text: days[indexPath.row])
+        cell.configureCell(text: dayArray[indexPath.row])
         
         return cell
     }
