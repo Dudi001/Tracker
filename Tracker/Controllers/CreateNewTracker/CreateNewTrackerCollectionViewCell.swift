@@ -35,25 +35,7 @@ final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
 //        }
 //    }
     
-//    override var isSelected: Bool {
-//        didSet {
-//            if isSelected {
-//                if selectedBorderLayer == nil {
-//                    let borderLayer = CALayer()
-//                    borderLayer.frame = bounds.insetBy(dx: 1.5, dy: 1.5)
-//                    borderLayer.borderWidth = 3
-//                    borderLayer.borderColor = colorImage.backgroundColor?.cgColor
-//                    borderLayer.opacity = 0.3
-//                    borderLayer.cornerRadius = 12
-//                    layer.addSublayer(borderLayer)
-//                    selectedBorderLayer = borderLayer
-//                }
-//            } else {
-//                selectedBorderLayer?.removeFromSuperlayer()
-//                selectedBorderLayer = nil
-//            }
-//        }
-//    }
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)

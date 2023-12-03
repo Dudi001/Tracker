@@ -12,6 +12,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     private var tracker: Tracker
     private var counterHeaderText: String
     private var category: String
+
     var type: `Type`
     
     private var selectedEmojiIndexPatch: IndexPath?
@@ -153,8 +154,6 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
         setupTextField()
         setupCollectionView()
         fillTrackerData()
-//        checkCreateButton()
-//        createButtonPressedIsEnabled()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -185,7 +184,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
             
         }
         createButtonPressedIsEnabled()
-//        checkCreateButton()
+
     }
     
     private func createButtonPressedIsEnabled() {
@@ -236,7 +235,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
         setupTitle()
         setupScrollViewItems()
         setupBottomButtonsStack()
-        createButton.isEnabled = false
+        createButton.isEnabled = true
     }
     
     private func setupBottomButtonsStack() {
@@ -263,33 +262,12 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     }
     
     
-    
-    func checkCreateButton() {
-        if dataProvider.trackerName != nil &&
-            dataProvider.selectedCategory != nil &&
-            dataProvider.trackerEmoji != nil &&
-            dataProvider.trackerColor != nil {
-            switch typeOfTracker {
-            case .irregular:
-                enableCreateButton()
-            case .hobby:
-                dataProvider.selectedSchedule != nil ? enableCreateButton() : disableCreateButton()
-            default:
-                disableCreateButton()
-            }
-        } else {
-            disableCreateButton()
-        }
-    }
-    
-//TODO: - Need fix top constraint for tableView
     private func setTextFieldWarning(_ countText: Int?) {
         
         guard let countText = countText else { return }
         if countText >= 38 {
             view.addSubview(warningLabel)
             disableCreateButton()
-//            categoryAndScheduleTableView.removeConstraint(topAnchorTableView)
             
             NSLayoutConstraint.activate([
                 warningLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
@@ -302,9 +280,6 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
         } else {
             warningLabel.removeFromSuperview()
             
-//            NSLayoutConstraint.activate([
-//                categoryAndScheduleTableView.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 24)
-//            ])
         }
     }
     
@@ -385,7 +360,6 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
     private func createButtonTapped() {
         dataProvider.trackerName = textField.text
         dataProvider.createTracker()
-//        dataProvider.resetNewTrackerInfo()
         dismiss(animated: true)
         selecTypeTracker?.switchToTrackerVC()
     }
@@ -398,14 +372,15 @@ extension EditTrackerViewController: UITextFieldDelegate {
         guard let textCount = textField.text?.count,
               let text = textField.text
         else { return }
-//        checkCreateButton()
+
         createButtonPressedIsEnabled()
+
         setTextFieldWarning(textCount)
         dataProvider.trackerName = text
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        checkCreateButton()
+        createButtonPressedIsEnabled()
         return textField.resignFirstResponder()
     }
 
@@ -413,9 +388,7 @@ extension EditTrackerViewController: UITextFieldDelegate {
         guard //let textCount = textField.text?.count,
               let text = textField.text
         else { return }
-//        checkCreateButton()
         createButtonPressedIsEnabled()
-//        setTextFieldWarning(textCount)
         dataProvider.trackerName = text
     }
 }
@@ -457,7 +430,6 @@ extension EditTrackerViewController: UITableViewDataSource {
         default:
             cell.configureCellWithoutCategory()
         }
-//        checkCreateButton()
         createButtonPressedIsEnabled()
         return cell
     }
@@ -508,12 +480,6 @@ extension EditTrackerViewController: UICollectionViewDataSource {
         case 0:
             cell.isSelected = true
             cell.configureEmojiCell(emoji: dataProvider.emojies[indexPath.row])
-//            cell.layer.cornerRadius = 16
-//            cell.backgroundColor = .ypLightGray
-            
-//            cell.isSelected = false
-//            dataProvider.trackerEmoji = cell.emojiLabel.text
-//            cell.emojiLabel.text = dataProvider.emojies[indexPath.row]
             if indexPath.row == selectedEmojiIndexPatch?.row {
                 cell.isSelected = true
                 cell.layer.cornerRadius = 16
@@ -523,21 +489,15 @@ extension EditTrackerViewController: UICollectionViewDataSource {
             }
             return cell
         case 1:
-//            cell.isSelected = true
-//            cell.configureColorCell(color: dataProvider.colors[indexPath.row])
-//            cell.layer.cornerRadius = 11
-//            cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
-//            cell.colorImage.backgroundColor = dataProvider.colors[indexPath.row]
-//            cell.layer.borderWidth = 3
-//            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
-            cell.colorImage.backgroundColor = dataProvider.colors[indexPath.row]
-//            if indexPath.row == selectedColorIndexPatch?.row {
-//                cell.isSelected = true
-//                cell.layer.cornerRadius = 16
-//                cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
-//            } else {
-//                cell.isSelected = false
-//            }
+            cell.configureColorCell(color: dataProvider.colors[indexPath.row])
+            if indexPath.row == selectedColorIndexPatch?.row {
+                cell.isSelected = true
+                cell.layer.cornerRadius = 11
+                cell.layer.borderWidth = 3
+                cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
+            } else {
+                cell.isSelected = false
+            }
             return cell
         default:
             return UICollectionViewCell()
@@ -647,15 +607,20 @@ extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
             dataProvider.trackerEmoji = cell.emojiLabel.text
             selectedEmojiIndexPatch = indexPath
         case 1:
+            if let selectedIndexPath = selectedColorIndexPatch, let previousCell = collectionView.cellForItem(at: selectedIndexPath) as? CreateNewTrackerCollectionViewCell
+            {
+                previousCell.layer.borderColor = .init(gray: 0.2, alpha: 0.0)
+                previousCell.isSelected = false
+            }
+            cell.isSelected = true
             cell.layer.cornerRadius = 11
             cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
-            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
+//            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
             
         default:
             cell.backgroundColor = .gray
         }
-//        checkCreateButton()
         createButtonPressedIsEnabled()
     }
     
@@ -664,7 +629,8 @@ extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         cell.layer.borderWidth = 0
-//        checkCreateButton()
+        cell.layer.borderColor = .init(gray: 0.2, alpha: 0.0)
+        cell.isSelected = false
         createButtonPressedIsEnabled()
     }
     
@@ -672,7 +638,6 @@ extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
         collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
             collectionView.deselectItem(at: $0, animated: true)
         })
-//        checkCreateButton()
         createButtonPressedIsEnabled()
         return true
     }

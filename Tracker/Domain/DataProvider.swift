@@ -147,7 +147,7 @@ final class DataProvider {
     }
     
     func updateButtonEnabled() -> Bool {
-        if !emoji.isEmpty && color != .black && !title.isEmpty {
+        if !trackerEmoji!.isEmpty && trackerColor != .black && !trackerName!.isEmpty {
             return true
         } else {
             return false
