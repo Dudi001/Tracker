@@ -612,11 +612,11 @@ extension EditTrackerViewController: UICollectionViewDelegateFlowLayout {
                 previousCell.layer.borderColor = .init(gray: 0.2, alpha: 0.0)
                 previousCell.isSelected = false
             }
-            cell.isSelected = true
             cell.layer.cornerRadius = 11
             cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
-//            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
+            dataProvider.trackerColor = dataProvider.colors[indexPath.row]
+            selectedColorIndexPatch = indexPath
             
         default:
             cell.backgroundColor = .gray
