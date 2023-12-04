@@ -185,7 +185,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     private func setupDatePicker() {
         datePicker?.addTarget(self, action: #selector(dateChanged(_:)), for: .valueChanged)
         var calendar = Calendar.current
-        calendar.firstWeekday = 1
+        calendar.firstWeekday = 2
         datePicker?.calendar = calendar
     }
     

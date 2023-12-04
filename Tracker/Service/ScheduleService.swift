@@ -20,19 +20,19 @@ final class ScheduleService {
     func addDayToSchedule(day: String) -> Int {
         switch day {
         case NSLocalizedString("monday", comment: ""):
-            return 0
-        case NSLocalizedString("tuesday", comment: ""):
-            return 1
-        case NSLocalizedString("wednesday", comment: ""):
             return 2
-        case NSLocalizedString("thursday", comment: ""):
+        case NSLocalizedString("tuesday", comment: ""):
             return 3
-        case NSLocalizedString("friday", comment: ""):
+        case NSLocalizedString("wednesday", comment: ""):
             return 4
-        case NSLocalizedString("saturday", comment: ""):
+        case NSLocalizedString("thursday", comment: ""):
             return 5
-        case NSLocalizedString("sunday", comment: ""):
+        case NSLocalizedString("friday", comment: ""):
             return 6
+        case NSLocalizedString("saturday", comment: ""):
+            return 7
+        case NSLocalizedString("sunday", comment: ""):
+            return 1
         default:
             return 0
         }
@@ -40,19 +40,19 @@ final class ScheduleService {
     
     func changeDayToShortName(day: Int) -> String {
         switch day {
-        case 6:
-            return NSLocalizedString("su", comment: "")
-        case 0:
-            return NSLocalizedString("mo", comment: "")
         case 1:
-            return NSLocalizedString("tu", comment: "")
+            return NSLocalizedString("su", comment: "")
         case 2:
-            return NSLocalizedString("we", comment: "")
+            return NSLocalizedString("mo", comment: "")
         case 3:
-            return NSLocalizedString("th", comment: "")
+            return NSLocalizedString("tu", comment: "")
         case 4:
-            return NSLocalizedString("fr", comment: "")
+            return NSLocalizedString("we", comment: "")
         case 5:
+            return NSLocalizedString("th", comment: "")
+        case 6:
+            return NSLocalizedString("fr", comment: "")
+        case 7:
             return NSLocalizedString("sa", comment: "")
         default:
             return ""
