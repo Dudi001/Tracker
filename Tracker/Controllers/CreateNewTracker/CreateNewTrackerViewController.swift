@@ -321,9 +321,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private func createButtonTapped() {
         dataProvider.trackerName = textField.text
         dataProvider.createTracker()
-//        dataProvider.resetNewTrackerInfo()
-//        dismiss(animated: true)
-//        selecTypeTracker?.switchToTrackerVC()
     }
 }
 

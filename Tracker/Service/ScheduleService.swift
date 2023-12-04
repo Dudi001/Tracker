@@ -19,41 +19,41 @@ final class ScheduleService {
     
     func addDayToSchedule(day: String) -> Int {
         switch day {
-        case "Понедельник":
+        case NSLocalizedString("monday", comment: ""):
             return 0
-        case "Вторник":
+        case NSLocalizedString("tuesday", comment: ""):
             return 1
-        case "Среда":
+        case NSLocalizedString("wednesday", comment: ""):
             return 2
-        case "Четверг":
+        case NSLocalizedString("thursday", comment: ""):
             return 3
-        case "Пятница":
+        case NSLocalizedString("friday", comment: ""):
             return 4
-        case "Суббота":
+        case NSLocalizedString("saturday", comment: ""):
             return 5
-        case "Воскресенье":
+        case NSLocalizedString("sunday", comment: ""):
             return 6
         default:
-            return 7
+            return 0
         }
     }
     
     func changeDayToShortName(day: Int) -> String {
         switch day {
-        case 1:
-            return "Вс"
-        case 2:
-            return "Пн"
-        case 3:
-            return "Вт"
-        case 4:
-            return "Ср"
-        case 5:
-            return "Чт"
         case 6:
-            return "Пт"
-        case 7:
-            return "Сб"
+            return NSLocalizedString("su", comment: "")
+        case 0:
+            return NSLocalizedString("mo", comment: "")
+        case 1:
+            return NSLocalizedString("tu", comment: "")
+        case 2:
+            return NSLocalizedString("we", comment: "")
+        case 3:
+            return NSLocalizedString("th", comment: "")
+        case 4:
+            return NSLocalizedString("fr", comment: "")
+        case 5:
+            return NSLocalizedString("sa", comment: "")
         default:
             return ""
         }

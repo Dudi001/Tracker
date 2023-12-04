@@ -20,6 +20,7 @@ final class ScheduleViewController: UIViewController {
     private let scheduleService = ScheduleService()
     var daysInInt: [Int] = []
     var days: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
+    
     private let dayArray = [NSLocalizedString("monday", comment: ""),
                             NSLocalizedString("tuesday", comment: ""),
                             NSLocalizedString("wednesday", comment: ""),
@@ -32,7 +33,7 @@ final class ScheduleViewController: UIViewController {
     private lazy var scheduleLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Расписание"
+        label.text = NSLocalizedString("createTracker.button.schedule", comment: "")
         label.font = .systemFont(ofSize: 16, weight: .medium)
         label.textColor = .ypBlack
         return label
