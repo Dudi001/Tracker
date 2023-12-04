@@ -15,7 +15,11 @@ protocol TrackerViewControllerProtocol: AnyObject {
 
 
 final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
-    var query: String = ""
+    var query: String = "" {
+        didSet {
+            setupStandardPlaceholder()
+        }
+    }
     var currentDate = Date()
     var datePicker: UIDatePicker?
     private let dataProvider = DataProvider.shared
@@ -93,6 +97,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkCellsCount()
         dataProvider.setMainCategory()
         dataProvider.categories = dataProvider.getTrackers()
         updateVisibleCategories(dataProvider.categories)
@@ -101,7 +106,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         initialDay()
         addViews()
         setupViews()
-        checkCellsCount()
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
         addConstraintSearchText()
@@ -206,7 +210,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     private func setupStandardPlaceholder() {
         if searchTextField.text == "" {
-            emptyImage.image = .placeHolder
+            emptyImage.image = Resourses.Images.trackerEmptyImage
             emptyLabel.text = NSLocalizedString("placeholder.title", comment: "placeholder title")
         } else {
             setupPlaceHolder()
@@ -215,7 +219,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     private func setupPlaceHolder() {
         if dataProvider.visibleCategories.isEmpty  {
-            emptyImage.image = .notFound
+            emptyImage.image = Resourses.Images.arrayEmptyImage
             emptyLabel.text = NSLocalizedString("trackers.notFoundPlaceholder.title", comment: "")
         }
     }
@@ -293,7 +297,7 @@ extension TrackerViewController {
         dataProvider.visibleCategories = newCategories
         trackerCollectionView.reloadData()
         updateCollectionViewVisibility()
-        setEmptyImage()
+//        setEmptyImage()
     }
     
     private func updateCollectionViewVisibility() {
@@ -517,12 +521,6 @@ extension TrackerViewController {
     private func cancelButtonTapped() {
         searchTextField.text = ""
         searchTextField.resignFirstResponder()
-        setEmptyImage()
-        emptyImage.removeFromSuperview()
-        emptyLabel.removeFromSuperview()
-        trackerCollectionView.reloadData()
-        trackerCollectionView.alpha = 1
-
     }
     
     private func dismissAllModalControllers(from viewController: UIViewController) {
@@ -561,11 +559,10 @@ extension TrackerViewController: UITextFieldDelegate {
         guard let queryTextFiled = textField.text else { return }
         query = queryTextFiled
         filtered()
-        setEmptyImage()
-        
     }
     
     func textFieldDidBeginEditing(_ textField: UITextField) {
+        setupStandardPlaceholder()
         UIView.animate(withDuration: 0.3) {
             self.cancelButton.isHidden = false
             self.view.layoutIfNeeded()
@@ -579,8 +576,8 @@ extension TrackerViewController: UITextFieldDelegate {
         }
         
         if dataProvider.visibleCategories.isEmpty  {
-            emptyImage.image = .notFound
-            emptyLabel.text = "Ничего не найдено"
+            emptyImage.image = Resourses.Images.arrayEmptyImage
+            emptyLabel.text = NSLocalizedString("trackers.notFoundPlaceholder.title", comment: "")
         }
     }
     

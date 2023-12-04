@@ -342,11 +342,9 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        guard //let textCount = textField.text?.count,
-              let text = textField.text
+        guard let text = textField.text
         else { return }
         checkCreateButton()
-//        setTextFieldWarning(textCount)
         dataProvider.trackerName = text
     }
 }
@@ -533,7 +531,6 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
-    // MARK: - Работа с базой данных. Установка ячейки
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
         guard let cell = collectionView.cellForItem(at: indexPath) as? CreateNewTrackerCollectionViewCell else { return }
