@@ -200,9 +200,7 @@ final class EditTrackerViewController: UIViewController, CreateTrackerViewContro
             categoryAndScheduleTableView.register(CreateNewTrackerTableVIewCell.self, forCellReuseIdentifier: "TableViewCell")
             categoryAndScheduleTableView.dataSource = self
             categoryAndScheduleTableView.delegate = self
-        }
-    
-    
+    }
     
     private func setupCollectionView() {
         collectionView2.register(CreateNewTrackerCollectionViewCell.self, forCellWithReuseIdentifier: "CollectionViewCell")

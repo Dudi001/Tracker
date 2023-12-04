@@ -517,7 +517,6 @@ extension TrackerViewController {
     private func cancelButtonTapped() {
         searchTextField.text = ""
         searchTextField.resignFirstResponder()
-        updateVisibleCategories(dataProvider.categories)
         setEmptyImage()
         emptyImage.removeFromSuperview()
         emptyLabel.removeFromSuperview()

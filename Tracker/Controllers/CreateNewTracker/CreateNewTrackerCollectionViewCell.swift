@@ -25,18 +25,6 @@ final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
         return colorItem
     }()
     
-    
-//    override var isSelected: Bool {
-//        didSet {
-//            if !isSelected {
-//                backgroundColor = .none
-//                layer.borderWidth = 0
-//            }
-//        }
-//    }
-    
-    
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupViews()
@@ -73,5 +61,3 @@ final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
     }
     
 }
-
-

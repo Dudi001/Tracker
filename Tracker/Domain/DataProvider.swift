@@ -100,15 +100,6 @@ final class DataProvider {
                                   NSLocalizedString("sa", comment: ""),
                                   NSLocalizedString("su", comment: "")]
     
-    func getFormattedSchedule() -> String? {
-        guard let schedule = schedule else {
-            return nil
-        }
-        
-        let days = schedule.map { shortDaysArray[$0 - 1] }
-        return days.joined(separator: ", ")
-    }
-    
     func updateCategories() {
         let category = trackerStore.fetchTracker()
         delegate?.updateCategories(category)
