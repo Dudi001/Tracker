@@ -82,7 +82,7 @@ final class StatisticViewController: UIViewController {
         }
         
         func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "StatsCell", for: indexPath) as! StatsCell
+            guard let cell = tableView.dequeueReusableCell(withIdentifier: "StatsCell", for: indexPath) as? StatsCell else { return UITableViewCell() }
             let count = statsViewModel.getCompletedTrackers()
             cell.countLabel.text = "\(count)"
             cell.headerLabel.text = "Трекеров завершено"
