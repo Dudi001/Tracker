@@ -15,6 +15,7 @@ protocol TrackerViewControllerProtocol: AnyObject {
 
 
 final class TrackerViewController: UIViewController, TrackerViewControllerProtocol {
+
     var query: String = "" {
         didSet {
             setupStandardPlaceholder()
@@ -123,6 +124,13 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         analyticsService.reportScreen(event: .close, onScreen: .main)
     }
     
+    private func addViews() {
+        setupSearchContainerView()
+        view.backgroundColor = .ypWhite
+        view.addSubview(trackerCollectionView)
+        view.addSubview(searchContainerView)
+    }
+    
     func reloadCollectionView() {
         dataProvider.visibleCategories = dataProvider.categories
         trackerCollectionView.reloadData()
@@ -165,7 +173,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         trackerCollectionView.register(
             SupplementaryView.self,
             forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
-            withReuseIdentifier: "header")
+            withReuseIdentifier: "head")
         trackerCollectionView.dataSource = self
         trackerCollectionView.delegate = self
     }
@@ -283,16 +291,6 @@ extension TrackerViewController {
         cancelButton.isHidden = true
     }
     
-    
-    private func addViews() {
-        setupSearchContainerView()
-        view.backgroundColor = .ypWhite
-        view.addSubview(trackerCollectionView)
-        view.addSubview(searchContainerView)
-    }
-    
-    
-    
     func updateVisibleCategories(_ newCategories: [TrackerCategory]) {
         dataProvider.visibleCategories = newCategories
         trackerCollectionView.reloadData()
@@ -364,7 +362,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         var id: String
         switch kind {
         case UICollectionView.elementKindSectionHeader:
-            id = "header"
+            id = "head"
         default:
             id = ""
         }
@@ -376,7 +374,7 @@ extension TrackerViewController: UICollectionViewDataSource {
         else { return UICollectionReusableView() }
         
         if !dataProvider.visibleCategories[indexPath.section].trackerArray.isEmpty {
-            view.titleLabel.text = dataProvider.visibleCategories[indexPath.section].name
+            view.titleLabel.text = dataProvider.visibleCategories[indexPath.section].header
             return view
         }
         return UICollectionReusableView()
@@ -486,7 +484,7 @@ extension TrackerViewController {
                 
             }
             if !trackers.isEmpty {
-                let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                let trackerCategory = TrackerCategory(header: category.header, trackerArray: trackers)
                 newCategory.append(trackerCategory)
             }
         }
@@ -502,7 +500,7 @@ extension TrackerViewController {
                     }
                 }
                 if !trackers.isEmpty {
-                    let trackerCategory = TrackerCategory(name: category.name, trackerArray: trackers)
+                    let trackerCategory = TrackerCategory(header: category.header, trackerArray: trackers)
                     trackersWithFilteredName.append(trackerCategory)
                 }
             }
@@ -510,7 +508,7 @@ extension TrackerViewController {
         }
         
         if !pinnedTrackers.isEmpty {
-            let pinnedCategory = TrackerCategory(name: "Закрепленные", trackerArray: pinnedTrackers)
+            let pinnedCategory = TrackerCategory(header: "Закрепленные", trackerArray: pinnedTrackers)
             newCategory.insert(pinnedCategory, at: 0)
         }
         updateVisibleCategories(newCategory)
@@ -646,7 +644,7 @@ extension TrackerViewController: UIContextMenuInteractionDelegate {
             type: isEvent ? .event : .habits,
             tracker: tracker,
             counterHeaderText: counterText,
-            category: category.name), animated: true)
+            category: category.header), animated: true)
     }
     
     private func pinTracker(at indexPath: IndexPath) {

@@ -8,6 +8,11 @@
 import UIKit
 
 struct TrackerCategory {
-    let name: String
+    let header: String
     var trackerArray: [Tracker]
+    
+    init(header: String, trackerArray: [Tracker]) {
+        self.header = header
+        self.trackerArray = trackerArray
+    }
 }

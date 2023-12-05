@@ -532,21 +532,32 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         guard let cell = collectionView.cellForItem(at: indexPath) as? CreateNewTrackerCollectionViewCell else { return }
         
         switch indexPath.section {
         case 0:
+            
+            if let selectedEmojiIndexPatch = selectedEmojiIndexPatch, let previousCell = collectionView.cellForItem(at: selectedEmojiIndexPatch) as? CreateNewTrackerCollectionViewCell
+            {
+                previousCell.isSelected = false
+                previousCell.backgroundColor = .clear
+            }
             cell.layer.cornerRadius = 16
             cell.backgroundColor = .ypLightGray
             dataProvider.trackerEmoji = cell.emojiLabel.text
             selectedEmojiIndexPatch = indexPath
         case 1:
+            if let selectedIndexPath = selectedColorIndexPatch, let previousCell = collectionView.cellForItem(at: selectedIndexPath) as? CreateNewTrackerCollectionViewCell
+            {
+                previousCell.layer.borderColor = .init(gray: 0.2, alpha: 0.0)
+                previousCell.isSelected = false
+            }
             cell.layer.cornerRadius = 11
             cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
             dataProvider.trackerColor = dataProvider.colors[indexPath.row]
             selectedColorIndexPatch = indexPath
+            
         default:
             cell.backgroundColor = .gray
         }

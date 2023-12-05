@@ -96,7 +96,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
                 trackers.append(newTracker)
             }
             
-            let trackerCategory = TrackerCategory(name: section.name, trackerArray: trackers)
+            let trackerCategory = TrackerCategory(header: section.name, trackerArray: trackers)
             trackerCategoryArray.append(trackerCategory)
         }
 //        print(trackerCategoryArray)
@@ -130,9 +130,6 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
                 print("Error deleting tracker record: \(error.localizedDescription)")
             }
     }
-    
-    
-    
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {

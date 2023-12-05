@@ -210,7 +210,7 @@ final class DataProvider {
                 let calendar = Calendar.current
         
                 for category in totalTrackers {
-                    var newCategory = TrackerCategory(name: category.name, trackerArray: [])
+                    var newCategory = TrackerCategory(header: category.header, trackerArray: [])
         
         
                     for tracker in category.trackerArray {
