@@ -139,6 +139,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
 
     
 //MARK: - Register cell
+    
     private func setupTableView() {
             categoryAndScheduleTableView.register(CreateNewTrackerTableVIewCell.self, forCellReuseIdentifier: "TableViewCell")
             categoryAndScheduleTableView.dataSource = self
@@ -221,7 +222,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         }
     }
     
-//TODO: - Need fix top constraint for tableView
+
     private func setTextFieldWarning(_ countText: Int?) {
         
         guard let countText = countText else { return }

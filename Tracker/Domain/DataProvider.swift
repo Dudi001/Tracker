@@ -123,6 +123,14 @@ final class DataProvider {
                                  pinned: false)
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
+        clearTracker()
+    }
+    
+    private func clearTracker() {
+        trackerName = nil
+        trackerColor = nil
+        trackerEmoji = nil
+        schedule = nil
     }
     
     func updateTracker(model: Tracker) {

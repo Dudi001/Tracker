@@ -660,7 +660,6 @@ extension TrackerViewController: UIContextMenuInteractionDelegate {
         let tracker = category.trackerArray[indexPath.item]
         
         dataProvider.deleteTracker(model: tracker)
-        setEmptyImage()
         filtered()
     }
     
