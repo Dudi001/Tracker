@@ -51,12 +51,12 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
     
     
     func addTracker(model: Tracker) {
-        let category = dataProvider.category
+        let category = dataProvider.selectedCategory
         let tracker = TrackerCoreData(context: context)
         let color = colorMarshaling.hexString(from: model.color)
         
         let categoryFetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-            categoryFetchRequest.predicate = NSPredicate(format: "header == %@", category)
+        categoryFetchRequest.predicate = NSPredicate(format: "header == %@", category ?? "Slyapa")
             let categoryResults = try? context.fetch(categoryFetchRequest)
 
             let categoryCoreData = categoryResults?.first ?? TrackerCategoryCoreData(context: context)

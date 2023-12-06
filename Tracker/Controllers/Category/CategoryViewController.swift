@@ -210,17 +210,6 @@ extension CategoryViewController: UITableViewDelegate {
         viewModel.didSelectRow(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
-
-//        if let selectedIndexPath = viewModel.selectedIndexPath {
-//            if let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? CategoryTableViewCell {
-//                selectedCell.accessoryType = .none
-//
-//                if selectedIndexPath == indexPath {
-//                    viewModel.clearSelection()
-//                    return
-//                }
-//            }
-//        }
         
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell {
             cell.accessoryType = .checkmark
