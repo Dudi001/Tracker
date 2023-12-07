@@ -11,11 +11,11 @@ import UIKit
 final class OnboardinMainViewController: UIPageViewController {
     private lazy var pages: [OnboardingViewController] = {
        let fistController = OnboardingViewController(
-        header: "Отслеживайте только то, что хотите",
+        header: NSLocalizedString("onboard.titleOne", comment: ""),
         backgroundImage: Resourses.Images.firstImageForOnboarding!)
         
         let secondController = OnboardingViewController(
-            header: "Даже если это не литры воды и йога",
+            header: NSLocalizedString("onboard.titleTwo", comment: ""),
             backgroundImage: Resourses.Images.secondImageForOnboardin!)
         
         return [fistController, secondController]
@@ -34,7 +34,7 @@ final class OnboardinMainViewController: UIPageViewController {
     private lazy var buttonStart: UIButton = {
         let button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Вот это технологии!", for: .normal)
+        button.setTitle(NSLocalizedString("onboard.startButton.title", comment: ""), for: .normal)
         button.backgroundColor = .ypBlack
         button.setTitleColor(.ypWhite, for: .normal)
         button.layer.cornerRadius = 16

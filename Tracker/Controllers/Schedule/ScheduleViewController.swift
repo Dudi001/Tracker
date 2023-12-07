@@ -16,15 +16,11 @@ final class ScheduleViewController: UIViewController {
     
     
     static let shared = ScheduleViewController()
-    var presenter: TrackerViewPresenterProtocol?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
     private let dataProvider = DataProvider.shared
     weak var delegate: CreateTrackerViewControllerProtocol?
-
-    private let scheduleService = ScheduleService()
     var daysInInt: [Int] = []
-    var days: [String] = ["Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье"]
-    
+
     private let dayArray = [NSLocalizedString("monday", comment: ""),
                             NSLocalizedString("tuesday", comment: ""),
                             NSLocalizedString("wednesday", comment: ""),
@@ -96,11 +92,6 @@ final class ScheduleViewController: UIViewController {
     
     @objc private func returnToNewTrackerVC() {
         dismiss(animated: true)
-//        let scheduleDay = daysInInt.count == 7 ? "Каждый день" : scheduleService.arrayToString(array: daysInInt)
-//        dataProvider.selectedSchedule = scheduleDay
-//        dataProvider.schedule = daysInInt
-//        createTrackerViewController?.reloadTableView()
-//        dismiss(animated: true)
     }
 }
 
@@ -178,5 +169,3 @@ extension ScheduleViewController {
         ])
     }
 }
-
-

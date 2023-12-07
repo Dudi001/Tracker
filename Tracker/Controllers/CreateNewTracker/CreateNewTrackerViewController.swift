@@ -217,7 +217,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         if countText >= 38 {
             view.addSubview(warningLabel)
             disableCreateButton()
-//            categoryAndScheduleTableView.removeConstraint(topAnchorTableView)
             
             NSLayoutConstraint.activate([
                 warningLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
@@ -363,7 +362,7 @@ extension CreateNewTrackerViewController: UITableViewDataSource {
         if indexPath.row == 1 {
             cell.subLabel.text = dataProvider.getFormattedSchedule()
         }
-//        checkCreateButton()
+
         createButtonPressedIsEnabled()
         cell.accessoryType = .disclosureIndicator
         return cell

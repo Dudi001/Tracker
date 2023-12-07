@@ -9,7 +9,6 @@ import UIKit
 
 protocol TrackerViewControllerProtocol: AnyObject {
     func reloadCollectionView()
-    func checkCellsCount()
     func updateVisibleCategories(_ newCategories: [TrackerCategory])
 }
 
@@ -111,7 +110,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         addConstraintSearchText()
         addConstraintsCollectionView()
         setupDatePicker()
-//        checkCellsCount()
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -129,6 +128,9 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         view.backgroundColor = .ypWhite
         view.addSubview(trackerCollectionView)
         view.addSubview(searchContainerView)
+        view.addSubview(emptyImage)
+        view.addSubview(emptyLabel)
+        view.addSubview(filterButton)
     }
     
     func reloadCollectionView() {
@@ -136,38 +138,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         trackerCollectionView.reloadData()
     }
     
-    func checkCellsCount() {
-        if dataProvider.categories.count == 0 {
-            filterButton.removeFromSuperview()
-            view.addSubview(emptyImage)
-            view.addSubview(emptyLabel)
-            emptyImage.image = Resourses.Images.trackerEmptyImage
-            emptyLabel.text = NSLocalizedString("placeholder.title", comment: "placeholder title")
-            
-            NSLayoutConstraint.activate([
-
-                emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-                emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                
-                emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
-            ])
-        } else {
-            emptyImage.removeFromSuperview()
-            emptyLabel.removeFromSuperview()
-            view.addSubview(filterButton)
-            
-            NSLayoutConstraint.activate([
-                filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -17),
-                filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-                filterButton.heightAnchor.constraint(equalToConstant: 50),
-                filterButton.widthAnchor.constraint(equalToConstant: 114)
-            ])
-        }
-    }
-    
 //MARK: - Private func
-
     private func setupViews() {
         trackerCollectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
         trackerCollectionView.register(
@@ -201,20 +172,23 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         datePicker?.calendar = calendar
     }
     
-    @objc
-    private func dateChanged(_ sender: UIDatePicker) {
-        currentDate = sender.date
+    private func setupCounterTextLabel(trackerID: UUID) -> String {
+        let count = dataProvider.completedTrackers.filter { $0.id == trackerID }.count
+        var text: String
+        text = count.days()
+        return("\(text)")
+    }
+    
+    private func initialDay() {
         let calendar = Calendar.current
         let weekday: Int = {
-            let day = calendar.component(.weekday, from: currentDate)
+            let day = calendar.component(.weekday, from: currentDate) - 1
             if day == 0 { return 7 }
             return day
         }()
         day = weekday
         filtered()
-        setupStandardPlaceholder()
     }
-    
     
     private func setupStandardPlaceholder() {
         if searchTextField.text == "" {
@@ -232,10 +206,8 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         }
     }
     
+    
 //MARK: - @OBJC FUNC
-    
-    
-    
     @objc
     private func completeButtonTapped(_ sender: UIButton) {
         guard let cell = sender.superview?.superview as? TrackerCollectionViewCell,
@@ -256,14 +228,15 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         analyticsService.report(event: .click, screen: .main, item: .track)
     }
     
-    private func setupCounterTextLabel(trackerID: UUID) -> String {
-        let count = dataProvider.completedTrackers.filter { $0.id == trackerID }.count
-        var text: String
-        text = count.days()
-        return("\(text)")
+    @objc
+    private func switchToFilterViewController() {
+        let filterVC = FilterViewController()
+        present(filterVC, animated: true)
     }
     
-    private func initialDay() {
+    @objc
+    private func dateChanged(_ sender: UIDatePicker) {
+        currentDate = sender.date
         let calendar = Calendar.current
         let weekday: Int = {
             let day = calendar.component(.weekday, from: currentDate) - 1
@@ -272,13 +245,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         }()
         day = weekday
         filtered()
-    }
-    
-    
-    @objc
-    private func switchToFilterViewController() {
-        let filterVC = FilterViewController()
-        present(filterVC, animated: true)
+        setupStandardPlaceholder()
     }
 }
 
@@ -295,33 +262,33 @@ extension TrackerViewController {
         dataProvider.visibleCategories = newCategories
         trackerCollectionView.reloadData()
         updateCollectionViewVisibility()
-//        setEmptyImage()
     }
     
     private func updateCollectionViewVisibility() {
         let hasData = !dataProvider.visibleCategories.isEmpty
         trackerCollectionView.isHidden = !hasData
         emptyImage.isHidden = hasData
+        emptyLabel.isHidden = hasData
+        filterButton.isHidden = !hasData
     }
-    
-    private func setEmptyImage() {
-        if dataProvider.visibleCategories.isEmpty {
-            setEmptyItemsAfterSearch()
-        } else {
-            emptyImage.removeFromSuperview()
-            emptyLabel.removeFromSuperview()
-            trackerCollectionView.reloadData()
-            trackerCollectionView.alpha = 1
-        }
-    }
-    
     
     private func addConstraintsCollectionView() {
         NSLayoutConstraint.activate([
             trackerCollectionView.topAnchor.constraint(equalTo: searchContainerView.bottomAnchor, constant: 10),
             trackerCollectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
             trackerCollectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            trackerCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
+            trackerCollectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor),
+            
+            emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            
+            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8),
+            
+            filterButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -17),
+            filterButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            filterButton.heightAnchor.constraint(equalToConstant: 50),
+            filterButton.widthAnchor.constraint(equalToConstant: 114)
         ])
     }
     
@@ -439,27 +406,6 @@ extension TrackerViewController: UICollectionViewDelegateFlowLayout {
 
 //MARK: - Filters cells
 extension TrackerViewController {
-    
-    func setEmptyItemsAfterSearch() {
-        trackerCollectionView.alpha = 0
-
-        view.addSubview(emptyImage)
-        view.addSubview(emptyLabel)
-        
-        emptyImage.image = Resourses.Images.arrayEmptyImage
-        emptyLabel.text = NSLocalizedString("trackers.notFoundPlaceholder.title", comment: "")
-
-        NSLayoutConstraint.activate([
-
-            emptyImage.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            emptyImage.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-
-            emptyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            emptyLabel.topAnchor.constraint(equalTo: emptyImage.bottomAnchor, constant: 8)
-        ])
-    }
-   
-    
     private func filtered() {
         var filteredCategories = [TrackerCategory]()
         var pinnedTrackers = [Tracker]()
@@ -536,7 +482,6 @@ extension TrackerViewController {
 
 
 //MARK: - DataProviderDelegate
-
 extension TrackerViewController: DataProviderDelegate {
     func addTrackers() {
         updateVisibleCategories(dataProvider.categories)
@@ -577,11 +522,6 @@ extension TrackerViewController: UITextFieldDelegate {
             self.cancelButton.isHidden = true
             self.view.layoutIfNeeded()
         }
-        
-        if dataProvider.visibleCategories.isEmpty  {
-            emptyImage.image = Resourses.Images.arrayEmptyImage
-            emptyLabel.text = NSLocalizedString("trackers.notFoundPlaceholder.title", comment: "")
-        }
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
@@ -592,7 +532,6 @@ extension TrackerViewController: UITextFieldDelegate {
 
 
 //MARK: - UIContextMenuInteractionDelegate
-
 extension TrackerViewController: UIContextMenuInteractionDelegate {
     func contextMenuInteraction(_ interaction: UIContextMenuInteraction, configurationForMenuAtLocation location: CGPoint) -> UIContextMenuConfiguration? {
         

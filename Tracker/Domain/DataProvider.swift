@@ -18,7 +18,6 @@ final class DataProvider {
     static let shared = DataProvider()
     @Observable
     var category: String = "Важное"
-    var color: UIColor = .black
     var selectedCategory: String?
     var selectedSchedule: String?
     let tableViewTitle = [NSLocalizedString("createTracker.button.category", comment: ""),
@@ -29,15 +28,12 @@ final class DataProvider {
     var schedule: [Int] = []
     var currentDate: Date?
     var trackerCat: String?
-    var title = ""
-    var emoji = ""
     var query: String = ""
     var day = 1
     
     private lazy var trackerStore = TrackerStore()
     private lazy var trackerCategoryStore = TrackerCategoryStore()
     private lazy var trackerRecordStore = TrackerRecordStore()
-//    var trackerViewController: TrackerViewController
     var categories: [TrackerCategory] = []
     //        trackerStore.fetchTracker()
     //    }

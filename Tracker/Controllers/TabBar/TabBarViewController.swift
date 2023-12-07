@@ -40,6 +40,7 @@ final class TabBarViewController: UITabBarController {
             
             let datePicker = UIDatePicker()
             datePicker.overrideUserInterfaceStyle = .light
+            datePicker.backgroundColor = .ypGray
             datePicker.layer.cornerRadius = 8
             datePicker.layer.masksToBounds = true
             datePicker.preferredDatePickerStyle = .compact
