@@ -8,6 +8,10 @@
 import UIKit
 
 
+
+
+
+
 final class ScheduleViewController: UIViewController {
     
     
@@ -15,7 +19,7 @@ final class ScheduleViewController: UIViewController {
     var presenter: TrackerViewPresenterProtocol?
     var createTrackerViewController: CreateTrackerViewControllerProtocol?
     private let dataProvider = DataProvider.shared
-    
+    weak var delegate: CreateTrackerViewControllerProtocol?
 
     private let scheduleService = ScheduleService()
     var daysInInt: [Int] = []
@@ -79,12 +83,24 @@ final class ScheduleViewController: UIViewController {
         doneButton.addTarget(self, action: #selector(returnToNewTrackerVC), for: .touchUpInside)
     }
     
+    private func setupCornerRadiusCell(for cell: ScheduleTableViewCell, indexPath: IndexPath) -> ScheduleTableViewCell {
+        if indexPath.row == 0 {
+            cell.layer.cornerRadius = 10
+            cell.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        } else if indexPath.row == 6 {
+            cell.layer.cornerRadius = 10
+            cell.layer.maskedCorners = [.layerMinXMaxYCorner, .layerMaxXMaxYCorner]
+        }
+        return cell
+    }
+    
     @objc private func returnToNewTrackerVC() {
-        let scheduleDay = daysInInt.count == 7 ? "Каждый день" : scheduleService.arrayToString(array: daysInInt)
-        dataProvider.selectedSchedule = scheduleDay
-        dataProvider.schedule = daysInInt
-        createTrackerViewController?.reloadTableView()
         dismiss(animated: true)
+//        let scheduleDay = daysInInt.count == 7 ? "Каждый день" : scheduleService.arrayToString(array: daysInInt)
+//        dataProvider.selectedSchedule = scheduleDay
+//        dataProvider.schedule = daysInInt
+//        createTrackerViewController?.reloadTableView()
+//        dismiss(animated: true)
     }
 }
 
@@ -98,7 +114,12 @@ extension ScheduleViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "ScheduleTableViewCell", for: indexPath) as? ScheduleTableViewCell else { return UITableViewCell() }
         
         cell.delegate = self
-        cell.configureCell(text: dayArray[indexPath.row])
+        setupCornerRadiusCell(for: cell, indexPath: indexPath)
+        cell.label.text = dayArray[indexPath.row]
+        let day = indexPath.row + 1
+            if dataProvider.scheduleContains(day) {
+                cell.switcher.isOn = true
+            }
         
         return cell
     }
@@ -111,21 +132,21 @@ extension ScheduleViewController: UITableViewDataSource {
 //MARK: UITableViewDelegate
 extension ScheduleViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        tableView.deselectRow(at: indexPath, animated: true)
     }
+    
 }
 
 extension ScheduleViewController: ScheduleViewControllerDelegate {
-    func addDaysToSchedule(cell: ScheduleTableViewCell) {
-        guard let fullNameofDay = cell.label.text else { return }
-        
-        let shortNameOfDay = scheduleService.addDayToSchedule(day: fullNameofDay)
-        if cell.switcher.isOn {
-            daysInInt.append(shortNameOfDay)
+    func scheduleCell(_ cell: ScheduleTableViewCell, didChangeSwitchValue isOn: Bool) {
+        guard let indexPath = scheduleTableView.indexPath(for: cell) else { return }
+        let day = indexPath.row + 1
+        if isOn {
+            dataProvider.addDay(day: day)
+            delegate?.reloadTableView()
         } else {
-            if let index = daysInInt.firstIndex(of: shortNameOfDay) {
-                daysInInt.remove(at: index)
-            }
+            dataProvider.removeDay(day: day)
+            delegate?.reloadTableView()
         }
     }
 }

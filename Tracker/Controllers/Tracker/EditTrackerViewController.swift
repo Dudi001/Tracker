@@ -408,26 +408,19 @@ extension EditTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as? CreateNewTrackerTableVIewCell else { return UITableViewCell() }
-        cell.label.text = dataProvider.tableViewTitle[indexPath.row]
+        cell.headerLabel.text = dataProvider.tableViewTitle[indexPath.row]
+        
+        cell.headerLabel.text = dataProvider.tableViewTitle[indexPath.row]
         
         switch indexPath.row {
         case 0:
-            if let selectedCategory = dataProvider.selectedCategory {
-                cell.label.removeConstraints(cell.label.constraints)
-                cell.configureCellWithCategory(selectedCategory)
-            } else {
-                cell.configureCellWithoutCategory()
-            }
+            cell.subLabel.text = dataProvider.category
         case 1:
-            if let selectedSchedule = dataProvider.selectedSchedule {
-                cell.label.removeConstraints(cell.label.constraints)
-                cell.configureCellWithCategory(selectedSchedule)
-            } else {
-                cell.configureCellWithoutCategory()
-            }
+            cell.subLabel.text = dataProvider.getFormattedSchedule()
         default:
-            cell.configureCellWithoutCategory()
+            cell.subLabel.text = ""
         }
+
         createButtonPressedIsEnabled()
         return cell
     }

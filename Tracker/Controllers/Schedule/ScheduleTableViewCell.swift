@@ -8,14 +8,14 @@
 import UIKit
 
 
-protocol ScheduleViewControllerDelegate: Any {
-    func addDaysToSchedule(cell: ScheduleTableViewCell)
+protocol ScheduleViewControllerDelegate: AnyObject {
+    func scheduleCell(_ cell: ScheduleTableViewCell, didChangeSwitchValue isOn: Bool)
 }
 
 
 final class ScheduleTableViewCell: UITableViewCell {
     
-    var delegate: ScheduleViewControllerDelegate?
+    weak var delegate: ScheduleViewControllerDelegate?
     
     lazy var label: UILabel = {
         let label = UILabel()
@@ -44,8 +44,8 @@ final class ScheduleTableViewCell: UITableViewCell {
         label.text = text
     }
     
-    @objc private func addSchedule() {
-        delegate?.addDaysToSchedule(cell: self)
+    @objc private func addSchedule(_ sender: UISwitch) {
+        delegate?.scheduleCell(self, didChangeSwitchValue: sender.isOn)
     }
     
     private func setupView() {

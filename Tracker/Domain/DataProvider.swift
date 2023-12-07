@@ -26,7 +26,7 @@ final class DataProvider {
     var trackerName: String?
     var trackerEmoji: String?
     var trackerColor: UIColor?
-    var schedule: [Int]?
+    var schedule: [Int] = []
     var currentDate: Date?
     var trackerCat: String?
     var title = ""
@@ -52,7 +52,7 @@ final class DataProvider {
         trackerName = nil
         trackerColor = nil
         trackerEmoji = nil
-        schedule = nil
+        schedule = []
     }
     
     
@@ -90,7 +90,6 @@ final class DataProvider {
         trackerName = ""
     }
     
-    private let shortDayArray = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"]
     
     private let shortDaysArray = [NSLocalizedString("mo", comment: ""),
                                   NSLocalizedString("tu", comment: ""),
@@ -109,6 +108,28 @@ final class DataProvider {
         self.category = category
     }
     
+    func scheduleContains(_ day: Int) -> Bool {
+        schedule.contains(day)
+    }
+    
+    func addDay(day: Int){
+        schedule.append(day)
+    }
+    
+    func removeDay(day: Int) {
+        schedule.removeAll { $0 == day }
+    }
+    
+    func getFormattedSchedule() -> String? {
+        guard !schedule.isEmpty else {
+            return nil
+        }
+        
+        
+        let days = schedule.map { shortDaysArray[$0 - 1] }
+        return days.joined(separator: ", ")
+    }
+    
     func createTracker() {
         guard let trackerColor = trackerColor,
               let trackerName = trackerName,
@@ -119,7 +140,7 @@ final class DataProvider {
                                  name: trackerName,
                                  color: trackerColor,
                                  emoji: trackerEmoji,
-                                 schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7],
+                                 schedule: schedule,
                                  pinned: false)
         trackerStore.addTracker(model: newTracker)
         delegate?.addTrackers()
@@ -130,7 +151,7 @@ final class DataProvider {
         trackerName = nil
         trackerColor = nil
         trackerEmoji = nil
-        schedule = nil
+        schedule = []
     }
     
     func updateTracker(model: Tracker) {
@@ -144,7 +165,7 @@ final class DataProvider {
                               name: trackerName,
                               color: trackerColor,
                               emoji: trackerEmoji,
-                              schedule: schedule ?? [1, 2, 3, 4, 5, 6, 7],
+                              schedule: schedule,
                               pinned: false)
         trackerStore.addTracker(model: tracker)
         delegate?.addTrackers()
@@ -152,7 +173,12 @@ final class DataProvider {
     }
     
     func updateButtonEnabled() -> Bool {
-        if !trackerEmoji!.isEmpty && trackerColor != nil && !trackerName!.isEmpty {
+        guard let trackerColor = trackerColor,
+              let trackerName = trackerName,
+              let trackerEmoji = trackerEmoji
+        else { return false }
+        
+        if !trackerEmoji.isEmpty && trackerColor != nil && !trackerName.isEmpty {
             return true
         } else {
             return false

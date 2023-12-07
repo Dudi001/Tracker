@@ -9,49 +9,54 @@ import UIKit
 
 
 final class CreateNewTrackerTableVIewCell: UITableViewCell {
-    lazy var label: UILabel = {
-        let labelItem = UILabel()
-        labelItem.font = .systemFont(ofSize: 17, weight: .regular)
-        labelItem.textColor = .ypBlack
-        labelItem.translatesAutoresizingMaskIntoConstraints = false
-        return labelItem
+    lazy var headerLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 17)
+        return label
     }()
     
-    lazy var categoryLabel: UILabel = {
-        let item = UILabel()
-        item.font = .systemFont(ofSize: 17, weight: .regular)
-        item.textColor = .ypGray
-        item.translatesAutoresizingMaskIntoConstraints = false
-        return item
+    lazy var subLabel: UILabel = {
+        let label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = .systemFont(ofSize: 17)
+        label.textColor = .ypGray
+        return label
     }()
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.translatesAutoresizingMaskIntoConstraints = false
+        stackView.axis = .vertical
+        stackView.alignment = .leading
+        stackView.distribution = .fill
+        stackView.spacing = 2
+        return stackView
+    }()
+    
+
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+        setupLayout()
+    }
+    
+    private func setupUI() {
         backgroundColor = .ypBackground
-        accessoryType = .disclosureIndicator
+        stackView.addArrangedSubview(headerLabel)
+        stackView.addArrangedSubview(subLabel)
+        addSubview(stackView)
     }
     
-    
-    func configureCellWithoutCategory() {
-        addSubview(label)
-        
+    private func setupLayout() {
         NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 27)
+            stackView.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            stackView.centerYAnchor.constraint(equalTo: centerYAnchor),
         ])
+        
     }
-    
-    func configureCellWithCategory(_ with: String) {
-        addSubview(label)
-        addSubview(categoryLabel)
-        
-        NSLayoutConstraint.activate([
-            label.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            label.topAnchor.constraint(equalTo: topAnchor, constant: 27),
-            
-            categoryLabel.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            categoryLabel.topAnchor.constraint(equalTo: label.bottomAnchor, constant: 2)
-        ])
-        categoryLabel.text = with
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

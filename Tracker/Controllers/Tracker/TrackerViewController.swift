@@ -26,7 +26,7 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     private let dataProvider = DataProvider.shared
     private lazy var analyticsService = AnalyticsService()
     
-    var day = 1
+    private var day = 1
     
     private lazy var emptyImage: UIImageView = {
         let newImage = UIImageView()
