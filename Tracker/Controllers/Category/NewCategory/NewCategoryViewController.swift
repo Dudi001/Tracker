@@ -15,7 +15,7 @@ final class NewCategoryViewController: UIViewController {
        let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.systemFont(ofSize: 16, weight: .medium)
-        label.text = "Новая категория"
+        label.text = NSLocalizedString("newCategory.title", comment: "")
         label.textColor = .ypBlack
        return label
     }()
@@ -29,7 +29,7 @@ final class NewCategoryViewController: UIViewController {
         text.leftViewMode = .always
         text.layer.cornerRadius = 16
         text.backgroundColor = .ypBackground
-        text.placeholder = "Введите название категории"
+        text.placeholder = NSLocalizedString("newCategory.placeholder", comment: "")
         text.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
         return text
     }()
@@ -37,7 +37,8 @@ final class NewCategoryViewController: UIViewController {
     private lazy var completeButton: UIButton = {
         let button = UIButton(type: .system)
         button.layer.cornerRadius = 16
-        button.setTitle("Готово", for: .normal)
+        let title = NSLocalizedString("newCategory.readyButton.title", comment: "")
+        button.setTitle(title, for: .normal)
         button.setTitleColor(.ypWhite, for: .normal)
         button.titleLabel?.font = .systemFont(ofSize: 16)
         button.backgroundColor = .ypBlack

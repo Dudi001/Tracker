@@ -32,12 +32,10 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
     private lazy var fetchResultController: NSFetchedResultsController<TrackerCoreData> = {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \TrackerCoreData.category?.header, ascending: true)]
-        let fetchController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: context,
-            sectionNameKeyPath: "category.header",
-            cacheName: nil)
-        
+        let fetchController = NSFetchedResultsController(fetchRequest: request,
+                                                         managedObjectContext: context,
+                                                         sectionNameKeyPath: "category.header",
+                                                         cacheName: nil)
         fetchController.delegate = self
         
         do {
@@ -45,6 +43,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
         } catch  {
             print(error.localizedDescription)
         }
+        
         return fetchController
     }()
     
@@ -85,21 +84,17 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
             
             for tracker in object {
                 let color = colorMarshaling.color(from: tracker.color ?? "")
-                let newTracker = Tracker(
-                    id: tracker.id ?? UUID(),
-                    name: tracker.name ?? "",
-                    color: color,
-                    emoji: tracker.emoji ?? "",
-                    schedule: tracker.schedule ?? [],
-                    pinned: tracker.pinned)
-                
+                let newTracker = Tracker(id: tracker.id ?? UUID(),
+                                         name: tracker.name ?? "",
+                                         color: color,emoji: tracker.emoji ?? "",
+                                         schedule: tracker.schedule ?? [],
+                                         pinned: tracker.pinned)
                 trackers.append(newTracker)
             }
             
             let trackerCategory = TrackerCategory(header: section.name, trackerArray: trackers)
             trackerCategoryArray.append(trackerCategory)
         }
-//        print(trackerCategoryArray)
         return trackerCategoryArray
     }
     

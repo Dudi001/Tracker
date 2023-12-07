@@ -98,20 +98,20 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        checkCellsCount()
         dataProvider.setMainCategory()
         dataProvider.categories = dataProvider.getTrackers()
         updateVisibleCategories(dataProvider.categories)
+        initialDay()
         dataProvider.delegate = self
         dataProvider.updateRecords()
-        initialDay()
-        addViews()
-        setupViews()
         searchTextField.delegate = self
         query = searchTextField.text ?? ""
+        addViews()
+        setupViews()
         addConstraintSearchText()
         addConstraintsCollectionView()
         setupDatePicker()
+//        checkCellsCount()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -461,7 +461,7 @@ extension TrackerViewController {
    
     
     private func filtered() {
-        var newCategory = [TrackerCategory]()
+        var filteredCategories = [TrackerCategory]()
         var pinnedTrackers = [Tracker]()
         
         for category in dataProvider.categories {
@@ -481,22 +481,25 @@ extension TrackerViewController {
                         trackers.append(tracker)
                     }
                 }
-                
             }
             if !trackers.isEmpty {
                 let trackerCategory = TrackerCategory(header: category.header, trackerArray: trackers)
-                newCategory.append(trackerCategory)
+                filteredCategories.append(trackerCategory)
             }
         }
         
         if !query.isEmpty {
             var trackersWithFilteredName = [TrackerCategory]()
-            for category in newCategory {
+            for category in filteredCategories {
                 var trackers = [Tracker]()
                 for tracker in category.trackerArray {
                     let trackerName = tracker.name.lowercased()
                     if trackerName.range(of: query, options: .caseInsensitive) != nil {
-                        trackers.append(tracker)
+                        if tracker.pinned {
+                            pinnedTrackers.append(tracker)
+                        } else {
+                            trackers.append(tracker)
+                        }
                     }
                 }
                 if !trackers.isEmpty {
@@ -504,15 +507,17 @@ extension TrackerViewController {
                     trackersWithFilteredName.append(trackerCategory)
                 }
             }
-            newCategory = trackersWithFilteredName
+            filteredCategories = trackersWithFilteredName
         }
         
         if !pinnedTrackers.isEmpty {
             let pinnedCategory = TrackerCategory(header: "Закрепленные", trackerArray: pinnedTrackers)
-            newCategory.insert(pinnedCategory, at: 0)
+            filteredCategories.insert(pinnedCategory, at: 0)
         }
-        updateVisibleCategories(newCategory)
+        
+        updateVisibleCategories(filteredCategories)
     }
+
     
 //MARK: - FILTER @OBJC FUNC
     @objc

@@ -169,6 +169,9 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         categoryTableView.delegate = self
     }
     
+    private func deleteCategory(at indexPath: IndexPath) {
+        viewModel.deleteCategory(at: indexPath)
+    }
     
 }
 
@@ -225,6 +228,23 @@ extension CategoryViewController: UITableViewDelegate {
         viewModel.clearSelection()
         tableView.reloadData()
     }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard indexPath.count > 0 else { return nil }
+        
+        let deleteButton = UIAction(title: "Удалить", image: nil, identifier: nil) { _ in
+            self.deleteCategory(at: indexPath)
+        }
+        
+        deleteButton.attributes = .destructive
+        
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+            let menu = UIMenu(title: "", children: [deleteButton])
+            return menu
+        }
+        
+        return configuration
+    }
 }
 
 
@@ -232,4 +252,9 @@ extension CategoryViewController: NewTrackerViewModelDelegate {
     func updateCategory() {
         viewModel.updateData()
     }
+    
+    
 }
+
+
+

@@ -175,6 +175,10 @@ final class DataProvider {
         trackerCategoryStore.setMainCategory()
     }
     
+    func deleteCategory(at header: String) {
+        trackerCategoryStore.deleteCategory(at: header)
+    }
+    
     func deleteTracker(model: Tracker) {
         trackerStore.deleteTacker(model: model)
     }
