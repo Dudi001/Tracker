@@ -505,7 +505,10 @@ extension TrackerViewController: DataProviderDelegate {
 extension TrackerViewController: UITextFieldDelegate {
     func textFieldDidChangeSelection(_ textField: UITextField) {
         guard let queryTextFiled = textField.text else { return }
+        setupStandardPlaceholder()
         query = queryTextFiled
+        emptyImage.image = Resourses.Images.arrayEmptyImage
+        emptyLabel.text = NSLocalizedString("trackers.notFoundPlaceholder.title", comment: "")
         filtered()
     }
     
@@ -518,6 +521,7 @@ extension TrackerViewController: UITextFieldDelegate {
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
+        setupStandardPlaceholder()
         UIView.animate(withDuration: 0.3) {
             self.cancelButton.isHidden = true
             self.view.layoutIfNeeded()
@@ -525,6 +529,7 @@ extension TrackerViewController: UITextFieldDelegate {
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        setupStandardPlaceholder()
         searchTextField.resignFirstResponder()
         return true
     }
@@ -604,6 +609,7 @@ extension TrackerViewController: UIContextMenuInteractionDelegate {
         let tracker = category.trackerArray[indexPath.item]
         
         dataProvider.deleteTracker(model: tracker)
+        setupStandardPlaceholder()
         filtered()
     }
     
