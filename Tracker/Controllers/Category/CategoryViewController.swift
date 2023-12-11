@@ -23,7 +23,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     
     private lazy var titleLabel: UILabel = {
         let item = UILabel()
-        item.text = "Категория"
+        let title = NSLocalizedString("category.title", comment: "")
+        item.text = title
         item.textColor = .ypBlack
         item.translatesAutoresizingMaskIntoConstraints = false
         item.font = UIFont.systemFont(ofSize: 16, weight: .medium)
@@ -60,7 +61,8 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
     private lazy var categoryButton: UIButton = {
         let item = UIButton(type: .system)
         item.translatesAutoresizingMaskIntoConstraints = false
-        item.setTitle("Добавить категорию", for: .normal)
+        let title = NSLocalizedString("category.addButton.title", comment: "")
+        item.setTitle(title, for: .normal)
         item.backgroundColor = .ypBlack
         item.tintColor = .ypWhite
         item.layer.cornerRadius = 16
@@ -167,6 +169,9 @@ final class CategoryViewController: UIViewController, CategoryViewControllerProt
         categoryTableView.delegate = self
     }
     
+    private func deleteCategory(at indexPath: IndexPath) {
+        viewModel.deleteCategory(at: indexPath)
+    }
     
 }
 
@@ -208,17 +213,6 @@ extension CategoryViewController: UITableViewDelegate {
         viewModel.didSelectRow(at: indexPath)
         tableView.deselectRow(at: indexPath, animated: true)
         tableView.reloadData()
-
-//        if let selectedIndexPath = viewModel.selectedIndexPath {
-//            if let selectedCell = tableView.cellForRow(at: selectedIndexPath) as? CategoryTableViewCell {
-//                selectedCell.accessoryType = .none
-//
-//                if selectedIndexPath == indexPath {
-//                    viewModel.clearSelection()
-//                    return
-//                }
-//            }
-//        }
         
         if let cell = tableView.cellForRow(at: indexPath) as? CategoryTableViewCell {
             cell.accessoryType = .checkmark
@@ -234,6 +228,23 @@ extension CategoryViewController: UITableViewDelegate {
         viewModel.clearSelection()
         tableView.reloadData()
     }
+    
+    func tableView(_ tableView: UITableView, contextMenuConfigurationForRowAt indexPath: IndexPath, point: CGPoint) -> UIContextMenuConfiguration? {
+        guard indexPath.count > 0 else { return nil }
+        
+        let deleteButton = UIAction(title: "Удалить", image: nil, identifier: nil) { _ in
+            self.deleteCategory(at: indexPath)
+        }
+        
+        deleteButton.attributes = .destructive
+        
+        let configuration = UIContextMenuConfiguration(identifier: nil, previewProvider: nil) { _ -> UIMenu? in
+            let menu = UIMenu(title: "", children: [deleteButton])
+            return menu
+        }
+        
+        return configuration
+    }
 }
 
 
@@ -241,4 +252,9 @@ extension CategoryViewController: NewTrackerViewModelDelegate {
     func updateCategory() {
         viewModel.updateData()
     }
+    
+    
 }
+
+
+

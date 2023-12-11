@@ -12,7 +12,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     lazy var cellView: UIView = {
         let cell = UIView()
         cell.translatesAutoresizingMaskIntoConstraints = false
-        cell.backgroundColor = .colorSelection1
+        cell.backgroundColor = .colorSection1
         cell.layer.cornerRadius = 16
         return cell
     }()
@@ -43,7 +43,7 @@ final class TrackerCollectionViewCell: UICollectionViewCell {
     lazy var trackerCompleteButton: RoundedButton = {
         let button = RoundedButton(type: .system)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = .colorSelection1
+        button.backgroundColor = .colorSection1
         let image = UIImage(systemName: "plus")
         button.tintColor = .white
         button.setImage(image, for: .normal)

@@ -9,6 +9,8 @@ import UIKit
 
 
 final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
+    private var selectedBorderLayer: CALayer?
+    
     lazy var emojiLabel: UILabel = {
        let emoji = UILabel()
         emoji.font = UIFont.boldSystemFont(ofSize: 32)
@@ -16,22 +18,12 @@ final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
         return emoji
     }()
     
-    private lazy var colorImage: UIImageView = {
+    lazy var colorImage: UIImageView = {
        let colorItem = UIImageView()
         colorItem.translatesAutoresizingMaskIntoConstraints = false
         colorItem.layer.cornerRadius = 8
         return colorItem
     }()
-    
-    
-    override var isSelected: Bool {
-        didSet {
-            if !isSelected {
-                backgroundColor = .none
-                layer.borderWidth = 0
-            }
-        }
-    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -69,5 +61,3 @@ final class CreateNewTrackerCollectionViewCell: UICollectionViewCell {
     }
     
 }
-
-

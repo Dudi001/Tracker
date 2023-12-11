@@ -13,7 +13,7 @@ enum TypeOfTracker {
     case irregular
 }
 
-protocol CreateTrackerViewControllerProtocol {
+protocol CreateTrackerViewControllerProtocol: AnyObject {
     func reloadTableView()
 }
 
@@ -25,6 +25,9 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private var dataProvider = DataProvider.shared
     private lazy var trackerStore = TrackerStore()
     weak var delegate: DataProviderDelegate?
+    
+    private var selectedEmojiIndexPatch: IndexPath?
+    private var selectedColorIndexPatch: IndexPath?
     
      
     
@@ -39,7 +42,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     private lazy var textField: UITextField = {
        let hobbyText = UITextField()
-        hobbyText.placeholder = "Введите название трекера"
+        hobbyText.placeholder = NSLocalizedString("createTracker.textField.placeholder", comment: "placeholder textfield")
         hobbyText.backgroundColor = .ypBackground
         hobbyText.textColor = .ypBlack
         hobbyText.clearButtonMode = .whileEditing
@@ -90,7 +93,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         element.layer.cornerRadius = 16
         element.layer.borderWidth = 1
         element.layer.borderColor = UIColor.ypRed.cgColor
-        element.setTitle("Отменить", for: .normal)
+        element.setTitle(NSLocalizedString("createTracker.cancelButtonTitle", comment: ""), for: .normal)
         element.titleLabel?.textAlignment = .center
         element.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         element.backgroundColor = .ypWhite
@@ -103,7 +106,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private lazy var createButton: UIButton = {
         let element = UIButton(type: .system)
         element.layer.cornerRadius = 16
-        element.setTitle("Создать", for: .normal)
+        element.setTitle(NSLocalizedString("createTracker.createButtonTitle", comment: ""), for: .normal)
         element.titleLabel?.font = .systemFont(ofSize: 16, weight: .medium)
         element.setTitleColor(.white, for: .normal)
         element.backgroundColor = .ypGray
@@ -136,6 +139,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
 
     
 //MARK: - Register cell
+    
     private func setupTableView() {
             categoryAndScheduleTableView.register(CreateNewTrackerTableVIewCell.self, forCellReuseIdentifier: "TableViewCell")
             categoryAndScheduleTableView.dataSource = self
@@ -157,7 +161,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     
     
     private func setupTitle() {
-        titileHobbyLabel.text = typeOfTracker == .hobby ? "Новая привычка" : "Новое нерегулярное событие"
+        titileHobbyLabel.text = typeOfTracker == .hobby ? NSLocalizedString("createTracker.title", comment: "") : NSLocalizedString("createTracker.title", comment: "")
     }
     
     func reloadTableView() {
@@ -188,6 +192,14 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         
     }
     
+    private func createButtonPressedIsEnabled() {
+        if DataProvider.shared.updateButtonEnabled() {
+            enableCreateButton()
+        } else {
+            disableCreateButton()
+        }
+    }
+    
     func enableCreateButton() {
         createButton.isEnabled = true
         createButton.backgroundColor = .ypBlack
@@ -198,34 +210,13 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
         createButton.isEnabled = false
         createButton.backgroundColor = .ypGray
     }
-    
-    
-    func checkCreateButton() {
-        if dataProvider.trackerName != nil &&
-            dataProvider.selectedCategory != nil &&
-            dataProvider.trackerEmoji != nil &&
-            dataProvider.trackerColor != nil {
-            switch typeOfTracker {
-            case .irregular:
-                enableCreateButton()
-            case .hobby:
-                dataProvider.selectedSchedule != nil ? enableCreateButton() : disableCreateButton()
-            default:
-                disableCreateButton()
-            }
-        } else {
-            disableCreateButton()
-        }
-    }
-    
-//TODO: - Need fix top constraint for tableView
+
     private func setTextFieldWarning(_ countText: Int?) {
         
         guard let countText = countText else { return }
         if countText >= 38 {
             view.addSubview(warningLabel)
             disableCreateButton()
-//            categoryAndScheduleTableView.removeConstraint(topAnchorTableView)
             
             NSLayoutConstraint.activate([
                 warningLabel.topAnchor.constraint(equalTo: textField.bottomAnchor, constant: 10),
@@ -305,6 +296,7 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private func switchToScheduleViewController() {
         let scheduleVC = ScheduleViewController()
         scheduleVC.createTrackerViewController = self
+        scheduleVC.delegate = self
         present(scheduleVC, animated: true)
     }
     
@@ -318,9 +310,6 @@ final class CreateNewTrackerViewController: UIViewController, CreateTrackerViewC
     private func createButtonTapped() {
         dataProvider.trackerName = textField.text
         dataProvider.createTracker()
-//        dataProvider.resetNewTrackerInfo()
-        dismiss(animated: true)
-        selecTypeTracker?.switchToTrackerVC()
     }
 }
 
@@ -331,23 +320,20 @@ extension CreateNewTrackerViewController: UITextFieldDelegate {
         guard let textCount = textField.text?.count,
               let text = textField.text
         else { return }
-        checkCreateButton()
         setTextFieldWarning(textCount)
         dataProvider.trackerName = text
+        createButtonPressedIsEnabled()
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        checkCreateButton()
         return textField.resignFirstResponder()
     }
 
     func textFieldDidEndEditing(_ textField: UITextField) {
-        guard //let textCount = textField.text?.count,
-              let text = textField.text
+        guard let text = textField.text
         else { return }
-        checkCreateButton()
-//        setTextFieldWarning(textCount)
         dataProvider.trackerName = text
+        createButtonPressedIsEnabled()
     }
 }
 
@@ -368,27 +354,17 @@ extension CreateNewTrackerViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TableViewCell", for: indexPath) as? CreateNewTrackerTableVIewCell else { return UITableViewCell() }
-        cell.label.text = dataProvider.tableViewTitle[indexPath.row]
+        cell.headerLabel.text = dataProvider.tableViewTitle[indexPath.row]
         
-        switch indexPath.row {
-        case 0:
-            if let selectedCategory = dataProvider.selectedCategory {
-                cell.label.removeConstraints(cell.label.constraints)
-                cell.configureCellWithCategory(selectedCategory)
-            } else {
-                cell.configureCellWithoutCategory()
-            }
-        case 1:
-            if let selectedSchedule = dataProvider.selectedSchedule {
-                cell.label.removeConstraints(cell.label.constraints)
-                cell.configureCellWithCategory(selectedSchedule)
-            } else {
-                cell.configureCellWithoutCategory()
-            }
-        default:
-            cell.configureCellWithoutCategory()
+        if indexPath.row == 0 {
+            cell.subLabel.text = dataProvider.category
         }
-        checkCreateButton()
+        if indexPath.row == 1 {
+            cell.subLabel.text = dataProvider.getFormattedSchedule()
+        }
+
+        createButtonPressedIsEnabled()
+        cell.accessoryType = .disclosureIndicator
         return cell
     }
 }
@@ -420,7 +396,6 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
         return 2
     }
     
-    // MARK: - Работа с базой данных
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch section {
         case 0:
@@ -464,9 +439,9 @@ extension CreateNewTrackerViewController: UICollectionViewDataSource {
         
         switch indexPath.section {
         case 0:
-            view.headerLabel.text = "Emoji"
+            view.headerLabel.text = NSLocalizedString("createTracker.emojiTitle", comment: "")
         case 1:
-            view.headerLabel.text = "Цвет"
+            view.headerLabel.text = NSLocalizedString("createTracker.colorTitle", comment: "")
         default:
             view.headerLabel.text = ""
         }
@@ -534,25 +509,39 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         }
     }
     
-    // MARK: - Работа с базой данных. Установка ячейки
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         guard let cell = collectionView.cellForItem(at: indexPath) as? CreateNewTrackerCollectionViewCell else { return }
         
         switch indexPath.section {
         case 0:
+            
+            if let selectedEmojiIndexPatch = selectedEmojiIndexPatch, let previousCell = collectionView.cellForItem(at: selectedEmojiIndexPatch) as? CreateNewTrackerCollectionViewCell
+            {
+                previousCell.isSelected = false
+                previousCell.backgroundColor = .clear
+            }
             cell.layer.cornerRadius = 16
             cell.backgroundColor = .ypLightGray
             dataProvider.trackerEmoji = cell.emojiLabel.text
+            selectedEmojiIndexPatch = indexPath
+            createButtonPressedIsEnabled()
         case 1:
+            if let selectedIndexPath = selectedColorIndexPatch, let previousCell = collectionView.cellForItem(at: selectedIndexPath) as? CreateNewTrackerCollectionViewCell
+            {
+                previousCell.layer.borderColor = .init(gray: 0.2, alpha: 0.0)
+                previousCell.isSelected = false
+            }
             cell.layer.cornerRadius = 11
             cell.layer.borderColor = dataProvider.colors[indexPath.row].withAlphaComponent(0.3).cgColor
             cell.layer.borderWidth = 3
             dataProvider.trackerColor = dataProvider.colors[indexPath.row]
+            selectedColorIndexPatch = indexPath
+            createButtonPressedIsEnabled()
         default:
             cell.backgroundColor = .gray
         }
-        checkCreateButton()
+
+        createButtonPressedIsEnabled()
     }
     
     func collectionView(_ collectionView: UICollectionView, didDeselectItemAt indexPath: IndexPath) {
@@ -560,14 +549,16 @@ extension CreateNewTrackerViewController: UICollectionViewDelegateFlowLayout {
         
         cell.backgroundColor = .none
         cell.layer.borderWidth = 0
-        checkCreateButton()
+
+        createButtonPressedIsEnabled()
     }
     
     func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
         collectionView.indexPathsForSelectedItems?.filter({ $0.section == indexPath.section }).forEach({
             collectionView.deselectItem(at: $0, animated: true)
         })
-        checkCreateButton()
+
+        createButtonPressedIsEnabled()
         return true
     }
 }

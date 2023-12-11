@@ -32,12 +32,10 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
     private lazy var fetchResultController: NSFetchedResultsController<TrackerCoreData> = {
         let request = NSFetchRequest<TrackerCoreData>(entityName: "TrackerCoreData")
         request.sortDescriptors = [NSSortDescriptor(keyPath: \TrackerCoreData.category?.header, ascending: true)]
-        let fetchController = NSFetchedResultsController(
-            fetchRequest: request,
-            managedObjectContext: context,
-            sectionNameKeyPath: "category.header",
-            cacheName: nil)
-        
+        let fetchController = NSFetchedResultsController(fetchRequest: request,
+                                                         managedObjectContext: context,
+                                                         sectionNameKeyPath: "category.header",
+                                                         cacheName: nil)
         fetchController.delegate = self
         
         do {
@@ -45,6 +43,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
         } catch  {
             print(error.localizedDescription)
         }
+        
         return fetchController
     }()
     
@@ -56,7 +55,7 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
         let color = colorMarshaling.hexString(from: model.color)
         
         let categoryFetchRequest: NSFetchRequest<TrackerCategoryCoreData> = TrackerCategoryCoreData.fetchRequest()
-            categoryFetchRequest.predicate = NSPredicate(format: "header == %@", category)
+        categoryFetchRequest.predicate = NSPredicate(format: "header == %@", category)
             let categoryResults = try? context.fetch(categoryFetchRequest)
 
             let categoryCoreData = categoryResults?.first ?? TrackerCategoryCoreData(context: context)
@@ -85,25 +84,47 @@ final class TrackerStore: NSObject, TrackerStorageProtocol{
             
             for tracker in object {
                 let color = colorMarshaling.color(from: tracker.color ?? "")
-                let newTracker = Tracker(
-                    id: tracker.id ?? UUID(),
-                    name: tracker.name ?? "",
-                    color: color,
-                    emoji: tracker.emoji ?? "",
-                    schedule: tracker.schedule ?? [])
-                
+                let newTracker = Tracker(id: tracker.id ?? UUID(),
+                                         name: tracker.name ?? "",
+                                         color: color,emoji: tracker.emoji ?? "",
+                                         schedule: tracker.schedule ?? [],
+                                         pinned: tracker.pinned)
                 trackers.append(newTracker)
             }
             
-            let trackerCategory = TrackerCategory(name: section.name, trackerArray: trackers)
+            let trackerCategory = TrackerCategory(header: section.name, trackerArray: trackers)
             trackerCategoryArray.append(trackerCategory)
         }
-//        print(trackerCategoryArray)
         return trackerCategoryArray
     }
     
+    func pinTacker(model: Tracker) {
+            let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", model.id as CVarArg)
+            do {
+                let trackers = try context.fetch(fetchRequest)
+                if let tracker = trackers.first {
+                    tracker.pinned = !model.pinned
+                    appDelegate.saveContext()
+                }
+            } catch {
+                print("Error deleting tracker record: \(error.localizedDescription)")
+            }
+    }
     
-    
+    func deleteTacker(model: Tracker) {
+            let fetchRequest: NSFetchRequest<TrackerCoreData> = TrackerCoreData.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %@", model.id as CVarArg)
+            do {
+                let trackers = try context.fetch(fetchRequest)
+                if let tracker = trackers.first {
+                    context.delete(tracker)
+                    appDelegate.saveContext()
+                }
+            } catch {
+                print("Error deleting tracker record: \(error.localizedDescription)")
+            }
+    }
 }
 
 extension TrackerStore: NSFetchedResultsControllerDelegate {

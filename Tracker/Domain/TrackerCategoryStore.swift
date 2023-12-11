@@ -59,6 +59,14 @@ final class TrackerCategoryStore: NSObject {
         }
     }
     
+    func deleteCategory(at header: String) {
+        guard let categories = fetchedResultController.fetchedObjects else { return }
+        if let categoryToDelete = categories.first(where: { $0.header == header }) {
+            context.delete(categoryToDelete)
+            appDelegate.saveContext()
+        }
+    }
+    
     func getCategories() -> [String] {
         guard let categories = fetchedResultController.fetchedObjects else { return [] }
         let categoriesArray: [String] = categories.compactMap { $0.header }

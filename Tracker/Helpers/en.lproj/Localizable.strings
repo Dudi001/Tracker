@@ -1,0 +1,60 @@
+/* 
+  Localizable.strings
+  
+
+  Created by Мурад Манапов on 29.11.2023.
+  
+*/
+
+
+"mo" = "Mo.";
+"tu" = "Tu.";
+"we" ="We.";
+"th" = "Th.";
+"fr" = "Fr.";
+"sa" = "Sa.";
+"su" = "Su.";
+"monday" = "Monday";
+"tuesday" = "Tuesday";
+"wednesday" = "Wednesday";
+"thursday" = "Thursday";
+"friday" = "Friday";
+"saturday" = "Saturday";
+"sunday" = "Sunday";
+"filter.button.title" = "Filters";
+"placeholder.title" = "What will we track??";
+"newCategory.title" = "New category";
+"newCategory.placeholder" = "Enter category name";
+"newCategory.readyButton.title" = "Ready";
+"category.addButton.title" = "Add category";
+"category.title" = "Category";
+"createTracker.title" = "New habit";
+"createTracker.textField.placeholder" = "Enter tracker name";
+"createTracker.button.category" = "Category";
+"createTracker.button.schedule" = "Schedule";
+"createTracker.emojiTitle" = "Emoji";
+"createTracker.colorTitle" = "Color";
+"createTracker.cancelButtonTitle" = "Cancel";
+"createTracker.createButtonTitle" = "Create";
+"selectType.title" = "Creating a tracker";
+"selectType.habitButton.title" = "Habit";
+"selectType.eventButton.title" = "Irregular event";
+"onboard.titleOne" = "Track only what you want";
+"onboard.titleTwo" = "Even if it's not liters of water and yoga";
+"onboard.startButton.title" = "That's technology!";
+"trackers.title" = "Trackers";
+"trackers.searchTextField.placeholder" = "Search";
+"trackers.cancelButton.title" = "Cancel";
+"trackers.notFoundPlaceholder.title" = "Nothing found";
+"tabBar.trackers.title" = "Trackers";
+"tabBar.stats.title" = "Statistics";
+"stats.placeHolder.title" = "Nothing to analyze";
+"editTacker.saveButtonTitle" = "Save";
+"createTracker.title" = "Editing a Habit";
+"contextMenu.pin" = "Pin";
+"contextMenu.unpin" = "Unpin";
+"contextMenu.edit" = "Edit";
+"contextMenu.delete" = "Delete";
+"deleteAlert.text" = "Are you sure you want to delete the tracker?";
+"deleteAlert.cancelAction.text" = "Cancel";
+"deleteAlert.deleteAction.text" = "Delete";
