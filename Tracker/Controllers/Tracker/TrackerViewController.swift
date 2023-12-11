@@ -22,9 +22,9 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
     }
     var currentDate = Date()
     var datePicker: UIDatePicker?
+    
     private let dataProvider = DataProvider.shared
     private lazy var analyticsService = AnalyticsService()
-    
     private var day = 1
     
     private lazy var emptyImage: UIImageView = {
@@ -110,7 +110,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         addConstraintSearchText()
         addConstraintsCollectionView()
         setupDatePicker()
-        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -123,6 +122,19 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         analyticsService.reportScreen(event: .close, onScreen: .main)
     }
     
+    func reloadCollectionView() {
+        dataProvider.visibleCategories = dataProvider.categories
+        trackerCollectionView.reloadData()
+    }
+    
+    func presentSelectTypeVC() {
+        let selectVC = SelectTypeTrackerViewController()
+        selectVC.trackerViewController = self
+        searchTextField.endEditing(true)
+        present(selectVC, animated: true)
+    }
+    
+//MARK: - Private func
     private func addViews() {
         setupSearchContainerView()
         view.backgroundColor = .ypWhite
@@ -133,12 +145,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         view.addSubview(filterButton)
     }
     
-    func reloadCollectionView() {
-        dataProvider.visibleCategories = dataProvider.categories
-        trackerCollectionView.reloadData()
-    }
-    
-//MARK: - Private func
     private func setupViews() {
         trackerCollectionView.register(TrackerCollectionViewCell.self, forCellWithReuseIdentifier: "TrackerCollectionViewCell")
         trackerCollectionView.register(
@@ -156,13 +162,6 @@ final class TrackerViewController: UIViewController, TrackerViewControllerProtoc
         let date = dateFormatter.string(from: currentDate)
         let trackerRecord = TrackerRecord(id: id, date: date)
         return trackerRecord
-    }
-    
-    func presentSelectTypeVC() {
-        let selectVC = SelectTypeTrackerViewController()
-        selectVC.trackerViewController = self
-        searchTextField.endEditing(true)
-        present(selectVC, animated: true)
     }
     
     private func setupDatePicker() {
@@ -460,7 +459,6 @@ extension TrackerViewController {
             let pinnedCategory = TrackerCategory(header: "Закрепленные", trackerArray: pinnedTrackers)
             filteredCategories.insert(pinnedCategory, at: 0)
         }
-        
         updateVisibleCategories(filteredCategories)
     }
 
@@ -492,7 +490,6 @@ extension TrackerViewController: DataProviderDelegate {
     func updateCategories(_ newCategory: [TrackerCategory]) {
         dataProvider.categories = newCategory
         updateVisibleCategories(dataProvider.categories)
-        
     }
     
     func updateRecords(_ newRecords: Set<TrackerRecord>) {
